@@ -72,7 +72,14 @@ export const DashboardTopProducts = ({ products = [], onNavigate }) => {
                   {/* Foto miniatura */}
                   <div className="w-10 h-10 rounded-lg overflow-hidden bg-night-900 border border-night-700 shrink-0">
                     {imgUrl ? (
-                      <img src={imgUrl} alt={item.name} className="w-full h-full object-cover" />
+                      <img
+                        src={imgUrl}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                        }}
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-text-muted">
                         <Package className="w-4 h-4" />

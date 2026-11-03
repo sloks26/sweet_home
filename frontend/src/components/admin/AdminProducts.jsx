@@ -12,7 +12,8 @@ import {
   Sliders,
   Sparkles,
   PackageCheck,
-  PackageX
+  PackageX,
+  RefreshCw
 } from 'lucide-react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
@@ -66,6 +67,10 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
 
   useEffect(() => {
     fetchProducts();
+    const timer = setInterval(() => {
+      fetchProducts(true);
+    }, 45000);
+    return () => clearInterval(timer);
   }, [search, selectedCategory, stockStatus, currentPage]);
 
   const fetchCategories = async () => {
@@ -80,8 +85,8 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
     }
   };
 
-  const fetchProducts = async () => {
-    setLoading(true);
+  const fetchProducts = async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const params = new URLSearchParams({
         page: currentPage,
@@ -229,9 +234,21 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
             Gestiona inventario, precios en colones (₡), fotografías 1:1 y colecciones exclusivas
           </p>
         </div>
-        <Button variant="primary" size="md" icon={Plus} onClick={openCreateModal}>
-          Nuevo Producto
-        </Button>
+        <div className="flex items-center gap-2.5">
+          <Button
+            variant="outline"
+            size="md"
+            icon={RefreshCw}
+            onClick={() => fetchProducts(false)}
+            disabled={loading}
+            title="Sincronizar y actualizar productos ahora"
+          >
+            Actualizar
+          </Button>
+          <Button variant="primary" size="md" icon={Plus} onClick={openCreateModal}>
+            Nuevo Producto
+          </Button>
+        </div>
       </div>
 
       {/* Barra de Filtros */}
@@ -323,6 +340,9 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
                             src={coverImage}
                             alt={prod.name}
                             className="w-10 h-10 rounded-lg object-cover border border-night-700 shrink-0"
+                            onError={(e) => {
+                              e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                            }}
                           />
                           <div>
                             <div className="font-semibold text-text-primary line-clamp-1">{prod.name}</div>

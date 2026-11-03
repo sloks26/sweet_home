@@ -73,6 +73,9 @@ export const AdminProductsMobileList = ({
                     alt={p.name}
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                    }}
                   />
                 ) : (
                   <Package className="w-6 h-6 text-text-muted" />

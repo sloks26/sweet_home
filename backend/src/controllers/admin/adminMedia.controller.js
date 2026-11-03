@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { config } from '../../config/index.js';
+import prisma from '../../config/prisma.js';
 import { processAndSaveImage, deleteImageFile } from '../../services/imageService.js';
 import { logAudit } from '../../services/audit.js';
 
@@ -77,6 +78,47 @@ export async function uploadMedia(req, res) {
 export async function deleteMedia(req, res) {
   try {
     const { filename } = req.params;
+
+    // Verificar integridad referencial: no permitir eliminar imágenes en uso
+    const usedByProduct = await prisma.productImage.findFirst({
+      where: { url: { contains: filename } },
+      include: { product: { select: { name: true } } }
+    });
+    if (usedByProduct) {
+      const prodName = usedByProduct.product?.name || 'un producto del catálogo';
+      return res.status(400).json({
+        error: true,
+        message: `No se puede eliminar la imagen porque está asignada al producto "${prodName}". Quítala del producto primero.`
+      });
+    }
+
+    const usedByBanner = await prisma.banner.findFirst({
+      where: {
+        OR: [
+          { desktopImage: { contains: filename } },
+          { mobileImage: { contains: filename } }
+        ]
+      },
+      select: { title: true }
+    });
+    if (usedByBanner) {
+      return res.status(400).json({
+        error: true,
+        message: `No se puede eliminar la imagen porque está asignada al banner "${usedByBanner.title}".`
+      });
+    }
+
+    const usedByCategory = await prisma.category.findFirst({
+      where: { image: { contains: filename } },
+      select: { name: true }
+    });
+    if (usedByCategory) {
+      return res.status(400).json({
+        error: true,
+        message: `No se puede eliminar la imagen porque está asignada a la categoría "${usedByCategory.name}".`
+      });
+    }
+
     const success = await deleteImageFile(filename);
 
     if (!success) {

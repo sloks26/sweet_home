@@ -61,4 +61,10 @@ router.get('/orders/:id', adminController.getAdminOrderById);
 router.patch('/orders/:id/status', adminController.updateAdminOrderStatus);
 router.delete('/orders/:id', adminController.deleteAdminOrder);
 
+// Gestión de Usuarios y Equipo
+router.get('/users', adminController.getAdminUsers);
+router.post('/users', adminController.createAdminUser);
+router.patch('/users/:id/toggle', adminController.toggleAdminUser);
+router.delete('/users/:id', adminController.deleteAdminUser);
+
 export default router;

@@ -21,14 +21,17 @@ export const ResponsiveImage = ({
   fallbackPlaceholder = null
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [useSrcSet, setUseSrcSet] = useState(true);
 
-  if (!src) {
+  if (!src || hasError) {
     return (
       <div
-        className={`bg-night-800/80 flex items-center justify-center text-text-muted text-xs ${containerClassName}`}
+        className={`bg-night-900/60 flex flex-col items-center justify-center text-text-muted text-xs p-3 text-center border border-night-800 ${containerClassName}`}
         style={{ aspectRatio, width: width ? `${width}px` : undefined, height: height ? `${height}px` : undefined }}
       >
-        {fallbackPlaceholder || 'Imagen no disponible'}
+        <span className="text-gold-light/40 text-lg mb-1">✨</span>
+        <span className="line-clamp-2 text-[11px] font-medium">{fallbackPlaceholder || alt || 'Sweet Home & Boutique'}</span>
       </div>
     );
   }
@@ -79,7 +82,7 @@ export const ResponsiveImage = ({
 
       <img
         src={defaultSrc}
-        srcSet={srcSetWebp}
+        srcSet={useSrcSet ? srcSetWebp : undefined}
         sizes={sizes}
         alt={alt}
         width={width || 600}
@@ -88,6 +91,15 @@ export const ResponsiveImage = ({
         fetchPriority={priority ? 'high' : 'auto'}
         decoding="async"
         onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          if (useSrcSet && isLocalUpload) {
+            // Intentar cargar la URL directa sin variantes
+            setUseSrcSet(false);
+          } else {
+            setHasError(true);
+            setIsLoaded(true);
+          }
+        }}
         className={`w-full h-full transition-opacity duration-300 ${
           objectFit === 'contain' ? 'object-contain' : 'object-cover'
         } ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}

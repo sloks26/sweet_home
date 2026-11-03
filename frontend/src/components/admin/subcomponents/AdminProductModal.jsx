@@ -351,7 +351,14 @@ export const AdminProductModal = ({
                           isCover ? 'border-gold-DEFAULT shadow-md shadow-gold-DEFAULT/20' : 'border-night-700 hover:border-gold-DEFAULT/50'
                         }`}
                       >
-                        <img src={url} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover" />
+                        <img
+                          src={url}
+                          alt={`Foto ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                          }}
+                        />
 
                         {isCover ? (
                           <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-gold-DEFAULT text-[9px] font-bold text-night-950 flex items-center gap-0.5 shadow">

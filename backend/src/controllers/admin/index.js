@@ -26,6 +26,12 @@ import {
   deleteAdminOrder
 } from './adminOrders.controller.js';
 import { adminAccountingController } from './adminAccounting.controller.js';
+import {
+  getAdminUsers,
+  createAdminUser,
+  toggleAdminUser,
+  deleteAdminUser
+} from './adminUsers.controller.js';
 
 export const adminController = {
   // Contabilidad, Egresos y Control de Apartados / Contra Entrega
@@ -75,7 +81,13 @@ export const adminController = {
   getAdminOrders,
   getAdminOrderById,
   updateAdminOrderStatus,
-  deleteAdminOrder
+  deleteAdminOrder,
+
+  // Users & Staff
+  getAdminUsers,
+  createAdminUser,
+  toggleAdminUser,
+  deleteAdminUser
 };
 
 export default adminController;

@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Package,
   FolderTree,
-  Settings
+  Settings,
+  Users
 } from 'lucide-react';
 import Logo, { LogoEmblem } from '../ui/Logo';
 import Badge from '../ui/Badge';
@@ -41,6 +42,7 @@ export const AdminLayout = ({
     { id: 'banners', label: 'Banners y Carrusel', icon: Sliders },
     { id: 'media', label: 'Biblioteca de Medios', icon: ImageIcon },
     { id: 'our-story', label: 'Nuestra Historia', icon: BookOpen },
+    { id: 'users', label: 'Equipo y Accesos', icon: Users },
     { id: 'settings', label: 'Ajustes de Tienda', icon: Settings }
   ];
 
@@ -60,6 +62,7 @@ export const AdminLayout = ({
     { id: 'categories', label: 'Categorías', icon: FolderTree },
     { id: 'media', label: 'Biblioteca de Medios', icon: ImageIcon },
     { id: 'our-story', label: 'Nuestra Historia', icon: BookOpen },
+    { id: 'users', label: 'Equipo y Accesos', icon: Users },
     { id: 'settings', label: 'Ajustes de Tienda', icon: Settings }
   ];
 

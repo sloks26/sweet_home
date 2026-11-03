@@ -103,27 +103,25 @@ export async function processAndSaveImage(tempFilePath, options = {}) {
     };
 
     for (const w of widths) {
-      if (origWidth >= w - 50) {
-        const webpName = `${baseName}_${w}.webp`;
-        const avifName = `${baseName}_${w}.avif`;
-        const webpPath = path.join(uploadDir, webpName);
-        const avifPath = path.join(uploadDir, avifName);
+      const webpName = `${baseName}_${w}.webp`;
+      const avifName = `${baseName}_${w}.avif`;
+      const webpPath = path.join(uploadDir, webpName);
+      const avifPath = path.join(uploadDir, avifName);
 
-        await Promise.all([
-          sharp(tempFilePath)
-            .resize({ width: w, fit: 'inside', withoutEnlargement: true })
-            .webp({ quality: 82, effort: 3 })
-            .toFile(webpPath)
-            .then(() => { generatedVariants.webp[w] = `/uploads/${webpName}`; })
-            .catch(() => {}),
-          sharp(tempFilePath)
-            .resize({ width: w, fit: 'inside', withoutEnlargement: true })
-            .avif({ quality: 75, effort: 2 })
-            .toFile(avifPath)
-            .then(() => { generatedVariants.avif[w] = `/uploads/${avifName}`; })
-            .catch(() => {})
-        ]);
-      }
+      await Promise.all([
+        sharp(tempFilePath)
+          .resize({ width: w, fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 82, effort: 3 })
+          .toFile(webpPath)
+          .then(() => { generatedVariants.webp[w] = `/uploads/${webpName}`; })
+          .catch(() => {}),
+        sharp(tempFilePath)
+          .resize({ width: w, fit: 'inside', withoutEnlargement: true })
+          .avif({ quality: 75, effort: 2 })
+          .toFile(avifPath)
+          .then(() => { generatedVariants.avif[w] = `/uploads/${avifName}`; })
+          .catch(() => {})
+      ]);
     }
 
     // Generar miniatura optimizada para panel de control
