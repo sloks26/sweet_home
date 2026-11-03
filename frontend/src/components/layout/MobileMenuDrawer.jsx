@@ -225,24 +225,12 @@ export const MobileMenuDrawer = ({
                   <MessageCircle className="w-4 h-4 text-status-success" />
                   <span>Atención por WhatsApp</span>
                 </a>
-                {authUser ? (
+                {authUser && (
                   <div className="pt-2 border-t border-night-700/60 space-y-2">
                     <div className="flex items-center gap-2 text-xs text-gold-light">
                       <User className="w-4 h-4 text-status-success" />
                       <span className="font-semibold">{authUser.name}</span>
                     </div>
-                    {(authUser.role === 'ADMIN' || authUser.role === 'STAFF') && (
-                      <button
-                        onClick={() => {
-                          onClose();
-                          if (onOpenAdminPanel) onOpenAdminPanel();
-                        }}
-                        className="w-full flex items-center gap-2 text-xs text-gold-bright font-semibold hover:text-gold-light py-1 cursor-pointer"
-                      >
-                        <Sliders className="w-4 h-4" />
-                        <span>Ir al Panel de Administración</span>
-                      </button>
-                    )}
                     <button
                       onClick={() => {
                         onClose();
@@ -254,17 +242,6 @@ export const MobileMenuDrawer = ({
                       <span>Cerrar Sesión</span>
                     </button>
                   </div>
-                ) : (
-                  <button
-                    onClick={() => {
-                      onClose();
-                      if (onOpenAdminLogin) onOpenAdminLogin();
-                    }}
-                    className="flex items-center gap-2 hover:text-gold-light py-1 text-left w-full cursor-pointer text-text-muted"
-                  >
-                    <KeyRound className="w-4 h-4" />
-                    <span>Iniciar Sesión / Mi Cuenta</span>
-                  </button>
                 )}
               </div>
             </motion.div>

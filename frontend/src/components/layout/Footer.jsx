@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Heart,
   MessageCircle,
@@ -34,6 +34,26 @@ export const Footer = ({
     instagram: { handle: '@sweethomeandboutiquecr', url: 'https://instagram.com/sweethomeandboutiquecr' },
     tiktok: { handle: '@sweet.home.boutique.cr', url: 'https://tiktok.com/@sweet.home.boutique.cr' },
     facebook: { name: 'Sweet Home & Boutique CR', url: 'https://facebook.com/SweetHomeAndBoutiqueCR' }
+  };
+
+  // Acceso discreto al panel administrativo: 5 toques en el texto de copyright
+  const tapCountRef = useRef(0);
+  const tapTimerRef = useRef(null);
+
+  const handleSecretAdminTrigger = () => {
+    tapCountRef.current += 1;
+
+    if (tapCountRef.current >= 5) {
+      tapCountRef.current = 0;
+      if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
+      if (onOpenAdminLogin) onOpenAdminLogin();
+      return;
+    }
+
+    if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
+    tapTimerRef.current = setTimeout(() => {
+      tapCountRef.current = 0;
+    }, 2500);
   };
   return (
     <footer className="border-t border-gold-DEFAULT/20 bg-gradient-to-b from-night-900 via-night-950 to-[#0A0312] text-text-secondary pt-16 pb-10 px-4 sm:px-8 mt-24 relative overflow-hidden">
@@ -205,17 +225,6 @@ export const Footer = ({
                   Política de Privacidad
                 </button>
               </li>
-              {/* B5: Acceso administrativo SOLO con sesión iniciada */}
-              {authUser && (authUser.role === 'ADMIN' || authUser.role === 'STAFF') && (
-                <li className="pt-2 border-t border-night-700/50">
-                  <a
-                    href="#admin"
-                    className="hover:text-gold-light text-gold-light/90 transition-colors flex items-center gap-1.5 text-[13px] font-semibold"
-                  >
-                    <span>🔒 Panel Administrativo</span>
-                  </a>
-                </li>
-              )}
             </ul>
           </div>
 
@@ -269,7 +278,12 @@ export const Footer = ({
 
         {/* Barra Inferior Copyright */}
         <div className="pt-8 border-t border-night-700/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted text-center sm:text-left">
-          <div>
+          <div
+            id="secret-admin-trigger"
+            onClick={handleSecretAdminTrigger}
+            className="select-none cursor-default active:opacity-75 transition-opacity"
+            title=""
+          >
             Sweet Home & Boutique CR © {new Date().getFullYear()} • Todos los derechos reservados
           </div>
           <div className="flex items-center gap-4 text-text-secondary text-xs sm:text-[13px]">

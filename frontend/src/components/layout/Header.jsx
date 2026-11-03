@@ -194,32 +194,30 @@ export const Header = ({
               </div>
             </button>
 
-            {/* Mi Cuenta */}
+            {/* Mi Cuenta / Seguimiento */}
             {authUser ? (
               <div className="flex items-center gap-1">
-                {(authUser.role === 'ADMIN' || authUser.role === 'STAFF') && (
-                  <button
-                    onClick={onOpenAdminPanel}
-                    className="px-2.5 py-1.5 rounded-xl bg-gold-metallic text-night-950 font-bold text-xs flex items-center gap-1 shadow-gold-sm hover:brightness-110 transition-all cursor-pointer"
-                    title="Panel de Administración"
-                  >
-                    <Sliders className="w-3 h-3" />
-                    <span className="hidden sm:inline">Admin</span>
-                  </button>
-                )}
+                <button
+                  onClick={onOpenAdminPanel}
+                  className="p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
+                  title={`Sesión activa: ${authUser.name}`}
+                >
+                  <User className="w-5 h-5 sm:w-4 sm:h-4 text-gold-bright" />
+                </button>
                 <button
                   onClick={onLogout}
-                  className="p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
+                  className="p-1.5 rounded-xl text-text-muted hover:text-status-error hover:bg-status-error/10 transition-colors"
                   title="Cerrar sesión"
                 >
-                  <User className="w-5 h-5 sm:w-4 sm:h-4 text-status-success" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             ) : (
               <button
-                onClick={onOpenAdminLogin}
+                onClick={onOpenTracking}
                 className="p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
-                title="Mi Cuenta"
+                title="Rastreo y Estado de Pedido"
+                aria-label="Rastreo de Pedido"
               >
                 <User className="w-5 h-5 sm:w-4 sm:h-4" />
               </button>

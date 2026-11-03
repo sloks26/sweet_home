@@ -255,20 +255,6 @@ export function App() {
     <div className="relative min-h-screen text-text-primary selection:bg-gold-base/30 selection:text-gold-light bg-night-900">
       <StarBackground />
 
-      {authUser && (authUser.role === 'ADMIN' || authUser.role === 'STAFF') && (
-        <aside aria-label="Acceso rápido administrativo" className="fixed bottom-6 left-6 z-40">
-          <button
-            onClick={handleOpenAdminPanel}
-            className="group flex items-center gap-2 px-3.5 py-2 rounded-full bg-night-950/92 border border-gold-DEFAULT/40 text-gold-light shadow-2xl backdrop-blur-md hover:border-gold-bright hover:scale-105 transition-all text-xs cursor-pointer"
-            title={`Sesión de Administradora (${authUser.name})`}
-          >
-            <span className="w-2 h-2 rounded-full bg-status-success animate-pulse" />
-            <Sliders className="w-3.5 h-3.5 text-gold-bright" />
-            <span className="font-semibold text-text-primary hidden sm:inline">Panel Admin</span>
-          </button>
-        </aside>
-      )}
-
       {/* Header Smart Sticky */}
       <Header
         categories={categories}
@@ -346,16 +332,14 @@ export function App() {
       </div>
 
       {/* Footer */}
-      <div className="content-visibility-auto">
-        <Footer
-          categories={categories}
-          onOpenAdminLogin={() => (authUser ? handleOpenAdminPanel() : setIsLoginModalOpen(true))}
-          onOpenTracking={() => setIsTrackingModalOpen(true)}
-          onOpenInfo={(t) => setInfoModalTopic(t)}
-          authUser={authUser}
-          storeSettings={storeSettings}
-        />
-      </div>
+      <Footer
+        categories={categories}
+        onOpenAdminLogin={() => (authUser ? handleOpenAdminPanel() : setIsLoginModalOpen(true))}
+        onOpenTracking={() => setIsTrackingModalOpen(true)}
+        onOpenInfo={(t) => setInfoModalTopic(t)}
+        authUser={authUser}
+        storeSettings={storeSettings}
+      />
 
       <CartDrawer onOpenCheckout={() => setIsCheckoutOpen(true)} />
       <AgeVerificationModal />
