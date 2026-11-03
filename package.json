@@ -17,6 +17,17 @@
     "pm2:stop": "pm2 stop sweet-home-boutique"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "@secretlint/quick-start": "^12.0.0",
+    "concurrently": "^9.1.2",
+    "depcheck": "^1.4.7",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^18.5.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-security": "^4.2.1",
+    "jscpd": "^5.4.2",
+    "madge": "^8.0.0",
+    "prettier": "^3.9.10"
   }
 }

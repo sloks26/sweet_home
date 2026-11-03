@@ -50,6 +50,8 @@ scratch/*.jpeg
 scratch/*.webp
 scratch/*.tar.gz
 scratch/*.zip
+scratch/*.json
+scratch/jscpd-report/
 
 # Operating System & IDE artifacts
 .DS_Store
