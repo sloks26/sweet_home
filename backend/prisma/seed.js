@@ -33,7 +33,7 @@ async function main() {
   await prisma.siteContent.deleteMany();
   await prisma.user.deleteMany();
 
-  // 2. Administrador inicial
+  // 2. Administradoras oficiales (Socias)
   const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com';
   const adminPass = process.env.INITIAL_ADMIN_PASSWORD || 'SweetHomeCR2026!#';
   const adminName = process.env.INITIAL_ADMIN_NAME || 'Dueña y Administradora';
@@ -45,11 +45,26 @@ async function main() {
       password: hashedPassword,
       name: adminName,
       role: 'ADMIN',
-      phone: '+506 8888-8888',
+      phone: '+506 6465-6625',
       isActive: true
     }
   });
-  console.log(`👤 Usuario Admin creado: ${adminUser.email}`);
+  console.log(`👤 Socia Administradora 1 creada: ${adminUser.email}`);
+
+  const jendryEmail = process.env.JENDRY_ADMIN_EMAIL || 'jendry@sweethomeboutiquecr.com';
+  const jendryPass = process.env.JENDRY_ADMIN_PASSWORD || 'SweetHomeCR2026!#';
+  const jendryName = process.env.JENDRY_ADMIN_NAME || 'Jendry Zúñiga';
+  const jendryHashedPassword = await bcrypt.hash(jendryPass, 12);
+  const jendryUser = await prisma.user.create({
+    data: {
+      email: jendryEmail.toLowerCase().trim(),
+      password: jendryHashedPassword,
+      name: jendryName,
+      role: 'ADMIN',
+      isActive: true
+    }
+  });
+  console.log(`👤 Socia Administradora 2 creada: ${jendryUser.email}`);
 
   // 3. Crear Categorías, Subcategorías y Productos
   const allCategories = [...categoriesGroup1, ...categoriesGroup2];
