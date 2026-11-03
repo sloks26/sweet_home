@@ -1,0 +1,22 @@
+{
+  "name": "sweet-home-boutique-cr",
+  "version": "1.0.0",
+  "description": "E-commerce premium para Sweet Home & Boutique CR - Costa Rica",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "build:frontend": "npm run build --prefix frontend",
+    "build": "npm run build:frontend",
+    "start": "node backend/src/index.js",
+    "seed": "npm run seed --prefix backend",
+    "deploy": "bash scripts/deploy-vps.sh",
+    "pm2:start": "pm2 start backend/src/index.js --name sweet-home-boutique",
+    "pm2:restart": "pm2 restart sweet-home-boutique",
+    "pm2:stop": "pm2 stop sweet-home-boutique"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

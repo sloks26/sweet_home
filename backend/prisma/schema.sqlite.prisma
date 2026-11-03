@@ -1,0 +1,346 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT      // Pedido creado, pendiente de comprobante
+  VOUCHER_RECEIVED     // Comprobante subido por cliente, pendiente de verificación manual
+  PAYMENT_CONFIRMED    // Pago validado por la dueña en el panel
+  PREPARING            // Empacando el pedido con amor
+  SHIPPED              // Enviado con número de guía
+  DELIVERED            // Entregado a satisfacción
+  CANCELLED            // Cancelado (por vencimiento o rechazo)
+}
+
+enum PaymentMethod {
+  SINPE_MOVIL
+  TRANSFER
+}
+
+enum PromotionType {
+  PERCENTAGE
+  FIXED_AMOUNT
+  FREE_SHIPPING
+  BUY_X_GET_Y
+}
+
+// -------------------------------------------------------------
+// USUARIOS Y SEGURIDAD
+// -------------------------------------------------------------
+model User {
+  id                  String     @id @default(uuid())
+  email               String     @unique
+  password            String
+  name                String
+  role                String     @default("ADMIN") // ADMIN, STAFF, CUSTOMER
+  phone               String?
+  avatar              String?
+  isActive            Boolean    @default(true)
+  failedAttempts      Int        @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  orders              Order[]
+  reviews             Review[]
+  auditLogs           AuditLog[]
+
+  @@map("users")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?
+  action      String   // LOGIN, LOGOUT, CREATE_PRODUCT, CONFIRM_PAYMENT, etc.
+  module      String   // AUTH, PRODUCTS, ORDERS, BANNERS, CONTENT
+  details     String?  // JSON string con detalles del cambio
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+
+// -------------------------------------------------------------
+// CATÁLOGO: CATEGORÍAS Y SUBCATEGORÍAS
+// -------------------------------------------------------------
+model Category {
+  id              String        @id @default(uuid())
+  name            String
+  slug            String        @unique
+  description     String?
+  icon            String?       // Nombre de ícono o emoji
+  image           String?       // Imagen de portada / destacada del menú
+  menuBadge       String?       // Rótulo opcional en la tarjeta del mega menú (ej: "Colección Nueva", "Exclusivo")
+  menuTitle       String?       // Título opcional en la tarjeta del mega menú
+  menuLink        String?       // Enlace opcional en la tarjeta del mega menú
+  order           Int           @default(0)
+  isActive        Boolean       @default(true)
+  isAdult         Boolean       @default(false) // Para +18 Bienestar Íntimo
+  featuredInMenu  Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  subcategories   Subcategory[]
+  products        Product[]
+
+  @@index([isActive, order])
+  @@map("categories")
+}
+
+model Subcategory {
+  id          String    @id @default(uuid())
+  categoryId  String
+  name        String
+  slug        String
+  description String?
+  image       String?
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@unique([categoryId, slug])
+  @@index([categoryId, isActive, order])
+  @@map("subcategories")
+}
+
+// -------------------------------------------------------------
+// PRODUCTOS, VARIANTES E IMÁGENES
+// -------------------------------------------------------------
+model Product {
+  id                 String           @id @default(uuid())
+  name               String
+  slug               String           @unique
+  description        String
+  shortDescription   String?
+  sku                String           @unique
+  price              Float            // Precio en colones ₡
+  compareAtPrice     Float?           // Precio regular tachado para ofertas
+  costPrice          Float?           // Costo para la tienda (admin)
+  stock              Int              @default(0)
+  lowStockThreshold  Int              @default(5)
+  isFeatured         Boolean          @default(false)
+  isNew              Boolean          @default(true)
+  isBestSeller       Boolean          @default(false)
+  isActive           Boolean          @default(true)
+  isAdult            Boolean          @default(false)
+  rating             Float            @default(5.0)
+  reviewCount        Int              @default(0)
+  viewsCount         Int              @default(0)
+  categoryId         String
+  subcategoryId      String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  category           Category         @relation(fields: [categoryId], references: [id])
+  subcategory        Subcategory?     @relation(fields: [subcategoryId], references: [id])
+  images             ProductImage[]
+  variants           ProductVariant[]
+  orderItems         OrderItem[]
+  reviews            Review[]
+
+  @@index([isActive, isFeatured])
+  @@index([isActive, isBestSeller])
+  @@index([isActive, isNew])
+  @@index([categoryId, isActive])
+  @@index([isActive, createdAt])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  productId String
+  url       String
+  alt       String?
+  isCover   Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id        String   @id @default(uuid())
+  productId String
+  name      String   // Ej: Talla, Color, Aroma
+  options   String   // JSON string: ["Vainilla Francesa", "Lavanda Suave"]
+  sku       String?
+  price     Float?
+  stock     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_variants")
+}
+
+// -------------------------------------------------------------
+// PEDIDOS Y PAGOS (SINPE MÓVIL Y TRANSFERENCIA)
+// -------------------------------------------------------------
+model Order {
+  id                  String        @id @default(uuid())
+  orderNumber         String        @unique // Ej: SH-2026-1001
+  status              String        @default("PENDING_PAYMENT") // PENDING_PAYMENT, VOUCHER_RECEIVED, PAYMENT_CONFIRMED, PREPARING, SHIPPED, DELIVERED, CANCELLED
+  paymentMethod       String        // SINPE_MOVIL, TRANSFER
+  customerName        String
+  customerEmail       String
+  customerPhone       String
+  shippingAddress     String        // JSON string o texto con Provincia, Cantón, Distrito, Detalles
+  shippingMethod      String        // "Correos de Costa Rica", "Mensajería Express GAM", "Retiro en tienda"
+  subtotal            Float
+  shippingCost        Float         @default(0)
+  discountTotal       Float         @default(0)
+  taxTotal            Float         @default(0) // 13% IVA
+  total               Float
+  voucherUrl          String?       // Captura del comprobante
+  voucherNotes        String?       // Referencia o nota del cliente
+  rejectionReason     String?       // Motivo si el comprobante fue rechazado
+  trackingNumber      String?       // Número de guía para rastreo
+  notes               String?       // Notas del cliente
+  internalNotes       String?       // Notas privadas del panel admin
+  expiresAt           DateTime?     // Límite para subir pago antes de liberar stock
+  voucherReceivedAt   DateTime?
+  paymentConfirmedAt  DateTime?
+  userId              String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  user                User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items               OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id           String   @id @default(uuid())
+  orderId      String
+  productId    String?
+  productName  String
+  productSku   String
+  productImage String?
+  variantName  String?
+  price        Float
+  quantity     Int
+  subtotal     Float
+
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product      Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@map("order_items")
+}
+
+// -------------------------------------------------------------
+// HERO CARRUSEL & BANNERS
+// -------------------------------------------------------------
+model Banner {
+  id           String    @id @default(uuid())
+  title        String
+  subtitle     String?
+  badge        String?   // "Edición Especial", "Nuevos Ingresos"
+  ctaText      String?   // "Ver Colección"
+  ctaLink      String?   // "/categoria/hogar"
+  desktopImage String
+  mobileImage  String?
+  order        Int       @default(0)
+  isActive     Boolean   @default(true)
+  startsAt     DateTime?
+  endsAt       DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([isActive, order])
+  @@map("banners")
+}
+
+// -------------------------------------------------------------
+// PROMOCIONES, CUPONES Y OFERTAS RELÁMPAGO
+// -------------------------------------------------------------
+model Promotion {
+  id             String    @id @default(uuid())
+  name           String
+  code           String?   @unique // Código de cupón opcional (ej: BIENVENIDA10)
+  type           String    @default("PERCENTAGE") // PERCENTAGE, FIXED_AMOUNT, FREE_SHIPPING
+  value          Float     // % o monto fijo en ₡
+  minOrderAmount Float?    // Monto mínimo de compra
+  maxDiscount    Float?    // Tope de descuento
+  usageLimit     Int?      // Límite de usos
+  usedCount      Int       @default(0)
+  startsAt       DateTime?
+  endsAt         DateTime?
+  isActive       Boolean   @default(true)
+  applyToAll     Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("promotions")
+}
+
+// -------------------------------------------------------------
+// CONTENIDO DINÁMICO DEL SITIO (NUESTRA HISTORIA, CONFIGURACIONES)
+// -------------------------------------------------------------
+model SiteContent {
+  id        String   @id @default(uuid())
+  key       String   @unique // our_story, store_info, sinpe_config, bank_config, promo_bar
+  data      String   // JSON string con todos los campos editables
+  updatedAt DateTime @updatedAt
+
+  @@map("site_content")
+}
+
+// -------------------------------------------------------------
+// TESTIMONIOS Y RESEÑAS
+// -------------------------------------------------------------
+model Testimonial {
+  id             String   @id @default(uuid())
+  clientName     String
+  clientLocation String?  // Ej: "Curridabat, San José"
+  clientAvatar   String?
+  rating         Int      @default(5)
+  comment        String
+  isFeatured     Boolean  @default(true)
+  isActive       Boolean  @default(true)
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model Review {
+  id            String   @id @default(uuid())
+  productId     String
+  userId        String?
+  customerName  String
+  customerEmail String
+  rating        Int      @default(5)
+  comment       String
+  isApproved    Boolean  @default(false) // Moderación en panel admin
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("reviews")
+}

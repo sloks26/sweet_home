@@ -1,0 +1,225 @@
+import React from 'react';
+import { MessageCircle, Send, Trash2, Clock, Plus } from 'lucide-react';
+import Badge from '../../ui/Badge';
+import Button from '../../ui/Button';
+
+export const ApartadosTable = ({
+  apartados = [],
+  pendingSaldo = 0,
+  onOpenCreate,
+  onOpenPayment,
+  onDelete,
+  formatCleanPhone,
+  getWhatsAppLink
+}) => {
+  return (
+    <div id="section-apartados" className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-amber-500/30 space-y-4 scroll-mt-24">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-night-700">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400">
+            <Clock className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="font-serif text-base sm:text-lg font-bold text-text-primary flex items-center gap-2">
+              <span>Clientes a Pagos / Apartados</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">
+                {apartados.length}
+              </span>
+            </h4>
+            <p className="text-xs text-text-secondary">
+              Saldo pendiente por cobrar: <strong className="text-amber-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
+            </p>
+          </div>
+        </div>
+
+        <Button
+          variant="primary"
+          size="sm"
+          icon={Plus}
+          onClick={onOpenCreate}
+        >
+          + Nuevo Apartado
+        </Button>
+      </div>
+
+      {apartados.length === 0 ? (
+        <div className="p-6 text-center text-xs text-text-muted bg-night-950/50 rounded-xl border border-dashed border-night-700">
+          No tienes clientes con apartados activos. Agrega uno con "+ Nuevo Apartado".
+        </div>
+      ) : (
+        <>
+          {/* Vista de Tarjetas para Celular y Tablet (< 768px) - Cero Scroll Horizontal */}
+          <div className="md:hidden space-y-3">
+            {apartados.map((item) => (
+              <div
+                key={item.id}
+                className="p-3.5 rounded-xl bg-night-950 border border-amber-500/25 space-y-2.5"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="font-bold text-sm text-text-primary">{item.customerName}</div>
+                    <a
+                      href={`https://wa.me/${formatCleanPhone(item.customerPhone)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs text-emerald-400 hover:underline inline-flex items-center gap-1 mt-0.5"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>{item.customerPhone}</span>
+                    </a>
+                  </div>
+                  {item.status === 'COMPLETED' ? (
+                    <Badge variant="success" size="sm">Liquidado</Badge>
+                  ) : (
+                    <Badge variant="warning" size="sm">Pendiente</Badge>
+                  )}
+                </div>
+
+                <div className="text-xs text-text-secondary bg-night-900 p-2 rounded-lg border border-night-800">
+                  <span className="text-[10px] uppercase font-semibold text-text-muted block">Prendas / Artículos:</span>
+                  <span className="font-medium text-text-primary">{item.productDetails}</span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-xs py-1 border-t border-b border-night-800">
+                  <div>
+                    <span className="text-[10px] text-text-muted block">Total</span>
+                    <span className="font-bold text-text-primary">₡{(item.totalAmount || 0).toLocaleString('es-CR')}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-text-muted block">Abonado</span>
+                    <span className="font-bold text-emerald-400">₡{(item.paidAmount || 0).toLocaleString('es-CR')}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-text-muted block">Saldo</span>
+                    <span className="font-bold text-amber-300">₡{(item.remainingAmount || 0).toLocaleString('es-CR')}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 pt-1">
+                  {item.status !== 'COMPLETED' ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <button
+                        type="button"
+                        onClick={() => onOpenPayment(item)}
+                        className="flex-1 min-h-[40px] px-3 py-2 rounded-xl bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 text-xs font-bold transition-colors flex items-center justify-center gap-1"
+                      >
+                        + Abono
+                      </button>
+                      <a
+                        href={getWhatsAppLink(item)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 min-h-[40px] px-3 py-2 rounded-xl bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold transition-colors flex items-center justify-center gap-1"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                        <span>Recordar WA</span>
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="flex-1 text-xs text-emerald-400 font-medium">Cuenta cancelada</div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => onDelete(item.id, item.customerName)}
+                    className="min-h-[40px] px-3 py-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 text-xs font-semibold transition-colors flex items-center justify-center"
+                    title="Eliminar"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Vista de Tabla para Pantallas Grandes (Desktop >= 768px) */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-left text-xs min-w-[680px]">
+              <thead>
+                <tr className="border-b border-night-700 text-text-muted">
+                  <th className="pb-3 font-medium">Cliente</th>
+                  <th className="pb-3 font-medium">Prendas</th>
+                  <th className="pb-3 font-medium">Total (₡)</th>
+                  <th className="pb-3 font-medium">Abonado (₡)</th>
+                  <th className="pb-3 font-medium">Saldo (₡)</th>
+                  <th className="pb-3 font-medium">Estado</th>
+                  <th className="pb-3 font-medium text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-night-800">
+                {apartados.map((item) => (
+                  <tr key={item.id} className="hover:bg-[#1E1033] transition-colors">
+                    <td className="py-3 font-medium text-white">
+                      <div>{item.customerName}</div>
+                      <a
+                        href={`https://wa.me/${formatCleanPhone(item.customerPhone)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[11px] text-emerald-400 hover:underline flex items-center gap-1 mt-0.5"
+                      >
+                        <MessageCircle className="w-3 h-3" />
+                        <span>{item.customerPhone}</span>
+                      </a>
+                    </td>
+                    <td className="py-3 text-text-secondary max-w-[180px] truncate" title={item.productDetails}>
+                      {item.productDetails}
+                    </td>
+                    <td className="py-3 font-bold text-text-primary">
+                      ₡{(item.totalAmount || 0).toLocaleString('es-CR')}
+                    </td>
+                    <td className="py-3 font-bold text-emerald-400">
+                      ₡{(item.paidAmount || 0).toLocaleString('es-CR')}
+                    </td>
+                    <td className="py-3 font-bold text-amber-300">
+                      ₡{(item.remainingAmount || 0).toLocaleString('es-CR')}
+                    </td>
+                    <td className="py-3">
+                      {item.status === 'COMPLETED' ? (
+                        <Badge variant="success" size="sm">Liquidado</Badge>
+                      ) : (
+                        <Badge variant="warning" size="sm">Pendiente</Badge>
+                      )}
+                    </td>
+                    <td className="py-3 text-right space-x-1.5 whitespace-nowrap">
+                      {item.status !== 'COMPLETED' && (
+                        <>
+                          <a
+                            href={getWhatsAppLink(item)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-[11px] font-semibold transition-colors inline-flex items-center gap-1"
+                            title="Cobro amable por WhatsApp"
+                          >
+                            <Send className="w-3 h-3" />
+                            <span>Cobrar WA</span>
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => onOpenPayment(item)}
+                            className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 text-[11px] font-semibold transition-colors"
+                          >
+                            + Abono
+                          </button>
+                        </>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => onDelete(item.id, item.customerName)}
+                        className="p-1 rounded text-text-muted hover:text-rose-400 transition-colors inline-block"
+                        title="Eliminar"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default ApartadosTable;
