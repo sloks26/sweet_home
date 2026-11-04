@@ -61,7 +61,9 @@ export const CheckoutStep3Confirmation = ({
           Gracias por tu compra
         </h3>
         <p className="text-xs text-text-secondary mt-1 max-w-md mx-auto">
-          Estimada(o) <strong className="text-text-primary">{createdOrder.customerName}</strong>, tu orden ha sido registrada. Sigue las instrucciones de abajo para validar tu pago y despachar tu paquete.
+          Estimada(o) <strong className="text-text-primary">{createdOrder.customerName}</strong>, tu
+          orden ha sido registrada. Sigue las instrucciones de abajo para validar tu pago y
+          despachar tu paquete.
         </p>
       </div>
 
@@ -117,8 +119,14 @@ export const CheckoutStep3Confirmation = ({
       <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-night-950 to-night-900 border border-gold-DEFAULT/30 text-left space-y-4">
         <div className="flex items-center justify-between border-b border-night-700/60 pb-3">
           <span className="text-xs font-bold text-gold-light uppercase tracking-wider flex items-center gap-2">
-            {isSinpe ? <Phone className="w-4 h-4 text-gold-bright" /> : <Landmark className="w-4 h-4 text-gold-bright" />}
-            <span>{isSinpe ? 'Datos para pagar por SINPE Móvil' : 'Cuentas para Transferencia Bancaria'}</span>
+            {isSinpe ? (
+              <Phone className="w-4 h-4 text-gold-bright" />
+            ) : (
+              <Landmark className="w-4 h-4 text-gold-bright" />
+            )}
+            <span>
+              {isSinpe ? 'Datos para pagar por SINPE Móvil' : 'Cuentas para Transferencia Bancaria'}
+            </span>
           </span>
           <span className="text-[11px] text-gold-bright font-medium">Colones ₡</span>
         </div>
@@ -128,15 +136,23 @@ export const CheckoutStep3Confirmation = ({
             {/* Teléfono SINPE */}
             <div className="flex items-center justify-between bg-night-900 p-3 rounded-xl border border-night-700">
               <div>
-                <span className="text-[10px] text-text-muted uppercase block">Teléfono SINPE Móvil</span>
-                <strong className="text-base sm:text-lg font-mono text-gold-bright">{sinpePhone || '6465-6625'}</strong>
+                <span className="text-[10px] text-text-muted uppercase block">
+                  Teléfono SINPE Móvil
+                </span>
+                <strong className="text-base sm:text-lg font-mono text-gold-bright">
+                  {sinpePhone || '6465-6625'}
+                </strong>
               </div>
               <button
                 type="button"
                 onClick={() => onCopy(sinpeClean || '64656625', 'sinpe')}
                 className="px-3 py-1.5 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 border border-gold-DEFAULT/30 text-gold-light text-xs font-semibold flex items-center gap-1.5 transition-all"
               >
-                {copiedField === 'sinpe' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedField === 'sinpe' ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
                 <span>{copiedField === 'sinpe' ? '¡Copiado!' : 'Copiar número'}</span>
               </button>
             </div>
@@ -144,21 +160,32 @@ export const CheckoutStep3Confirmation = ({
             {/* Monto a transferir */}
             <div className="flex items-center justify-between bg-night-900 p-3 rounded-xl border border-night-700">
               <div>
-                <span className="text-[10px] text-text-muted uppercase block">Monto Exacto a Transferir</span>
-                <strong className="text-base sm:text-lg font-mono text-emerald-400">₡{totalFormatted}</strong>
+                <span className="text-[10px] text-text-muted uppercase block">
+                  Monto Exacto a Transferir
+                </span>
+                <strong className="text-base sm:text-lg font-mono text-emerald-400">
+                  ₡{totalFormatted}
+                </strong>
               </div>
               <button
                 type="button"
                 onClick={() => onCopy(createdOrder.total?.toString() || '', 'amount')}
                 className="px-3 py-1.5 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 border border-gold-DEFAULT/30 text-gold-light text-xs font-semibold flex items-center gap-1.5 transition-all"
               >
-                {copiedField === 'amount' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedField === 'amount' ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
                 <span>{copiedField === 'amount' ? '¡Copiado!' : 'Copiar monto'}</span>
               </button>
             </div>
 
             <div className="text-xs text-text-secondary pt-1">
-              Titular: <strong className="text-text-primary">{sinpeHolder || 'Maureen Vanessa Sanchez Martinez'}</strong>
+              Titular:{' '}
+              <strong className="text-text-primary">
+                {sinpeHolder || 'Maureen Vanessa Sanchez Martinez'}
+              </strong>
             </div>
           </div>
         ) : (
@@ -175,7 +202,11 @@ export const CheckoutStep3Confirmation = ({
                   onClick={() => onCopy(bacIban, 'bac')}
                   className="px-2.5 py-1 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 border border-gold-DEFAULT/30 text-gold-light text-[11px] font-semibold flex items-center gap-1"
                 >
-                  {copiedField === 'bac' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copiedField === 'bac' ? (
+                    <Check className="w-3 h-3 text-emerald-400" />
+                  ) : (
+                    <Copy className="w-3 h-3" />
+                  )}
                   <span>{copiedField === 'bac' ? '¡Copiado!' : 'Copiar IBAN'}</span>
                 </button>
               </div>
@@ -194,7 +225,11 @@ export const CheckoutStep3Confirmation = ({
                   onClick={() => onCopy(popularIban, 'popular')}
                   className="px-2.5 py-1 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 border border-gold-DEFAULT/30 text-gold-light text-[11px] font-semibold flex items-center gap-1"
                 >
-                  {copiedField === 'popular' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copiedField === 'popular' ? (
+                    <Check className="w-3 h-3 text-emerald-400" />
+                  ) : (
+                    <Copy className="w-3 h-3" />
+                  )}
                   <span>{copiedField === 'popular' ? '¡Copiado!' : 'Copiar IBAN'}</span>
                 </button>
               </div>
@@ -204,21 +239,32 @@ export const CheckoutStep3Confirmation = ({
             {/* Monto a transferir */}
             <div className="flex items-center justify-between bg-night-900 p-3 rounded-xl border border-night-700">
               <div>
-                <span className="text-[10px] text-text-muted uppercase block">Monto Exacto a Transferir</span>
-                <strong className="text-base sm:text-lg font-mono text-emerald-400">₡{totalFormatted}</strong>
+                <span className="text-[10px] text-text-muted uppercase block">
+                  Monto Exacto a Transferir
+                </span>
+                <strong className="text-base sm:text-lg font-mono text-emerald-400">
+                  ₡{totalFormatted}
+                </strong>
               </div>
               <button
                 type="button"
                 onClick={() => onCopy(createdOrder.total?.toString() || '', 'amount')}
                 className="px-3 py-1.5 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 border border-gold-DEFAULT/30 text-gold-light text-xs font-semibold flex items-center gap-1.5 transition-all"
               >
-                {copiedField === 'amount' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedField === 'amount' ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
                 <span>{copiedField === 'amount' ? '¡Copiado!' : 'Copiar monto'}</span>
               </button>
             </div>
 
             <div className="text-xs text-text-secondary pt-1">
-              Titular: <strong className="text-text-primary">{bankHolder || 'Maureen Vanessa Sanchez Martinez'}</strong>
+              Titular:{' '}
+              <strong className="text-text-primary">
+                {bankHolder || 'Maureen Vanessa Sanchez Martinez'}
+              </strong>
             </div>
           </div>
         )}
@@ -239,7 +285,8 @@ export const CheckoutStep3Confirmation = ({
           <span>Enviar Comprobante por WhatsApp</span>
         </a>
         <p className="text-[11px] text-text-muted">
-          Se abrirá WhatsApp con el mensaje prellenado incluyendo tu número de pedido <strong>{createdOrder.orderNumber}</strong>.
+          Se abrirá WhatsApp con el mensaje prellenado incluyendo tu número de pedido{' '}
+          <strong>{createdOrder.orderNumber}</strong>.
         </p>
       </div>
 
@@ -254,7 +301,10 @@ export const CheckoutStep3Confirmation = ({
             <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
             <div>
               <strong className="block font-bold">¡Comprobante adjuntado con éxito!</strong>
-              <span>Tu comprobante ya está registrado en el sistema. La dueña validará tu pago a la brevedad.</span>
+              <span>
+                Tu comprobante ya está registrado en el sistema. La dueña validará tu pago a la
+                brevedad.
+              </span>
             </div>
           </div>
         ) : (
@@ -273,7 +323,11 @@ export const CheckoutStep3Confirmation = ({
 
             {filePreview && (
               <div className="relative w-36 h-36 rounded-xl overflow-hidden border-2 border-gold-DEFAULT/40 mx-auto shadow-md">
-                <img src={filePreview} alt="Vista previa del comprobante" className="w-full h-full object-cover" />
+                <img
+                  src={filePreview}
+                  alt="Vista previa del comprobante"
+                  className="w-full h-full object-cover"
+                />
               </div>
             )}
 
@@ -302,13 +356,7 @@ export const CheckoutStep3Confirmation = ({
 
       {/* Botón Finalizar */}
       <div className="pt-2">
-        <Button
-          type="button"
-          variant="primary"
-          size="md"
-          onClick={onClose}
-          className="w-full"
-        >
+        <Button type="button" variant="primary" size="md" onClick={onClose} className="w-full">
           Volver a la Tienda
         </Button>
       </div>

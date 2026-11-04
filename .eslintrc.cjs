@@ -36,6 +36,7 @@ module.exports = {
         'n/no-unpublished-import': 'off',
         'n/no-missing-import': 'off',
         'import/no-unresolved': 'off',
+        'import/no-named-as-default': 'off',
         'security/detect-object-injection': 'off' // will note in report
       }
     },
@@ -62,9 +63,12 @@ module.exports = {
       rules: {
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',
+        'react/no-unescaped-entities': 'off',
+        'react-hooks/set-state-in-effect': 'warn',
         'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
         'no-console': 'off',
-        'import/no-unresolved': 'off'
+        'import/no-unresolved': 'off',
+        'import/no-named-as-default': 'off'
       }
     }
   ]

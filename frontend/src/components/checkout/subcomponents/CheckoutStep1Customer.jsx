@@ -203,7 +203,9 @@ export const CheckoutStep1Customer = ({
                 className="w-full bg-night-900 text-text-primary rounded-xl px-3 py-2 text-xs border border-night-600 focus:outline-none focus:border-gold-DEFAULT"
               >
                 {CR_PROVINCES.map((prov) => (
-                  <option key={prov} value={prov}>{prov}</option>
+                  <option key={prov} value={prov}>
+                    {prov}
+                  </option>
                 ))}
               </select>
             </div>
@@ -259,7 +261,9 @@ export const CheckoutStep1Customer = ({
       <div className="p-4 rounded-2xl bg-night-950/70 border border-gold-DEFAULT/20 space-y-2 text-xs">
         <div className="flex justify-between text-text-secondary">
           <span>Subtotal de Artículos ({itemsCount})</span>
-          <span className="font-semibold text-text-primary">₡{subtotal.toLocaleString('es-CR')}</span>
+          <span className="font-semibold text-text-primary">
+            ₡{subtotal.toLocaleString('es-CR')}
+          </span>
         </div>
         <div className="flex justify-between text-text-secondary">
           <span>Costo de Envío</span>
@@ -279,20 +283,10 @@ export const CheckoutStep1Customer = ({
 
       {/* Botón Siguiente */}
       <div className="flex justify-end gap-3 pt-2">
-        <Button
-          type="button"
-          variant="ghost"
-          size="md"
-          onClick={onClose}
-        >
+        <Button type="button" variant="ghost" size="md" onClick={onClose}>
           Seguir Comprando
         </Button>
-        <Button
-          type="submit"
-          variant="primary"
-          size="md"
-          iconRight={ArrowRight}
-        >
+        <Button type="submit" variant="primary" size="md" iconRight={ArrowRight}>
           Continuar al Pago
         </Button>
       </div>

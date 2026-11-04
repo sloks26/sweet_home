@@ -170,7 +170,9 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
     };
 
     try {
-      const url = editingProduct ? `/api/admin/products/${editingProduct.id}` : '/api/admin/products';
+      const url = editingProduct
+        ? `/api/admin/products/${editingProduct.id}`
+        : '/api/admin/products';
       const method = editingProduct ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -331,7 +333,9 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
                 </tr>
               ) : (
                 products.map((prod) => {
-                  const coverImage = prod.images?.[0]?.url || 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                  const coverImage =
+                    prod.images?.[0]?.url ||
+                    'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
                   return (
                     <tr key={prod.id} className="hover:bg-night-800/40 transition-colors">
                       <td className="py-3 px-4">
@@ -341,11 +345,14 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
                             alt={prod.name}
                             className="w-10 h-10 rounded-lg object-cover border border-night-700 shrink-0"
                             onError={(e) => {
-                              e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
                             }}
                           />
                           <div>
-                            <div className="font-semibold text-text-primary line-clamp-1">{prod.name}</div>
+                            <div className="font-semibold text-text-primary line-clamp-1">
+                              {prod.name}
+                            </div>
                             <div className="text-[11px] text-text-muted font-mono">{prod.sku}</div>
                           </div>
                         </div>
@@ -354,7 +361,9 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
                       <td className="py-3 px-4 text-text-secondary">
                         <div>{prod.category?.name || 'Sin Categoría'}</div>
                         {prod.subcategory && (
-                          <div className="text-[11px] text-gold-bright/80">{prod.subcategory.name}</div>
+                          <div className="text-[11px] text-gold-bright/80">
+                            {prod.subcategory.name}
+                          </div>
                         )}
                       </td>
 

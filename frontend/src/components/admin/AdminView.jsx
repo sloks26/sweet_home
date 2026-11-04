@@ -37,11 +37,13 @@ export const AdminView = ({
   return (
     <div className="relative min-h-screen text-text-primary bg-night-950 selection:bg-gold-base/30 selection:text-gold-light">
       <StarBackground />
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center text-gold-light font-serif text-lg">
-          Cargando panel de administración seguro...
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center text-gold-light font-serif text-lg">
+            Cargando panel de administración seguro...
+          </div>
+        }
+      >
         <AdminLayout
           activeTab={adminTab}
           pendingVouchersCount={adminStats?.metrics?.voucherReceivedOrders || 0}
@@ -51,10 +53,7 @@ export const AdminView = ({
           onLogout={handleLogout}
         >
           {adminTab === 'dashboard' && (
-            <AdminDashboard
-              stats={adminStats}
-              onNavigate={handleAdminNavigation}
-            />
+            <AdminDashboard stats={adminStats} onNavigate={handleAdminNavigation} />
           )}
           {adminTab === 'orders' && <AdminOrders initialStatusFilter={orderFilter} />}
           {adminTab === 'products' && <AdminProducts initialStockStatus={productStockFilter} />}
@@ -65,7 +64,9 @@ export const AdminView = ({
           {adminTab === 'users' && <AdminUsersSection currentUserId={authUser?.id} />}
           {adminTab === 'settings' && (
             <AdminSettings
-              onSaveSuccess={(payload) => setStoreSettings((prev) => ({ ...(prev || {}), ...payload }))}
+              onSaveSuccess={(payload) =>
+                setStoreSettings((prev) => ({ ...(prev || {}), ...payload }))
+              }
             />
           )}
         </AdminLayout>

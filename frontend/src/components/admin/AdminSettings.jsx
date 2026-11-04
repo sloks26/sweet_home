@@ -70,12 +70,16 @@ export const AdminSettings = ({ onSaveSuccess }) => {
           setStoreAddress(d.storeAddress || 'San José, Costa Rica');
           setPickupNote(d.pickupNote || 'Previa coordinación por WhatsApp');
           setContactEmail(d.contactEmail || 'info@sweethomeboutiquecr.com');
-          setFreeShippingThreshold(d.freeShippingThreshold ? d.freeShippingThreshold.toString() : '35000');
+          setFreeShippingThreshold(
+            d.freeShippingThreshold ? d.freeShippingThreshold.toString() : '35000'
+          );
 
           if (d.social) {
             if (d.social.instagram) {
               setInstagramHandle(d.social.instagram.handle || '@sweethomeandboutiquecr');
-              setInstagramUrl(d.social.instagram.url || 'https://instagram.com/sweethomeandboutiquecr');
+              setInstagramUrl(
+                d.social.instagram.url || 'https://instagram.com/sweethomeandboutiquecr'
+              );
             }
             if (d.social.tiktok) {
               setTiktokHandle(d.social.tiktok.handle || '@sweet.home.boutique.cr');
@@ -83,7 +87,9 @@ export const AdminSettings = ({ onSaveSuccess }) => {
             }
             if (d.social.facebook) {
               setFacebookName(d.social.facebook.name || 'Sweet Home & Boutique CR');
-              setFacebookUrl(d.social.facebook.url || 'https://facebook.com/SweetHomeAndBoutiqueCR');
+              setFacebookUrl(
+                d.social.facebook.url || 'https://facebook.com/SweetHomeAndBoutiqueCR'
+              );
             }
           }
         }
@@ -161,17 +167,12 @@ export const AdminSettings = ({ onSaveSuccess }) => {
             <span>Ajustes Generales de la Boutique</span>
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Reemplaza aquí los datos de contacto (SINPE Móvil, teléfono, WhatsApp, cuentas bancarias BAC / Popular y correos) por tus datos reales.
+            Reemplaza aquí los datos de contacto (SINPE Móvil, teléfono, WhatsApp, cuentas bancarias
+            BAC / Popular y correos) por tus datos reales.
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          size="md"
-          icon={Check}
-          isLoading={saving}
-          onClick={handleSave}
-        >
+        <Button variant="primary" size="md" icon={Check} isLoading={saving} onClick={handleSave}>
           Guardar Ajustes
         </Button>
       </div>
@@ -179,7 +180,10 @@ export const AdminSettings = ({ onSaveSuccess }) => {
       {savedSuccess && (
         <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-xs flex items-center gap-2.5 shadow-sm">
           <Check className="w-4 h-4 text-emerald-400" />
-          <span>¡Ajustes actualizados con éxito en toda la tienda pública (Header, Footer, Checkout, Modal de Envío y WhatsApp)!</span>
+          <span>
+            ¡Ajustes actualizados con éxito en toda la tienda pública (Header, Footer, Checkout,
+            Modal de Envío y WhatsApp)!
+          </span>
         </div>
       )}
 
@@ -215,15 +219,24 @@ export const AdminSettings = ({ onSaveSuccess }) => {
                 required
               />
               <div className="flex items-center justify-between text-[11px] px-1">
-                <span className={whatsapp.replace(/\D/g, '').length >= 8 ? 'text-emerald-400' : 'text-amber-300'}>
-                  {whatsapp.replace(/\D/g, '').length >= 8 ? '✓ Formato Costa Rica detectado' : '⚠ 506 seguido de 8 dígitos'}
+                <span
+                  className={
+                    whatsapp.replace(/\D/g, '').length >= 8 ? 'text-emerald-400' : 'text-amber-300'
+                  }
+                >
+                  {whatsapp.replace(/\D/g, '').length >= 8
+                    ? '✓ Formato Costa Rica detectado'
+                    : '⚠ 506 seguido de 8 dígitos'}
                 </span>
                 <button
                   type="button"
                   onClick={() => {
                     const clean = whatsapp.replace(/\D/g, '');
                     const phone = clean.startsWith('506') ? clean : `506${clean}`;
-                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hola Sweet Home, prueba de enlace ✨')}`, '_blank');
+                    window.open(
+                      `https://wa.me/${phone}?text=${encodeURIComponent('Hola Sweet Home, prueba de enlace ✨')}`,
+                      '_blank'
+                    );
                   }}
                   className="text-emerald-400 hover:underline inline-flex items-center gap-1 font-semibold cursor-pointer"
                 >
@@ -435,7 +448,8 @@ export const AdminSettings = ({ onSaveSuccess }) => {
           <div className="space-y-1">
             <h4 className="font-bold text-amber-300">Sincronización en Tiempo Real</h4>
             <p className="leading-relaxed text-[#D6C8DD]">
-              Al guardar tus datos en este formulario, se actualizarán en vivo y de manera inmediata en toda la plataforma (Header, Footer, Checkout, Modal de Envío y WhatsApp).
+              Al guardar tus datos en este formulario, se actualizarán en vivo y de manera inmediata
+              en toda la plataforma (Header, Footer, Checkout, Modal de Envío y WhatsApp).
             </p>
           </div>
         </div>

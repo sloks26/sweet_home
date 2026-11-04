@@ -2,7 +2,6 @@ import { z } from 'zod';
 import prisma from '../config/prisma.js';
 import { config } from '../config/index.js';
 import { processAndSaveImage } from '../services/imageService.js';
-import { logAudit } from '../services/audit.js';
 
 const orderItemSchema = z.object({
   id: z.string(),
@@ -19,12 +18,14 @@ const createOrderSchema = z.object({
   customerEmail: z.string().email('Correo electrónico inválido'),
   customerPhone: z.string().min(8, 'Teléfono debe tener al menos 8 dígitos'),
   shippingMethod: z.enum(['CORREOS_CR', 'EXPRESS_GAM', 'RETIRO_TIENDA']),
-  shippingAddress: z.object({
-    province: z.string().min(1, 'Provincia requerida'),
-    canton: z.string().min(1, 'Cantón requerido'),
-    district: z.string().min(1, 'Distrito requerido'),
-    details: z.string().min(5, 'Dirección detallada requerida')
-  }).optional(),
+  shippingAddress: z
+    .object({
+      province: z.string().min(1, 'Provincia requerida'),
+      canton: z.string().min(1, 'Cantón requerido'),
+      district: z.string().min(1, 'Distrito requerido'),
+      details: z.string().min(5, 'Dirección detallada requerida')
+    })
+    .optional(),
   paymentMethod: z.enum(['SINPE_MOVIL', 'TRANSFER']),
   notes: z.string().optional(),
   items: z.array(orderItemSchema).min(1, 'El carrito debe tener al menos un producto')
@@ -57,7 +58,7 @@ export const orderController = {
       } = parsed.data;
 
       // 1. Calcular subtotal de artículos
-      const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
       // 2. Calcular costo de envío según política de Costa Rica
       // Envío gratis a partir de ₡35,000 en Correos de Costa Rica o Retiro en Tienda
@@ -249,10 +250,7 @@ export const orderController = {
 
       const order = await prisma.order.findFirst({
         where: {
-          OR: [
-            { orderNumber },
-            { id: orderNumber }
-          ]
+          OR: [{ orderNumber }, { id: orderNumber }]
         }
       });
 

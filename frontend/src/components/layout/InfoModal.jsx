@@ -25,7 +25,9 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
       content: (
         <div className="space-y-4 text-xs text-text-secondary leading-relaxed">
           <p>
-            En <strong className="text-text-primary">Sweet Home & Boutique CR</strong> nos aseguramos de que cada paquete viaje protegido y con la mejor presentación hasta la puerta de tu hogar o lugar de trabajo.
+            En <strong className="text-text-primary">Sweet Home & Boutique CR</strong> nos
+            aseguramos de que cada paquete viaje protegido y con la mejor presentación hasta la
+            puerta de tu hogar o lugar de trabajo.
           </p>
 
           <div className="space-y-3 pt-2">
@@ -34,10 +36,13 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
                 Correos de Costa Rica (Todo el País)
               </span>
               <p>
-                • Tarifa estándar: ₡3,500 colones para cualquier provincia.<br />
-                • <strong className="text-status-success">¡Envío GRATIS!</strong> en todas las compras de {freeThreshold} o más.<br />
-                • Plazo de entrega: de 2 a 4 días hábiles una vez confirmado el pago.<br />
-                • Te compartimos tu número de guía para que rastrees tu paquete directamente en correos.go.cr.
+                • Tarifa estándar: ₡3,500 colones para cualquier provincia.
+                <br />• <strong className="text-status-success">¡Envío GRATIS!</strong> en todas las
+                compras de {freeThreshold} o más.
+                <br />
+                • Plazo de entrega: de 2 a 4 días hábiles una vez confirmado el pago.
+                <br />• Te compartimos tu número de guía para que rastrees tu paquete directamente
+                en correos.go.cr.
               </p>
             </div>
 
@@ -46,9 +51,10 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
                 Mensajería Express GAM
               </span>
               <p>
-                • Tarifa: ₡2,500 colones.<br />
-                • Cobertura en zonas centrales de San José, Heredia, Alajuela y Cartago.<br />
-                • Entrega rápida en 24 a 48 horas hábiles.
+                • Tarifa: ₡2,500 colones.
+                <br />
+                • Cobertura en zonas centrales de San José, Heredia, Alajuela y Cartago.
+                <br />• Entrega rápida en 24 a 48 horas hábiles.
               </p>
             </div>
 
@@ -57,8 +63,8 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
                 Retiro en Tienda Física (Sweet Home CR)
               </span>
               <p>
-                • Costo: ₡0 (Totalmente gratuito).<br />
-                • {pickupNote}.
+                • Costo: ₡0 (Totalmente gratuito).
+                <br />• {pickupNote}.
               </p>
             </div>
           </div>
@@ -71,30 +77,52 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
       content: (
         <div className="space-y-4 text-xs text-text-secondary leading-relaxed">
           <div className="p-3.5 rounded-2xl bg-night-950/80 border border-night-700 space-y-1">
-            <strong className="text-text-primary block text-sm">¿Cómo realizo el pago por SINPE Móvil?</strong>
+            <strong className="text-text-primary block text-sm">
+              ¿Cómo realizo el pago por SINPE Móvil?
+            </strong>
             <p>
-              Al finalizar tu compra en el checkout, selecciona SINPE Móvil y transfiere el monto exacto al número <strong className="text-gold-bright font-mono">{sinpePhone}</strong> a nombre de <strong className="text-text-primary">{sinpeHolder}</strong>. Luego adjunta tu comprobante por WhatsApp o en la misma web.
+              Al finalizar tu compra en el checkout, selecciona SINPE Móvil y transfiere el monto
+              exacto al número <strong className="text-gold-bright font-mono">{sinpePhone}</strong>{' '}
+              a nombre de <strong className="text-text-primary">{sinpeHolder}</strong>. Luego
+              adjunta tu comprobante por WhatsApp o en la misma web.
             </p>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-night-950/80 border border-night-700 space-y-1">
-            <strong className="text-text-primary block text-sm">¿Tienen número de cuenta IBAN bancaria?</strong>
+            <strong className="text-text-primary block text-sm">
+              ¿Tienen número de cuenta IBAN bancaria?
+            </strong>
             <p>
-              Sí, contamos con cuentas en colones: <strong className="text-gold-bright font-mono">{bacName}: {bacIban}</strong> y <strong className="text-gold-bright font-mono">{popularName}: {popularIban}</strong> a nombre de <strong className="text-text-primary">{bankHolder}</strong>.
+              Sí, contamos con cuentas en colones:{' '}
+              <strong className="text-gold-bright font-mono">
+                {bacName}: {bacIban}
+              </strong>{' '}
+              y{' '}
+              <strong className="text-gold-bright font-mono">
+                {popularName}: {popularIban}
+              </strong>{' '}
+              a nombre de <strong className="text-text-primary">{bankHolder}</strong>.
             </p>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-night-950/80 border border-night-700 space-y-1">
-            <strong className="text-text-primary block text-sm">¿Los paquetes incluyen empaque de regalo?</strong>
+            <strong className="text-text-primary block text-sm">
+              ¿Los paquetes incluyen empaque de regalo?
+            </strong>
             <p>
-              ¡Sí! Todos nuestros envíos se preparan con papel seda, lazo de satín y perfume insignia. Si deseas una tarjeta con dedicatoria personalizada, puedes indicárnoslo en las notas de tu pedido sin costo extra.
+              ¡Sí! Todos nuestros envíos se preparan con papel seda, lazo de satín y perfume
+              insignia. Si deseas una tarjeta con dedicatoria personalizada, puedes indicárnoslo en
+              las notas de tu pedido sin costo extra.
             </p>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-night-950/80 border border-night-700 space-y-1">
-            <strong className="text-text-primary block text-sm">¿Los productos de Bienestar Íntimo son discretos?</strong>
+            <strong className="text-text-primary block text-sm">
+              ¿Los productos de Bienestar Íntimo son discretos?
+            </strong>
             <p>
-              Absolutamente. Se envían en cajas rígidas totalmente selladas y opacas, sin ninguna etiqueta o mención externa sobre el contenido, garantizando tu total privacidad.
+              Absolutamente. Se envían en cajas rígidas totalmente selladas y opacas, sin ninguna
+              etiqueta o mención externa sobre el contenido, garantizando tu total privacidad.
             </p>
           </div>
         </div>
@@ -106,13 +134,23 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
       content: (
         <div className="space-y-3 text-xs text-text-secondary leading-relaxed">
           <p>
-            Bienvenido a Sweet Home & Boutique CR. Al realizar compras en nuestra plataforma aceptas nuestras políticas de venta transparente y entrega garantizada en el territorio costarricense.
+            Bienvenido a Sweet Home & Boutique CR. Al realizar compras en nuestra plataforma aceptas
+            nuestras políticas de venta transparente y entrega garantizada en el territorio
+            costarricense.
           </p>
           <p>
-            1. <strong>Precios y Moneda:</strong> Todos los precios están expresados en colones costarricenses (₡).<br />
-            2. <strong>Confirmación de Pedidos:</strong> Los pedidos quedan en estado pendiente hasta la verificación manual del comprobante de SINPE Móvil o Transferencia Bancaria.<br />
-            3. <strong>Disponibilidad de Inventario:</strong> Los productos se reservan por un plazo máximo de 24 horas a la espera del comprobante de pago.<br />
-            4. <strong>Garantía de Satisfacción:</strong> Si un artículo presenta defecto de fábrica al momento de la entrega, te lo reemplazamos o reintegramos de inmediato coordinando por nuestro WhatsApp oficial.
+            1. <strong>Precios y Moneda:</strong> Todos los precios están expresados en colones
+            costarricenses (₡).
+            <br />
+            2. <strong>Confirmación de Pedidos:</strong> Los pedidos quedan en estado pendiente
+            hasta la verificación manual del comprobante de SINPE Móvil o Transferencia Bancaria.
+            <br />
+            3. <strong>Disponibilidad de Inventario:</strong> Los productos se reservan por un plazo
+            máximo de 24 horas a la espera del comprobante de pago.
+            <br />
+            4. <strong>Garantía de Satisfacción:</strong> Si un artículo presenta defecto de fábrica
+            al momento de la entrega, te lo reemplazamos o reintegramos de inmediato coordinando por
+            nuestro WhatsApp oficial.
           </p>
         </div>
       )
@@ -123,10 +161,15 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
       content: (
         <div className="space-y-3 text-xs text-text-secondary leading-relaxed">
           <p>
-            En Sweet Home & Boutique CR respetamos y protegemos la privacidad de nuestras clientas. Tus datos personales (nombre, teléfono, correo y dirección de entrega) son utilizados exclusivamente para coordinar el despacho de tus paquetes y brindarte asesoría de compra.
+            En Sweet Home & Boutique CR respetamos y protegemos la privacidad de nuestras clientas.
+            Tus datos personales (nombre, teléfono, correo y dirección de entrega) son utilizados
+            exclusivamente para coordinar el despacho de tus paquetes y brindarte asesoría de
+            compra.
           </p>
           <p>
-            No compartimos ni comercializamos tu información con terceros bajo ninguna circunstancia. Toda la comunicación de pago se maneja de forma segura y directa por canales oficiales.
+            No compartimos ni comercializamos tu información con terceros bajo ninguna
+            circunstancia. Toda la comunicación de pago se maneja de forma segura y directa por
+            canales oficiales.
           </p>
         </div>
       )
@@ -153,9 +196,7 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
               <h2 className="font-serif text-xl sm:text-2xl font-bold text-text-primary">
                 {currentTopic.title}
               </h2>
-              <p className="text-xs text-text-secondary">
-                Sweet Home & Boutique CR • Costa Rica
-              </p>
+              <p className="text-xs text-text-secondary">Sweet Home & Boutique CR • Costa Rica</p>
             </div>
           </div>
           <button

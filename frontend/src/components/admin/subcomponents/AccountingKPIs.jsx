@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  TrendingUp,
-  TrendingDown,
-  Wallet,
-  Clock,
-  Truck,
-  ArrowUpRight
-} from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, Clock, Truck, ArrowUpRight } from 'lucide-react';
 
 // Componente para animación de conteo numérico progresivo
 export const AnimatedCounter = ({ targetValue = 0, duration = 1200, isCurrency = true }) => {
@@ -98,7 +91,9 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
             <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
         </div>
-        <div className={`text-base sm:text-2xl font-extrabold ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+        <div
+          className={`text-base sm:text-2xl font-extrabold ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}
+        >
           <AnimatedCounter targetValue={netProfit} />
         </div>
         <span className="text-[10px] sm:text-[11px] text-text-secondary block truncate">
@@ -124,7 +119,8 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
         </div>
         <span className="text-[10px] sm:text-[11px] text-text-secondary flex items-center justify-between">
           <span className="truncate">
-            {activeApartadosCount} {activeApartadosCount === 1 ? 'cliente activo' : 'clientes activos'}
+            {activeApartadosCount}{' '}
+            {activeApartadosCount === 1 ? 'cliente activo' : 'clientes activos'}
           </span>
           <span className="text-amber-300 text-[10px] underline flex items-center shrink-0">
             Ver <ArrowUpRight className="w-2.5 h-2.5 ml-0.5" />
@@ -150,7 +146,8 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
         </div>
         <span className="text-[10px] sm:text-[11px] text-text-secondary flex items-center justify-between">
           <span>
-            {activeContraEntregaCount} {activeContraEntregaCount === 1 ? 'pedido por cobrar' : 'pedidos por cobrar'}
+            {activeContraEntregaCount}{' '}
+            {activeContraEntregaCount === 1 ? 'pedido por cobrar' : 'pedidos por cobrar'}
           </span>
           <span className="text-sky-300 text-[10px] underline flex items-center shrink-0">
             Ver <ArrowUpRight className="w-2.5 h-2.5 ml-0.5" />

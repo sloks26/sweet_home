@@ -65,7 +65,8 @@ export const AdminOrderDetailModal = ({
   if (!selectedOrder) return null;
 
   const handleConfirmRejection = () => {
-    const finalReason = rejectionReason.trim() || 'Comprobante no cumple con los requisitos de verificación';
+    const finalReason =
+      rejectionReason.trim() || 'Comprobante no cumple con los requisitos de verificación';
     onRejectVoucher(finalReason);
     setShowRejectBox(false);
   };
@@ -116,7 +117,9 @@ export const AdminOrderDetailModal = ({
 
             <button
               type="button"
-              onClick={() => onDeleteOrder && onDeleteOrder(selectedOrder.id, selectedOrder.orderNumber)}
+              onClick={() =>
+                onDeleteOrder && onDeleteOrder(selectedOrder.id, selectedOrder.orderNumber)
+              }
               className="px-3 py-1.5 rounded-xl border border-status-error/40 text-status-error hover:bg-status-error/20 transition-colors flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
               title="Eliminar pedido permanentemente"
             >
@@ -139,7 +142,9 @@ export const AdminOrderDetailModal = ({
                 </h4>
                 <button
                   type="button"
-                  onClick={() => onDeleteOrder && onDeleteOrder(selectedOrder.id, selectedOrder.orderNumber)}
+                  onClick={() =>
+                    onDeleteOrder && onDeleteOrder(selectedOrder.id, selectedOrder.orderNumber)
+                  }
                   className="text-[11px] text-status-error hover:underline flex items-center gap-1 font-medium"
                   title="Eliminar pedido"
                 >
@@ -148,9 +153,15 @@ export const AdminOrderDetailModal = ({
                 </button>
               </div>
               <div className="space-y-1 text-text-secondary">
-                <div><strong>Nombre:</strong> {selectedOrder.customerName}</div>
-                <div><strong>Email:</strong> {selectedOrder.customerEmail}</div>
-                <div><strong>Teléfono:</strong> {selectedOrder.customerPhone}</div>
+                <div>
+                  <strong>Nombre:</strong> {selectedOrder.customerName}
+                </div>
+                <div>
+                  <strong>Email:</strong> {selectedOrder.customerEmail}
+                </div>
+                <div>
+                  <strong>Teléfono:</strong> {selectedOrder.customerPhone}
+                </div>
               </div>
             </div>
 
@@ -161,7 +172,9 @@ export const AdminOrderDetailModal = ({
                 <span>Método y Dirección de Envío</span>
               </h4>
               <div className="space-y-1 text-text-secondary">
-                <div><strong>Método:</strong> {selectedOrder.shippingMethod}</div>
+                <div>
+                  <strong>Método:</strong> {selectedOrder.shippingMethod}
+                </div>
                 <div className="bg-night-950 p-2.5 rounded-lg border border-night-800 mt-1 whitespace-pre-wrap text-[11px] font-mono">
                   {selectedOrder.shippingAddress}
                 </div>
@@ -198,7 +211,9 @@ export const AdminOrderDetailModal = ({
                         </div>
                       )}
                       <div className="truncate">
-                        <div className="font-semibold text-text-primary truncate">{item.productName}</div>
+                        <div className="font-semibold text-text-primary truncate">
+                          {item.productName}
+                        </div>
                         <div className="text-[10px] text-text-muted">
                           Cant: {item.quantity} {item.variantName ? `• ${item.variantName}` : ''}
                         </div>
@@ -213,8 +228,12 @@ export const AdminOrderDetailModal = ({
 
               {/* Resumen de totales */}
               <div className="pt-2 border-t border-night-800 space-y-1 text-right">
-                <div className="text-text-muted">Subtotal: ₡{selectedOrder.subtotal.toLocaleString('es-CR')}</div>
-                <div className="text-text-muted">Envío: ₡{selectedOrder.shippingCost.toLocaleString('es-CR')}</div>
+                <div className="text-text-muted">
+                  Subtotal: ₡{selectedOrder.subtotal.toLocaleString('es-CR')}
+                </div>
+                <div className="text-text-muted">
+                  Envío: ₡{selectedOrder.shippingCost.toLocaleString('es-CR')}
+                </div>
                 <div className="text-sm font-bold text-gold-light">
                   Total: ₡{selectedOrder.total.toLocaleString('es-CR')}
                 </div>
@@ -266,12 +285,21 @@ export const AdminOrderDetailModal = ({
                   {/* Comparador Rápido: Monto Esperado vs Referencia */}
                   <div className="p-3 rounded-xl bg-night-950 border border-gold-DEFAULT/30 grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      <span className="text-text-muted text-[10px] uppercase font-bold tracking-wider block">Monto Esperado</span>
-                      <span className="text-base font-extrabold text-gold-bright">₡{(selectedOrder.total || 0).toLocaleString('es-CR')}</span>
+                      <span className="text-text-muted text-[10px] uppercase font-bold tracking-wider block">
+                        Monto Esperado
+                      </span>
+                      <span className="text-base font-extrabold text-gold-bright">
+                        ₡{(selectedOrder.total || 0).toLocaleString('es-CR')}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-text-muted text-[10px] uppercase font-bold tracking-wider block">Referencia Cliente</span>
-                      <span className="font-mono text-xs font-semibold text-text-primary truncate block" title={selectedOrder.voucherNotes || ''}>
+                      <span className="text-text-muted text-[10px] uppercase font-bold tracking-wider block">
+                        Referencia Cliente
+                      </span>
+                      <span
+                        className="font-mono text-xs font-semibold text-text-primary truncate block"
+                        title={selectedOrder.voucherNotes || ''}
+                      >
                         {selectedOrder.voucherNotes || 'Sin referencia'}
                       </span>
                     </div>
@@ -322,11 +350,7 @@ export const AdminOrderDetailModal = ({
                         className="w-full bg-night-950 text-text-primary text-xs rounded-xl px-3 py-2 border border-night-700 focus:outline-none focus:border-status-error"
                       />
                       <div className="flex items-center justify-end gap-2 pt-1">
-                        <Button
-                          variant="ghost"
-                          size="xs"
-                          onClick={() => setShowRejectBox(false)}
-                        >
+                        <Button variant="ghost" size="xs" onClick={() => setShowRejectBox(false)}>
                           Cancelar
                         </Button>
                         <Button
@@ -367,9 +391,12 @@ export const AdminOrderDetailModal = ({
               ) : (
                 <div className="p-8 text-center bg-night-950 rounded-xl border border-dashed border-night-700 text-text-muted space-y-2">
                   <Clock className="w-8 h-8 mx-auto text-amber-400/80" />
-                  <p className="font-semibold text-text-secondary">Aún no se ha adjuntado comprobante</p>
+                  <p className="font-semibold text-text-secondary">
+                    Aún no se ha adjuntado comprobante
+                  </p>
                   <p className="text-[11px]">
-                    El cliente puede subirlo desde la pantalla de confirmación o enviártelo por WhatsApp.
+                    El cliente puede subirlo desde la pantalla de confirmación o enviártelo por
+                    WhatsApp.
                   </p>
                 </div>
               )}
@@ -400,7 +427,9 @@ export const AdminOrderDetailModal = ({
                   <Button
                     variant="secondary"
                     size="xs"
-                    onClick={() => onUpdateStatus('PREPARING', { trackingNumber: trackingNumberInput })}
+                    onClick={() =>
+                      onUpdateStatus('PREPARING', { trackingNumber: trackingNumberInput })
+                    }
                     disabled={isUpdatingStatus}
                   >
                     En Preparación
@@ -408,7 +437,9 @@ export const AdminOrderDetailModal = ({
                   <Button
                     variant="primary"
                     size="xs"
-                    onClick={() => onUpdateStatus('SHIPPED', { trackingNumber: trackingNumberInput })}
+                    onClick={() =>
+                      onUpdateStatus('SHIPPED', { trackingNumber: trackingNumberInput })
+                    }
                     disabled={isUpdatingStatus}
                   >
                     Marcar como Enviado
@@ -416,7 +447,9 @@ export const AdminOrderDetailModal = ({
                   <Button
                     variant="outline"
                     size="xs"
-                    onClick={() => onUpdateStatus('DELIVERED', { trackingNumber: trackingNumberInput })}
+                    onClick={() =>
+                      onUpdateStatus('DELIVERED', { trackingNumber: trackingNumberInput })
+                    }
                     disabled={isUpdatingStatus}
                   >
                     Marcar como Entregado
@@ -441,10 +474,12 @@ export const AdminOrderDetailModal = ({
                 <Button
                   variant="outline"
                   size="xs"
-                  onClick={() => onUpdateStatus(selectedOrder.status, {
-                    trackingNumber: trackingNumberInput,
-                    internalNotes: internalNotesInput
-                  })}
+                  onClick={() =>
+                    onUpdateStatus(selectedOrder.status, {
+                      trackingNumber: trackingNumberInput,
+                      internalNotes: internalNotesInput
+                    })
+                  }
                   disabled={isUpdatingStatus}
                 >
                   Guardar Notas

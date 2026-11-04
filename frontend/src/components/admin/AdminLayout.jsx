@@ -171,9 +171,7 @@ export const AdminLayout = ({
 
         {/* Cuerpo del Panel (Con padding inferior en móvil para la barra de navegación) */}
         <main className="flex-1 p-3.5 sm:p-8 pb-28 lg:pb-8 overflow-y-auto">
-          <div className="max-w-6xl mx-auto space-y-6">
-            {children}
-          </div>
+          <div className="max-w-6xl mx-auto space-y-6">{children}</div>
         </main>
       </div>
 
@@ -200,14 +198,18 @@ export const AdminLayout = ({
               }`}
             >
               <div className="relative">
-                <Icon className={`w-5 h-5 ${isActive ? 'scale-110 text-gold-bright drop-shadow-[0_0_8px_rgba(242,193,78,0.5)]' : ''}`} />
+                <Icon
+                  className={`w-5 h-5 ${isActive ? 'scale-110 text-gold-bright drop-shadow-[0_0_8px_rgba(242,193,78,0.5)]' : ''}`}
+                />
                 {tab.badge && (
                   <span className="absolute -top-1.5 -right-2.5 px-1.5 py-0.2 text-[9px] font-extrabold rounded-full bg-amber-400 text-night-950 animate-pulse">
                     {tab.badge}
                   </span>
                 )}
               </div>
-              <span className={`text-[11px] mt-1 tracking-tight ${isActive ? 'text-gold-bright font-bold' : ''}`}>
+              <span
+                className={`text-[11px] mt-1 tracking-tight ${isActive ? 'text-gold-bright font-bold' : ''}`}
+              >
                 {tab.label}
               </span>
             </button>

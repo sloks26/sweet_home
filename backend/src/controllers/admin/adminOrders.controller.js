@@ -129,10 +129,12 @@ export async function deleteAdminOrder(req, res) {
       metadata: { orderId: id, orderNumber: order.orderNumber }
     });
 
-    return res.json({ success: true, message: `Pedido ${order.orderNumber} eliminado correctamente` });
+    return res.json({
+      success: true,
+      message: `Pedido ${order.orderNumber} eliminado correctamente`
+    });
   } catch (err) {
     console.error('Error al eliminar pedido en admin:', err);
     return res.status(500).json({ error: true, message: 'Error al eliminar pedido' });
   }
 }
-

@@ -1,12 +1,7 @@
 /**
  * Exportador de Contabilidad a CSV compatible con Microsoft Excel (UTF-8 con BOM)
  */
-export const exportAccountingToExcel = ({
-  metrics,
-  charts,
-  layaways = [],
-  expenses = []
-}) => {
+export const exportAccountingToExcel = ({ metrics, charts, layaways = [], expenses = [] }) => {
   const formatCRC = (num) => `₡${(num || 0).toLocaleString('es-CR')}`;
   const now = new Date();
   const dateStr = now.toLocaleDateString('es-CR');

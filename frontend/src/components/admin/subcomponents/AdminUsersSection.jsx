@@ -130,7 +130,11 @@ export const AdminUsersSection = ({ currentUserId }) => {
       return;
     }
 
-    if (!window.confirm(`¿Estás segura de eliminar al usuario "${user.name}" (${user.email})? Esta acción no se puede deshacer.`)) {
+    if (
+      !window.confirm(
+        `¿Estás segura de eliminar al usuario "${user.name}" (${user.email})? Esta acción no se puede deshacer.`
+      )
+    ) {
       return;
     }
 
@@ -162,15 +166,11 @@ export const AdminUsersSection = ({ currentUserId }) => {
             <span>Equipo de Gestión y Usuarios</span>
           </div>
           <p className="text-xs text-text-secondary mt-1">
-            Administra los accesos de la dueña y colaboradoras secundarias. Todos los usuarios autorizados verán los mismos productos e imágenes en tiempo real.
+            Administra los accesos de la dueña y colaboradoras secundarias. Todos los usuarios
+            autorizados verán los mismos productos e imágenes en tiempo real.
           </p>
         </div>
-        <Button
-          variant="primary"
-          size="sm"
-          icon={UserPlus}
-          onClick={() => setIsModalOpen(true)}
-        >
+        <Button variant="primary" size="sm" icon={UserPlus} onClick={() => setIsModalOpen(true)}>
           Nuevo Usuario
         </Button>
       </div>
@@ -211,11 +211,13 @@ export const AdminUsersSection = ({ currentUserId }) => {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 ${
-                      isOwner
-                        ? 'bg-gold-DEFAULT/20 text-gold-light border border-gold-DEFAULT/40'
-                        : 'bg-night-800 text-text-primary border border-night-700'
-                    }`}>
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 ${
+                        isOwner
+                          ? 'bg-gold-DEFAULT/20 text-gold-light border border-gold-DEFAULT/40'
+                          : 'bg-night-800 text-text-primary border border-night-700'
+                      }`}
+                    >
                       {u.name ? u.name.charAt(0).toUpperCase() : 'U'}
                     </div>
                     <div className="min-w-0">
@@ -243,7 +245,9 @@ export const AdminUsersSection = ({ currentUserId }) => {
 
                 <div className="mt-4 pt-3 border-t border-night-800 flex items-center justify-between text-xs text-text-muted">
                   <div className="flex items-center gap-1.5">
-                    <span className={`w-2 h-2 rounded-full ${u.isActive ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                    <span
+                      className={`w-2 h-2 rounded-full ${u.isActive ? 'bg-emerald-400' : 'bg-red-400'}`}
+                    />
                     <span>{u.isActive ? 'Activo' : 'Desactivado'}</span>
                   </div>
 
@@ -322,7 +326,9 @@ export const AdminUsersSection = ({ currentUserId }) => {
               onChange={(e) => setRole(e.target.value)}
               className="w-full bg-night-900 border border-night-700 rounded-xl px-3 py-2 text-xs text-text-primary focus:border-gold-DEFAULT focus:outline-none"
             >
-              <option value="STAFF">Asistente / Staff (Gestión de catálogo, fotos y pedidos)</option>
+              <option value="STAFF">
+                Asistente / Staff (Gestión de catálogo, fotos y pedidos)
+              </option>
               <option value="ADMIN">Administradora (Acceso completo a todos los ajustes)</option>
             </select>
           </div>

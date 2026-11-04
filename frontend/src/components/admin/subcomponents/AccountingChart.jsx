@@ -11,8 +11,8 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
     activePeriod === 'daily'
       ? charts?.daily || []
       : activePeriod === 'weekly'
-      ? charts?.weekly || []
-      : charts?.monthly || [];
+        ? charts?.weekly || []
+        : charts?.monthly || [];
 
   // Encontrar el valor máximo para escalar la altura de las barras
   const maxVal = Math.max(
@@ -35,16 +35,16 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
               {viewMode === 'income'
                 ? 'Gráfica de Ingresos y Ventas (₡)'
                 : viewMode === 'expense'
-                ? 'Gráfica de Egresos y Gastos (₡)'
-                : 'Gráfica de Ingresos vs Egresos (₡)'}
+                  ? 'Gráfica de Egresos y Gastos (₡)'
+                  : 'Gráfica de Ingresos vs Egresos (₡)'}
             </h3>
           </div>
           <p className="text-xs text-text-secondary mt-0.5">
             {viewMode === 'income'
               ? 'Visualiza el crecimiento de ingresos por ventas y abonos en colones.'
               : viewMode === 'expense'
-              ? 'Controla los desembolsos en mercadería, empaques y envíos.'
-              : 'Monitorea el flujo financiero de la boutique comparando ingresos contra egresos.'}
+                ? 'Controla los desembolsos en mercadería, empaques y envíos.'
+                : 'Monitorea el flujo financiero de la boutique comparando ingresos contra egresos.'}
           </p>
         </div>
 
@@ -195,7 +195,11 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
                         </p>
                       )}
                       {viewMode === 'comparative' && (
-                        <p className={net >= 0 ? 'text-gold-bright font-bold' : 'text-red-400 font-bold'}>
+                        <p
+                          className={
+                            net >= 0 ? 'text-gold-bright font-bold' : 'text-red-400 font-bold'
+                          }
+                        >
                           Neto: ₡{net.toLocaleString('es-CR')}
                         </p>
                       )}
@@ -253,23 +257,23 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
                       viewMode === 'income'
                         ? 'text-emerald-400'
                         : viewMode === 'expense'
-                        ? 'text-rose-400'
-                        : net > 0
-                        ? 'text-emerald-400'
-                        : net < 0
-                        ? 'text-rose-400'
-                        : 'text-text-muted'
+                          ? 'text-rose-400'
+                          : net > 0
+                            ? 'text-emerald-400'
+                            : net < 0
+                              ? 'text-rose-400'
+                              : 'text-text-muted'
                     }`}
                   >
                     {viewMode === 'income'
                       ? formatCompactAmount(item.income)
                       : viewMode === 'expense'
-                      ? formatCompactAmount(item.expense)
-                      : net > 0
-                      ? `+${formatCompactAmount(net)}`
-                      : net < 0
-                      ? `-${formatCompactAmount(Math.abs(net))}`
-                      : '₡0'}
+                        ? formatCompactAmount(item.expense)
+                        : net > 0
+                          ? `+${formatCompactAmount(net)}`
+                          : net < 0
+                            ? `-${formatCompactAmount(Math.abs(net))}`
+                            : '₡0'}
                   </span>
                 </div>
               );

@@ -10,7 +10,8 @@ export const OurStorySection = ({ storyData, onOpenFullStory, authUser }) => {
     subtitle: 'Tu tienda de confianza en Costa Rica',
     founderName: 'Fundadora & Directora Creativa',
     founderRole: 'Sweet Home & Boutique CR',
-    founderPhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80&auto=format&fit=crop',
+    founderPhoto:
+      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80&auto=format&fit=crop',
     storyParagraphs: [
       'Somos tu tienda de confianza, donde encontrarás productos seleccionados con amor para el hogar, la belleza, tu estilo y tu bienestar íntimo.',
       'Creemos que cada detalle cuenta y tiene el poder de transformar tu día a día. Nuestra misión es brindar productos de calidad que hagan tu vida más fácil, bonita y especial.',
@@ -78,9 +79,7 @@ export const OurStorySection = ({ storyData, onOpenFullStory, authUser }) => {
 
           <div className="space-y-4 font-serif text-base sm:text-lg text-[#4A3B58] leading-relaxed">
             {data.storyParagraphs?.map((paragraph, idx) => (
-              <p key={idx}>
-                {paragraph}
-              </p>
+              <p key={idx}>{paragraph}</p>
             ))}
           </div>
 
@@ -94,12 +93,7 @@ export const OurStorySection = ({ storyData, onOpenFullStory, authUser }) => {
               </span>
             </div>
 
-            <Button
-              variant="primary"
-              size="md"
-              iconRight={ArrowRight}
-              onClick={onOpenFullStory}
-            >
+            <Button variant="primary" size="md" iconRight={ArrowRight} onClick={onOpenFullStory}>
               Conoce Más de Nuestra Historia
             </Button>
           </div>

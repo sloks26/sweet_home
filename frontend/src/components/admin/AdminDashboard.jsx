@@ -90,7 +90,8 @@ export const AdminDashboard = ({ stats, onNavigate }) => {
             Panel de Control y Contabilidad
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Resumen en vivo de ingresos en colones (₡), egresos, clientes a pagos, contra entrega y comprobantes SINPE.
+            Resumen en vivo de ingresos en colones (₡), egresos, clientes a pagos, contra entrega y
+            comprobantes SINPE.
           </p>
         </div>
 
@@ -142,10 +143,7 @@ export const AdminDashboard = ({ stats, onNavigate }) => {
       <DashboardSalesGoal currentSales={combinedMetrics.totalRevenue} />
 
       {/* 5. GRÁFICA ANIMADA DE INGRESOS VS EGRESOS (DÍA, SEMANA, MES) */}
-      <AccountingChart
-        charts={accountingData?.charts}
-        onExportExcel={handleExportExcel}
-      />
+      <AccountingChart charts={accountingData?.charts} onExportExcel={handleExportExcel} />
 
       {/* 6. FILA DOBLE: PRENDAS ESTRELLA (TOP 5) Y RESUMEN DE ENVÍOS / MENSAJERÍA */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -184,9 +182,7 @@ export const AdminDashboard = ({ stats, onNavigate }) => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-7 p-6 rounded-2xl bg-[#140A22] border border-gold-DEFAULT/20 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-serif text-xl font-bold text-text-primary">
-              Últimos Pedidos
-            </h3>
+            <h3 className="font-serif text-xl font-bold text-text-primary">Últimos Pedidos</h3>
             <button
               type="button"
               onClick={() => onNavigate('orders')}
@@ -230,13 +226,21 @@ export const AdminDashboard = ({ stats, onNavigate }) => {
                       </td>
                       <td className="py-3">
                         {ord.status === 'VOUCHER_RECEIVED' ? (
-                          <Badge variant="warning" size="sm">Validar</Badge>
+                          <Badge variant="warning" size="sm">
+                            Validar
+                          </Badge>
                         ) : ord.status === 'PAYMENT_CONFIRMED' ? (
-                          <Badge variant="success" size="sm">Confirmado</Badge>
+                          <Badge variant="success" size="sm">
+                            Confirmado
+                          </Badge>
                         ) : ord.status === 'SHIPPED' ? (
-                          <Badge variant="gold" size="sm">Enviado</Badge>
+                          <Badge variant="gold" size="sm">
+                            Enviado
+                          </Badge>
                         ) : (
-                          <Badge variant="outline" size="sm">{ord.status}</Badge>
+                          <Badge variant="outline" size="sm">
+                            {ord.status}
+                          </Badge>
                         )}
                       </td>
                     </tr>
@@ -271,7 +275,10 @@ export const AdminDashboard = ({ stats, onNavigate }) => {
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-gold-light">{log.action}</span>
                     <span className="text-[10px] text-text-muted">
-                      {new Date(log.createdAt).toLocaleTimeString('es-CR', { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(log.createdAt).toLocaleTimeString('es-CR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
                     </span>
                   </div>
                   <div className="text-[11px] text-text-secondary truncate">

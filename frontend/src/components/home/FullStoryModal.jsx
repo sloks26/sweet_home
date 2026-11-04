@@ -38,13 +38,22 @@ export const FullStoryModal = ({ isOpen, onClose, storyData }) => {
 
   const valores = [
     { name: 'Calidad', desc: 'Seleccionamos con cuidado productos de excelente calidad para ti.' },
-    { name: 'Confianza', desc: 'Construimos relaciones basadas en la confianza, honestidad y respeto.' },
+    {
+      name: 'Confianza',
+      desc: 'Construimos relaciones basadas en la confianza, honestidad y respeto.'
+    },
     { name: 'Atención', desc: 'Te brindamos un trato cercano, amable y personalizado.' },
-    { name: 'Compromiso', desc: 'Nos comprometemos a ofrecerte una experiencia segura y satisfactoria.' },
+    {
+      name: 'Compromiso',
+      desc: 'Nos comprometemos a ofrecerte una experiencia segura y satisfactoria.'
+    },
     { name: 'Pasión', desc: 'Amamos lo que hacemos y ponemos el corazón en cada detalle.' },
     { name: 'Inspiración', desc: 'Queremos inspirarte a crear un hogar que refleje tu esencia.' },
     { name: 'Empoderamiento', desc: 'Celebramos tu belleza, tu estilo y tu esencia única.' },
-    { name: 'Bienestar Íntimo', desc: 'Promovemos tu bienestar integral con productos que te hacen sentir bien.' },
+    {
+      name: 'Bienestar Íntimo',
+      desc: 'Promovemos tu bienestar integral con productos que te hacen sentir bien.'
+    },
     { name: 'Detalles', desc: 'Creemos que los pequeños detalles hacen grandes momentos.' },
     { name: 'Comunidad', desc: 'Somos más que una tienda, somos una comunidad que crece contigo.' }
   ];
@@ -108,19 +117,23 @@ export const FullStoryModal = ({ isOpen, onClose, storyData }) => {
                   Nuestra Misión
                 </span>
                 <p className="text-sm font-sans leading-relaxed">
-                  Brindar productos de calidad que hagan tu vida más fácil, bonita y especial. Inspiramos tu hogar, realzamos tu belleza, tu estilo y cuidamos tu bienestar íntimo. Creemos firmemente que cada detalle tiene el poder de transformar tu día a día.
+                  Brindar productos de calidad que hagan tu vida más fácil, bonita y especial.
+                  Inspiramos tu hogar, realzamos tu belleza, tu estilo y cuidamos tu bienestar
+                  íntimo. Creemos firmemente que cada detalle tiene el poder de transformar tu día a
+                  día.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <h3 className="font-serif text-xl font-bold text-text-primary">
-                  ¿Quiénes Somos?
-                </h3>
+                <h3 className="font-serif text-xl font-bold text-text-primary">¿Quiénes Somos?</h3>
                 <p>
-                  Somos tu tienda de confianza, donde encontrarás productos seleccionados con amor para el hogar, la belleza, tu estilo y tu bienestar íntimo. Creemos que cada detalle cuenta y tiene el poder de transformar tu día a día.
+                  Somos tu tienda de confianza, donde encontrarás productos seleccionados con amor
+                  para el hogar, la belleza, tu estilo y tu bienestar íntimo. Creemos que cada
+                  detalle cuenta y tiene el poder de transformar tu día a día.
                 </p>
                 <p>
-                  Desde San José con envíos a todo Costa Rica, cuidamos cada paquete para que al abrirlo sientas la dedicación y el cariño con el que fue preparado.
+                  Desde San José con envíos a todo Costa Rica, cuidamos cada paquete para que al
+                  abrirlo sientas la dedicación y el cariño con el que fue preparado.
                 </p>
               </div>
             </div>
@@ -133,7 +146,10 @@ export const FullStoryModal = ({ isOpen, onClose, storyData }) => {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {pilares.map((pil, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-night-800/70 border border-gold-DEFAULT/15 text-left">
+                <div
+                  key={idx}
+                  className="p-3.5 rounded-xl bg-night-800/70 border border-gold-DEFAULT/15 text-left"
+                >
                   <div className="flex items-center gap-2 mb-1">
                     <Sparkles className="w-3.5 h-3.5 text-gold-bright shrink-0" />
                     <span className="font-semibold text-xs text-text-primary">{pil.title}</span>
@@ -151,13 +167,14 @@ export const FullStoryModal = ({ isOpen, onClose, storyData }) => {
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {valores.map((val, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-night-800/80 border border-gold-DEFAULT/20 text-center flex flex-col justify-between">
+                <div
+                  key={idx}
+                  className="p-3 rounded-xl bg-night-800/80 border border-gold-DEFAULT/20 text-center flex flex-col justify-between"
+                >
                   <span className="text-xs font-bold text-gold-light uppercase tracking-wider block mb-1">
                     {val.name}
                   </span>
-                  <p className="text-[10px] text-text-secondary leading-tight">
-                    {val.desc}
-                  </p>
+                  <p className="text-[10px] text-text-secondary leading-tight">{val.desc}</p>
                 </div>
               ))}
             </div>
@@ -173,12 +190,7 @@ export const FullStoryModal = ({ isOpen, onClose, storyData }) => {
                 Tu hogar, tu estilo, tu esencia.
               </div>
             </div>
-            <Button
-              variant="primary"
-              size="md"
-              icon={ShoppingBag}
-              onClick={onClose}
-            >
+            <Button variant="primary" size="md" icon={ShoppingBag} onClick={onClose}>
               Explorar la Boutique
             </Button>
           </div>

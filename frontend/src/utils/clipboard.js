@@ -8,7 +8,11 @@ export async function copyToClipboard(text) {
   const strText = String(text).trim();
 
   // 1. Intentar API moderna si estamos en contexto seguro (HTTPS o localhost)
-  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText && window.isSecureContext) {
+  if (
+    typeof navigator !== 'undefined' &&
+    navigator.clipboard?.writeText &&
+    window.isSecureContext
+  ) {
     try {
       await navigator.clipboard.writeText(strText);
       return true;

@@ -20,8 +20,18 @@ export const ProductSection = ({ products = [], onSelectProduct, onNavigateCatal
 
   const tabs = [
     { id: 'new', label: 'Novedades', icon: Sparkles, desc: 'Recién llegados a la boutique' },
-    { id: 'bestseller', label: 'Más Vendidos', icon: Award, desc: 'Los favoritos de nuestras clientas' },
-    { id: 'offers', label: 'Ofertas Especiales', icon: Flame, desc: 'Precios especiales por tiempo limitado' },
+    {
+      id: 'bestseller',
+      label: 'Más Vendidos',
+      icon: Award,
+      desc: 'Los favoritos de nuestras clientas'
+    },
+    {
+      id: 'offers',
+      label: 'Ofertas Especiales',
+      icon: Flame,
+      desc: 'Precios especiales por tiempo limitado'
+    }
   ];
 
   const handleScrollLeft = () => {
@@ -37,7 +47,10 @@ export const ProductSection = ({ products = [], onSelectProduct, onNavigateCatal
   };
 
   return (
-    <section id="ofertas" className="w-full bg-[#FDF7FA] text-[#1A0D26] py-16 sm:py-24 px-4 sm:px-8 border-b border-[#EEDDE8]">
+    <section
+      id="ofertas"
+      className="w-full bg-[#FDF7FA] text-[#1A0D26] py-16 sm:py-24 px-4 sm:px-8 border-b border-[#EEDDE8]"
+    >
       <div className="max-w-7xl mx-auto space-y-10">
         {/* Encabezado Editorial y Pestañas Minimalistas */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E6D8E3] pb-6">
@@ -49,7 +62,8 @@ export const ProductSection = ({ products = [], onSelectProduct, onNavigateCatal
               El Giro de <span className="italic font-normal text-galaxy-DEFAULT">Productos</span>
             </h2>
             <p className="text-xs sm:text-sm text-[#685B78] max-w-lg leading-relaxed">
-              Descubre las piezas preferidas por nuestras clientas y las novedades que iluminan tu espacio con estilo propio.
+              Descubre las piezas preferidas por nuestras clientas y las novedades que iluminan tu
+              espacio con estilo propio.
             </p>
           </div>
 

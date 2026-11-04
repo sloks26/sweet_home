@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Eye,
-  Trash2,
-  MapPin,
-  Calendar,
-  Smartphone,
-  PackageCheck
-} from 'lucide-react';
+import { Eye, Trash2, MapPin, Calendar, Smartphone, PackageCheck } from 'lucide-react';
 import WhatsAppIcon from '../../ui/WhatsAppIcon';
 
 export const AdminOrdersMobileList = ({
@@ -56,17 +49,13 @@ export const AdminOrdersMobileList = ({
                   })}
                 </span>
               </div>
-              <div className="shrink-0">
-                {getStatusBadge(ord.status)}
-              </div>
+              <div className="shrink-0">{getStatusBadge(ord.status)}</div>
             </div>
 
             {/* Fila 2: Cliente y Dirección */}
             <div className="space-y-1 text-xs text-text-secondary">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-text-primary text-sm">
-                  {ord.customerName}
-                </span>
+                <span className="font-bold text-text-primary text-sm">{ord.customerName}</span>
                 <span className="font-mono text-gold-bright font-extrabold text-sm">
                   ₡{ord.total.toLocaleString('es-CR')}
                 </span>
@@ -97,7 +86,9 @@ export const AdminOrdersMobileList = ({
                     className="w-10 h-10 rounded-lg object-cover border border-amber-500/40"
                   />
                   <div>
-                    <span className="text-xs font-bold text-amber-300 block">Comprobante adjunto</span>
+                    <span className="text-xs font-bold text-amber-300 block">
+                      Comprobante adjunto
+                    </span>
                     <span className="text-[10px] text-text-muted">Listo para revisar</span>
                   </div>
                 </div>

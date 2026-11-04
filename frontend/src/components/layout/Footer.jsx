@@ -31,9 +31,18 @@ export const Footer = ({
   const currentBac = storeSettings?.bankIban || 'CR84010200009659820931';
   const currentPopular = storeSettings?.popularBankIban || 'CR64016111056166941071';
   const social = storeSettings?.social || {
-    instagram: { handle: '@sweethomeandboutiquecr', url: 'https://instagram.com/sweethomeandboutiquecr' },
-    tiktok: { handle: '@sweet.home.boutique.cr', url: 'https://tiktok.com/@sweet.home.boutique.cr' },
-    facebook: { name: 'Sweet Home & Boutique CR', url: 'https://facebook.com/SweetHomeAndBoutiqueCR' }
+    instagram: {
+      handle: '@sweethomeandboutiquecr',
+      url: 'https://instagram.com/sweethomeandboutiquecr'
+    },
+    tiktok: {
+      handle: '@sweet.home.boutique.cr',
+      url: 'https://tiktok.com/@sweet.home.boutique.cr'
+    },
+    facebook: {
+      name: 'Sweet Home & Boutique CR',
+      url: 'https://facebook.com/SweetHomeAndBoutiqueCR'
+    }
   };
 
   // Acceso discreto al panel administrativo: 5 o más toques en el texto de copyright
@@ -74,7 +83,8 @@ export const Footer = ({
             <Sparkles className="w-3.5 h-3.5" />
           </div>
           <p className="font-serif text-xl sm:text-2xl text-text-primary italic leading-relaxed">
-            "Variedad, calidad y amor en cada detalle. Para ti, para tu hogar, para cada momento especial."
+            "Variedad, calidad y amor en cada detalle. Para ti, para tu hogar, para cada momento
+            especial."
           </p>
           <span className="text-xs text-gold-light/80 font-sans block pt-1">
             Sweet Home & Boutique CR — Iluminando tus momentos en Costa Rica 🇨🇷
@@ -87,7 +97,8 @@ export const Footer = ({
           <div className="lg:col-span-4 space-y-4">
             <Logo size="default" />
             <p className="text-xs text-text-secondary leading-relaxed max-w-sm pt-2">
-              Boutique costarricense especializada en hacer de tu hogar un espacio mágico y en resaltar tu estilo con piezas exclusivas y empaques preparados con amor.
+              Boutique costarricense especializada en hacer de tu hogar un espacio mágico y en
+              resaltar tu estilo con piezas exclusivas y empaques preparados con amor.
             </p>
 
             <div className="space-y-2 text-[13px] pt-2">
@@ -175,7 +186,10 @@ export const Footer = ({
                 </li>
               ))}
               <li>
-                <a href="#catalogo" className="text-gold-bright hover:text-gold-light font-semibold">
+                <a
+                  href="#catalogo"
+                  className="text-gold-bright hover:text-gold-light font-semibold"
+                >
                   Ver todas las categorías →
                 </a>
               </li>
@@ -196,7 +210,11 @@ export const Footer = ({
                   Seguimiento de Pedido
                 </button>
               </li>
-              <li><a href="#nuestra-historia" className="hover:text-gold-light transition-colors">Nuestra Historia</a></li>
+              <li>
+                <a href="#nuestra-historia" className="hover:text-gold-light transition-colors">
+                  Nuestra Historia
+                </a>
+              </li>
               <li>
                 <button
                   onClick={() => onOpenInfo && onOpenInfo('envios')}

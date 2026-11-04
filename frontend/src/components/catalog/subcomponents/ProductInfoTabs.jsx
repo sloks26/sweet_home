@@ -51,10 +51,12 @@ export const ProductInfoTabs = ({ product }) => {
       {activeTab === 'shipping' && (
         <div className="text-xs text-text-secondary space-y-3 font-sans">
           <p>
-            📦 <strong>Correos de Costa Rica:</strong> Entregas en 24 a 48 horas en todo el país. Tarifa plana de ₡2.800 dentro del GAM y ₡3.500 fuera del GAM.
+            📦 <strong>Correos de Costa Rica:</strong> Entregas en 24 a 48 horas en todo el país.
+            Tarifa plana de ₡2.800 dentro del GAM y ₡3.500 fuera del GAM.
           </p>
           <p>
-            🚚 <strong>Mensajería Privada:</strong> Disponible en el Gran Área Metropolitana para entregas el mismo día o al día siguiente.
+            🚚 <strong>Mensajería Privada:</strong> Disponible en el Gran Área Metropolitana para
+            entregas el mismo día o al día siguiente.
           </p>
           <p>
             ✨ <strong>Envío Gratis:</strong> En compras superiores a ₡35.000.
@@ -75,7 +77,8 @@ export const ProductInfoTabs = ({ product }) => {
               ))}
             </div>
             <p className="text-text-secondary pt-1">
-              "¡Me encantó! Llegó super rápido por Correos de Costa Rica y el empaque venía perfumado, se nota el cariño en cada detalle. Totalmente recomendado."
+              "¡Me encantó! Llegó super rápido por Correos de Costa Rica y el empaque venía
+              perfumado, se nota el cariño en cada detalle. Totalmente recomendado."
             </p>
           </div>
         </div>

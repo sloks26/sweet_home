@@ -43,7 +43,11 @@ export const PaymentPreviewBox = ({
               onClick={() => handleCopy(sinpePhone?.replace(/\D/g, ''), 'sinpe')}
               className="text-[10px] px-2 py-0.5 rounded-md bg-gold-DEFAULT/15 text-gold-light border border-gold-DEFAULT/30 flex items-center gap-1 hover:bg-gold-DEFAULT/25"
             >
-              {copiedKey === 'sinpe' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+              {copiedKey === 'sinpe' ? (
+                <Check className="w-3 h-3 text-emerald-400" />
+              ) : (
+                <Copy className="w-3 h-3" />
+              )}
               <span>{copiedKey === 'sinpe' ? 'Copiado' : 'Copiar número'}</span>
             </button>
           </div>
@@ -51,7 +55,8 @@ export const PaymentPreviewBox = ({
             {sinpePhone || '6465-6625'}
           </div>
           <div className="text-[11px] text-text-secondary">
-            Titular: <strong className="text-white">{sinpeHolder || 'Maureen Vanessa Sanchez M.'}</strong>
+            Titular:{' '}
+            <strong className="text-white">{sinpeHolder || 'Maureen Vanessa Sanchez M.'}</strong>
           </div>
         </div>
 
@@ -67,7 +72,11 @@ export const PaymentPreviewBox = ({
               onClick={() => handleCopy(bankIban?.replace(/\s/g, ''), 'iban1')}
               className="text-[10px] px-2 py-0.5 rounded-md bg-gold-DEFAULT/15 text-gold-light border border-gold-DEFAULT/30 flex items-center gap-1 hover:bg-gold-DEFAULT/25"
             >
-              {copiedKey === 'iban1' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+              {copiedKey === 'iban1' ? (
+                <Check className="w-3 h-3 text-emerald-400" />
+              ) : (
+                <Copy className="w-3 h-3" />
+              )}
               <span>{copiedKey === 'iban1' ? 'Copiado' : 'Copiar IBAN'}</span>
             </button>
           </div>
@@ -75,7 +84,8 @@ export const PaymentPreviewBox = ({
             {bankIban || 'CR84010200009659820931'}
           </div>
           <div className="text-[11px] text-text-secondary">
-            Titular: <strong className="text-white">{bankHolder || 'Maureen Vanessa Sanchez M.'}</strong>
+            Titular:{' '}
+            <strong className="text-white">{bankHolder || 'Maureen Vanessa Sanchez M.'}</strong>
           </div>
         </div>
       </div>

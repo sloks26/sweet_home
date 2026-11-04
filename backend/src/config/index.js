@@ -25,7 +25,8 @@ export const config = {
   store: {
     name: process.env.STORE_NAME || 'Sweet Home & Boutique CR',
     slogan: 'Donde cada detalle ilumina tu hogar y tu estilo.',
-    footerSlogan: 'Variedad, calidad y amor en cada detalle. Para ti, para tu hogar, para cada momento especial.',
+    footerSlogan:
+      'Variedad, calidad y amor en cada detalle. Para ti, para tu hogar, para cada momento especial.',
     currency: 'CRC',
     symbol: '₡',
     phone: process.env.STORE_PHONE || '+506 6465-6625',

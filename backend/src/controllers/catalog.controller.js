@@ -19,7 +19,14 @@ export const catalogController = {
       }
 
       const now = new Date();
-      const [rawBanners, categories, featuredProducts, ourStoryRecord, storeSettingsRecord, testimonials] = await Promise.all([
+      const [
+        rawBanners,
+        categories,
+        featuredProducts,
+        ourStoryRecord,
+        storeSettingsRecord,
+        testimonials
+      ] = await Promise.all([
         prisma.banner.findMany({
           where: { isActive: true },
           orderBy: { order: 'asc' }
@@ -57,29 +64,31 @@ export const catalogController = {
         })
       ]);
 
-      const banners = rawBanners.filter(b => {
+      const banners = rawBanners.filter((b) => {
         if (b.startsAt && new Date(b.startsAt) > now) return false;
         if (b.endsAt && new Date(b.endsAt) < now) return false;
         return true;
       });
 
       const ourStory = ourStoryRecord ? JSON.parse(ourStoryRecord.data) : null;
-      const storeSettings = storeSettingsRecord ? JSON.parse(storeSettingsRecord.data) : {
-        phone: config.store.phone,
-        whatsapp: config.store.whatsapp,
-        sinpePhone: config.store.sinpe.phone,
-        sinpeHolder: config.store.sinpe.holder,
-        bankName: config.store.banks.bac.name,
-        bankHolder: config.store.banks.holder,
-        bankIban: config.store.banks.bac.iban,
-        popularBankName: config.store.banks.popular.name,
-        popularBankIban: config.store.banks.popular.iban,
-        storeAddress: config.store.address,
-        pickupNote: 'Previa coordinación por WhatsApp',
-        contactEmail: config.store.email,
-        freeShippingThreshold: 35000,
-        social: config.store.social
-      };
+      const storeSettings = storeSettingsRecord
+        ? JSON.parse(storeSettingsRecord.data)
+        : {
+            phone: config.store.phone,
+            whatsapp: config.store.whatsapp,
+            sinpePhone: config.store.sinpe.phone,
+            sinpeHolder: config.store.sinpe.holder,
+            bankName: config.store.banks.bac.name,
+            bankHolder: config.store.banks.holder,
+            bankIban: config.store.banks.bac.iban,
+            popularBankName: config.store.banks.popular.name,
+            popularBankIban: config.store.banks.popular.iban,
+            storeAddress: config.store.address,
+            pickupNote: 'Previa coordinación por WhatsApp',
+            contactEmail: config.store.email,
+            freeShippingThreshold: 35000,
+            social: config.store.social
+          };
 
       const payload = {
         banners,
@@ -188,7 +197,8 @@ export const catalogController = {
       const orderBy = [];
       if (sort === 'price_asc') orderBy.push({ price: 'asc' });
       else if (sort === 'price_desc') orderBy.push({ price: 'desc' });
-      else if (sort === 'best_seller') orderBy.push({ isBestSeller: 'desc' }, { viewsCount: 'desc' });
+      else if (sort === 'best_seller')
+        orderBy.push({ isBestSeller: 'desc' }, { viewsCount: 'desc' });
       else if (sort === 'rating') orderBy.push({ rating: 'desc' });
       else orderBy.push({ createdAt: 'desc' });
 
@@ -262,10 +272,12 @@ export const catalogController = {
       }
 
       // Incrementar contador de visitas de forma no bloqueante
-      prisma.product.update({
-        where: { id: product.id },
-        data: { viewsCount: { increment: 1 } }
-      }).catch(() => {});
+      prisma.product
+        .update({
+          where: { id: product.id },
+          data: { viewsCount: { increment: 1 } }
+        })
+        .catch(() => {});
 
       // Buscar productos relacionados de la misma categoría
       const related = await prisma.product.findMany({
@@ -302,7 +314,7 @@ export const catalogController = {
         orderBy: { order: 'asc' }
       });
 
-      const banners = rawBanners.filter(b => {
+      const banners = rawBanners.filter((b) => {
         if (b.startsAt && new Date(b.startsAt) > now) return false;
         if (b.endsAt && new Date(b.endsAt) < now) return false;
         return true;

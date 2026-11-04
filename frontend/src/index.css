@@ -3,28 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --color-night-900: #12071F;
-  --color-night-800: #1B0B30;
-  --color-night-700: #2A1148;
-  --color-galaxy-purple: #7C3AED;
-  --color-nebula-magenta: #C026D3;
-  --color-nebula-pink: #E0559F;
-  --color-gold-base: #D4A017;
-  --color-gold-bright: #F2C14E;
-  --color-gold-light: #FFE08A;
-  --color-text-primary: #F8F1FF;
-  --color-text-secondary: #C9B8E0;
+  --color-night-900: #12071f;
+  --color-night-800: #1b0b30;
+  --color-night-700: #2a1148;
+  --color-galaxy-purple: #7c3aed;
+  --color-nebula-magenta: #c026d3;
+  --color-nebula-pink: #e0559f;
+  --color-gold-base: #d4a017;
+  --color-gold-bright: #f2c14e;
+  --color-gold-light: #ffe08a;
+  --color-text-primary: #f8f1ff;
+  --color-text-secondary: #c9b8e0;
 }
 
 @layer base {
   body {
-    background-color: #12071F;
-    color: #F8F1FF;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #12071f;
+    color: #f8f1ff;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, .font-serif-title {
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
     letter-spacing: -0.01em;
   }
@@ -33,14 +41,14 @@
 @layer components {
   /* Gradiente dorado metálico para textos */
   .text-gold-gradient {
-    background: linear-gradient(135deg, #FFE08A 0%, #F2C14E 40%, #D4A017 80%, #9A6F00 100%);
+    background: linear-gradient(135deg, #ffe08a 0%, #f2c14e 40%, #d4a017 80%, #9a6f00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   /* Gradiente magenta/rosa nebulosa */
   .text-nebula-gradient {
-    background: linear-gradient(135deg, #F472B6 0%, #E0559F 45%, #C026D3 100%);
+    background: linear-gradient(135deg, #f472b6 0%, #e0559f 45%, #c026d3 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -50,26 +58,34 @@
     background: linear-gradient(180deg, rgba(42, 17, 72, 0.85) 0%, rgba(27, 11, 48, 0.95) 100%);
     border: 1px solid rgba(242, 193, 78, 0.2);
     border-radius: 1rem;
-    box-shadow: 0 10px 30px -10px rgba(18, 7, 31, 0.8), inset 0 1px 0 rgba(255, 224, 138, 0.1);
+    box-shadow:
+      0 10px 30px -10px rgba(18, 7, 31, 0.8),
+      inset 0 1px 0 rgba(255, 224, 138, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .luxury-card:hover {
     border-color: rgba(242, 193, 78, 0.45);
-    box-shadow: 0 15px 35px -5px rgba(91, 33, 182, 0.35), 0 0 15px rgba(242, 193, 78, 0.2);
+    box-shadow:
+      0 15px 35px -5px rgba(91, 33, 182, 0.35),
+      0 0 15px rgba(242, 193, 78, 0.2);
     transform: translateY(-2px);
   }
 
   /* Tarjeta Editorial de Boutique (Para secciones claras de catálogo sin cajas oscuras) */
   .editorial-card {
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 1.25rem;
-    box-shadow: 0 10px 30px -5px rgba(26, 13, 38, 0.05), 0 1px 3px rgba(26, 13, 38, 0.02);
+    box-shadow:
+      0 10px 30px -5px rgba(26, 13, 38, 0.05),
+      0 1px 3px rgba(26, 13, 38, 0.02);
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .editorial-card:hover {
-    box-shadow: 0 20px 40px -10px rgba(91, 33, 182, 0.12), 0 2px 6px rgba(212, 160, 23, 0.15);
+    box-shadow:
+      0 20px 40px -10px rgba(91, 33, 182, 0.12),
+      0 2px 6px rgba(212, 160, 23, 0.15);
     transform: translateY(-4px);
   }
 
@@ -83,8 +99,15 @@
     inset: -1px;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(242, 193, 78, 0.6), rgba(192, 38, 211, 0.4), rgba(212, 160, 23, 0.3));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    background: linear-gradient(
+      135deg,
+      rgba(242, 193, 78, 0.6),
+      rgba(192, 38, 211, 0.4),
+      rgba(212, 160, 23, 0.3)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
@@ -92,22 +115,27 @@
 
   /* Botón dorado metálico */
   .btn-gold-metallic {
-    background: linear-gradient(135deg, #FFE08A 0%, #F2C14E 40%, #D4A017 75%, #9A6F00 100%);
-    color: #12071F;
+    background: linear-gradient(135deg, #ffe08a 0%, #f2c14e 40%, #d4a017 75%, #9a6f00 100%);
+    color: #12071f;
     font-weight: 600;
     box-shadow: 0 4px 15px rgba(242, 193, 78, 0.35);
     transition: all 0.25s ease;
   }
 
   .btn-gold-metallic:hover {
-    background: linear-gradient(135deg, #FFF4D0 0%, #FFE08A 35%, #F2C14E 70%, #D4A017 100%);
+    background: linear-gradient(135deg, #fff4d0 0%, #ffe08a 35%, #f2c14e 70%, #d4a017 100%);
     box-shadow: 0 6px 22px rgba(242, 193, 78, 0.55);
     transform: translateY(-1px);
   }
 
   /* Shimmer luxury animation */
   .shimmer-gold {
-    background: linear-gradient(90deg, rgba(242, 193, 78, 0.05) 0%, rgba(242, 193, 78, 0.2) 50%, rgba(242, 193, 78, 0.05) 100%);
+    background: linear-gradient(
+      90deg,
+      rgba(242, 193, 78, 0.05) 0%,
+      rgba(242, 193, 78, 0.2) 50%,
+      rgba(242, 193, 78, 0.05) 100%
+    );
     background-size: 200% 100%;
     animation: shimmer 2.5s infinite linear;
   }
@@ -121,7 +149,9 @@
 
 /* Reducción de animaciones si el usuario lo prefiere */
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -135,13 +165,13 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #12071F;
+  background: #12071f;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2A1148;
+  background: #2a1148;
   border-radius: 9999px;
   border: 1px solid rgba(242, 193, 78, 0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #5B21B6;
+  background: #5b21b6;
 }

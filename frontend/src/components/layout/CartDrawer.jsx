@@ -5,7 +5,8 @@ import { useCartStore } from '../../store/cartStore';
 import Button from '../ui/Button';
 
 export const CartDrawer = ({ onOpenCheckout }) => {
-  const { isDrawerOpen, closeDrawer, items, removeItem, updateQuantity, getSubtotal } = useCartStore();
+  const { isDrawerOpen, closeDrawer, items, removeItem, updateQuantity, getSubtotal } =
+    useCartStore();
 
   const subtotal = getSubtotal();
   const freeShippingThreshold = 35000; // ₡35,000
@@ -60,7 +61,11 @@ export const CartDrawer = ({ onOpenCheckout }) => {
                       </strong>
                     ) : (
                       <>
-                        Agrega <strong className="text-gold-light">₡{missingForFreeShipping.toLocaleString('es-CR')}</strong> más para Envío Gratis
+                        Agrega{' '}
+                        <strong className="text-gold-light">
+                          ₡{missingForFreeShipping.toLocaleString('es-CR')}
+                        </strong>{' '}
+                        más para Envío Gratis
                       </>
                     )}
                   </span>
@@ -84,17 +89,14 @@ export const CartDrawer = ({ onOpenCheckout }) => {
                       <ShoppingBag className="w-8 h-8 opacity-60" />
                     </div>
                     <div>
-                      <h3 className="font-serif text-lg font-bold text-text-primary">Tu carrito está vacío</h3>
+                      <h3 className="font-serif text-lg font-bold text-text-primary">
+                        Tu carrito está vacío
+                      </h3>
                       <p className="text-xs text-text-secondary mt-1 max-w-xs">
                         Explora nuestras colecciones exclusivas para tu hogar, fragancias y estilo.
                       </p>
                     </div>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={closeDrawer}
-                      icon={ArrowRight}
-                    >
+                    <Button variant="primary" size="sm" onClick={closeDrawer} icon={ArrowRight}>
                       Explorar la Tienda
                     </Button>
                   </div>
@@ -162,7 +164,9 @@ export const CartDrawer = ({ onOpenCheckout }) => {
                   <div className="space-y-1.5 text-xs text-text-secondary">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span className="text-text-primary font-semibold">₡{subtotal.toLocaleString('es-CR')}</span>
+                      <span className="text-text-primary font-semibold">
+                        ₡{subtotal.toLocaleString('es-CR')}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Envío</span>
@@ -176,7 +180,9 @@ export const CartDrawer = ({ onOpenCheckout }) => {
                     </div>
                     <div className="flex justify-between text-base font-bold text-text-primary pt-2 border-t border-night-700">
                       <span>Total Estimado</span>
-                      <span className="text-gold-gradient text-lg">₡{subtotal.toLocaleString('es-CR')}</span>
+                      <span className="text-gold-gradient text-lg">
+                        ₡{subtotal.toLocaleString('es-CR')}
+                      </span>
                     </div>
                   </div>
 

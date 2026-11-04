@@ -131,15 +131,18 @@ export async function createAdminProduct(req, res) {
     } = req.body;
 
     if (!name || price === undefined || !categoryId) {
-      return res.status(400).json({ error: true, message: 'Nombre, precio y categoría son obligatorios.' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'Nombre, precio y categoría son obligatorios.' });
     }
 
-    const finalSlug = (slug || name)
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)+/g, '') + `-${Date.now().toString().slice(-4)}`;
+    const finalSlug =
+      (slug || name)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)+/g, '') + `-${Date.now().toString().slice(-4)}`;
 
     const finalSku = (sku || `SW-${Date.now().toString().slice(-6)}`).toUpperCase();
 
@@ -253,10 +256,12 @@ export async function updateAdminProduct(req, res) {
       if (shortDescription !== undefined) updateData.shortDescription = shortDescription;
       if (sku) updateData.sku = sku.toUpperCase();
       if (price !== undefined) updateData.price = parseFloat(price);
-      if (compareAtPrice !== undefined) updateData.compareAtPrice = compareAtPrice ? parseFloat(compareAtPrice) : null;
+      if (compareAtPrice !== undefined)
+        updateData.compareAtPrice = compareAtPrice ? parseFloat(compareAtPrice) : null;
       if (costPrice !== undefined) updateData.costPrice = costPrice ? parseFloat(costPrice) : null;
       if (stock !== undefined) updateData.stock = parseInt(stock, 10);
-      if (lowStockThreshold !== undefined) updateData.lowStockThreshold = parseInt(lowStockThreshold, 10);
+      if (lowStockThreshold !== undefined)
+        updateData.lowStockThreshold = parseInt(lowStockThreshold, 10);
       if (isFeatured !== undefined) updateData.isFeatured = Boolean(isFeatured);
       if (isNew !== undefined) updateData.isNew = Boolean(isNew);
       if (isBestSeller !== undefined) updateData.isBestSeller = Boolean(isBestSeller);
@@ -324,7 +329,9 @@ export async function updateAdminProduct(req, res) {
     return res.json({ success: true, message: 'Producto actualizado con éxito', data: product });
   } catch (err) {
     console.error('Error al actualizar producto:', err);
-    return res.status(500).json({ error: true, message: err.message || 'Error al actualizar producto' });
+    return res
+      .status(500)
+      .json({ error: true, message: err.message || 'Error al actualizar producto' });
   }
 }
 

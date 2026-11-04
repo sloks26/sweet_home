@@ -132,7 +132,8 @@ export const AdminCategories = () => {
             Categorías y Subcategorías
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Organiza los 10 departamentos de la boutique, reordena el menú principal y administra subcategorías.
+            Organiza los 10 departamentos de la boutique, reordena el menú principal y administra
+            subcategorías.
           </p>
         </div>
 

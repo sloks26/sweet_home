@@ -34,11 +34,15 @@ export async function createAdminUser(req, res) {
     const { name, email, password, role = 'STAFF', phone } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ error: true, message: 'Nombre, correo y contraseña son obligatorios' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'Nombre, correo y contraseña son obligatorios' });
     }
 
     if (password.length < 8) {
-      return res.status(400).json({ error: true, message: 'La contraseña debe tener al menos 8 caracteres' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'La contraseña debe tener al menos 8 caracteres' });
     }
 
     const cleanEmail = email.toLowerCase().trim();
@@ -47,7 +51,9 @@ export async function createAdminUser(req, res) {
     });
 
     if (existing) {
-      return res.status(400).json({ error: true, message: 'Ya existe un usuario con este correo electrónico' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'Ya existe un usuario con este correo electrónico' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -97,7 +103,9 @@ export async function toggleAdminUser(req, res) {
     const { id } = req.params;
 
     if (req.user.id === id) {
-      return res.status(400).json({ error: true, message: 'No puedes desactivar tu propio usuario activo' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'No puedes desactivar tu propio usuario activo' });
     }
 
     const targetUser = await prisma.user.findUnique({ where: { id } });

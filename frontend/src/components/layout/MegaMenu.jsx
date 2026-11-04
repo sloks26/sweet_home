@@ -89,7 +89,8 @@ export const MegaMenu = ({
             </h3>
 
             <p className="text-[14px] text-[#D8CCE0] leading-relaxed font-sans">
-              {currentCat.description || 'Detalles únicos preparados con el estándar de elegancia y amor de Sweet Home & Boutique CR.'}
+              {currentCat.description ||
+                'Detalles únicos preparados con el estándar de elegancia y amor de Sweet Home & Boutique CR.'}
             </p>
 
             {currentCat.isAdult && (

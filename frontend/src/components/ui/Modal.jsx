@@ -58,11 +58,7 @@ export const Modal = ({
                       {title}
                     </h3>
                   )}
-                  {subtitle && (
-                    <p className="text-xs text-text-secondary mt-1">
-                      {subtitle}
-                    </p>
-                  )}
+                  {subtitle && <p className="text-xs text-text-secondary mt-1">{subtitle}</p>}
                 </div>
                 {showClose && (
                   <button

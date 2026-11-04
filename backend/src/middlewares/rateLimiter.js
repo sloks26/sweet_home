@@ -7,7 +7,11 @@ const ipAttempts = new Map();
  * @param {number} options.windowMs - Duración de la ventana en milisegundos
  * @param {string} options.message - Mensaje al exceder
  */
-export function rateLimiter({ maxAttempts = 10, windowMs = 15 * 60 * 1000, message = 'Demasiados intentos. Intenta de nuevo más tarde.' }) {
+export function rateLimiter({
+  maxAttempts = 10,
+  windowMs = 15 * 60 * 1000,
+  message = 'Demasiados intentos. Intenta de nuevo más tarde.'
+}) {
   return (req, res, next) => {
     const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
     const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp.split(',')[0].trim();

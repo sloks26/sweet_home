@@ -49,7 +49,7 @@ export const uploadMiddleware = multer({
  * 2. Genera miniatura 400x400 para panel admin.
  * 3. Genera LQIP (Low Quality Image Placeholder) borroso de 20px para carga instantánea sin CLS.
  * 4. Elimina el archivo original sin procesar.
- * 
+ *
  * @param {string} tempFilePath - Ruta temporal del archivo
  * @param {Object} [options]
  * @returns {Promise<{ filename: string, url: string, thumbUrl: string, lqip: string, sizes: Object, width: number, height: number, size: number }>}
@@ -113,13 +113,17 @@ export async function processAndSaveImage(tempFilePath, options = {}) {
           .resize({ width: w, fit: 'inside', withoutEnlargement: true })
           .webp({ quality: 82, effort: 3 })
           .toFile(webpPath)
-          .then(() => { generatedVariants.webp[w] = `/uploads/${webpName}`; })
+          .then(() => {
+            generatedVariants.webp[w] = `/uploads/${webpName}`;
+          })
           .catch(() => {}),
         sharp(tempFilePath)
           .resize({ width: w, fit: 'inside', withoutEnlargement: true })
           .avif({ quality: 75, effort: 2 })
           .toFile(avifPath)
-          .then(() => { generatedVariants.avif[w] = `/uploads/${avifName}`; })
+          .then(() => {
+            generatedVariants.avif[w] = `/uploads/${avifName}`;
+          })
           .catch(() => {})
       ]);
     }
@@ -139,7 +143,10 @@ export async function processAndSaveImage(tempFilePath, options = {}) {
         .webp({ quality: 20 })
         .toBuffer();
       lqipBase64 = `data:image/webp;base64,${lqipBuffer.toString('base64')}`;
-    } catch (_) {}
+    } catch (_lqipErr) {
+      // Fallback seguro: el placeholder LQIP es opcional y no interrumpe el procesamiento principal
+      lqipBase64 = null;
+    }
 
     // Eliminar archivo temporal
     if (fs.existsSync(tempFilePath)) {
@@ -165,7 +172,7 @@ export async function processAndSaveImage(tempFilePath, options = {}) {
 
 /**
  * Elimina una imagen y su miniatura del almacenamiento
- * @param {string} filename 
+ * @param {string} filename
  */
 export async function deleteImageFile(filename) {
   try {

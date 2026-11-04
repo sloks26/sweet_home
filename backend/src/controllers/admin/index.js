@@ -1,5 +1,11 @@
 import { getDashboardStats, updateSiteContent } from './adminDashboard.controller.js';
-import { getBanners, createBanner, updateBanner, deleteBanner, reorderBanners } from './adminBanners.controller.js';
+import {
+  getBanners,
+  createBanner,
+  updateBanner,
+  deleteBanner,
+  reorderBanners
+} from './adminBanners.controller.js';
 import { listMedia, uploadMedia, deleteMedia } from './adminMedia.controller.js';
 import {
   getAdminProducts,

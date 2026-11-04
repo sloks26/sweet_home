@@ -1,13 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  Check,
-  Trash2,
-  Image as ImageIcon,
-  UploadCloud,
-  Star,
-  Loader2,
-  Plus
-} from 'lucide-react';
+import { Check, Trash2, Image as ImageIcon, UploadCloud, Star, Loader2, Plus } from 'lucide-react';
 import Button from '../../ui/Button';
 import Input, { Textarea } from '../../ui/Input';
 import Modal from '../../ui/Modal';
@@ -154,7 +146,9 @@ export const AdminProductModal = ({
           {/* Categoría y Subcategoría */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-secondary">Categoría Principal *</label>
+              <label className="text-xs font-medium text-text-secondary">
+                Categoría Principal *
+              </label>
               <select
                 value={categoryId}
                 onChange={(e) => {
@@ -174,7 +168,9 @@ export const AdminProductModal = ({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-secondary">Subcategoría (Opcional)</label>
+              <label className="text-xs font-medium text-text-secondary">
+                Subcategoría (Opcional)
+              </label>
               <select
                 value={subcategoryId}
                 onChange={(e) => setSubcategoryId(e.target.value)}
@@ -298,7 +294,8 @@ export const AdminProductModal = ({
                         📷 Subir fotos desde Celular o PC
                       </span>
                       <span className="text-[11px] text-text-muted mt-0.5 block">
-                        Toca aquí para seleccionar de tu galería o cámara (puedes elegir varias fotos a la vez)
+                        Toca aquí para seleccionar de tu galería o cámara (puedes elegir varias
+                        fotos a la vez)
                       </span>
                     </div>
                   </>
@@ -312,7 +309,9 @@ export const AdminProductModal = ({
                   onClick={() => setShowManualUrl(!showManualUrl)}
                   className="text-[11px] text-text-muted hover:text-gold-bright underline"
                 >
-                  {showManualUrl ? 'Ocultar opción de URL manual' : '¿Prefieres pegar un enlace web de imagen?'}
+                  {showManualUrl
+                    ? 'Ocultar opción de URL manual'
+                    : '¿Prefieres pegar un enlace web de imagen?'}
                 </button>
               </div>
 
@@ -337,7 +336,9 @@ export const AdminProductModal = ({
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs text-text-muted">
                   <span>{images.length} foto(s) agregada(s)</span>
-                  <span className="text-[11px] text-gold-bright">Haz clic en "Hacer Portada" para cambiar la principal</span>
+                  <span className="text-[11px] text-gold-bright">
+                    Haz clic en "Hacer Portada" para cambiar la principal
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5">
@@ -348,7 +349,9 @@ export const AdminProductModal = ({
                       <div
                         key={idx}
                         className={`relative aspect-square rounded-xl overflow-hidden border-2 group transition-all ${
-                          isCover ? 'border-gold-DEFAULT shadow-md shadow-gold-DEFAULT/20' : 'border-night-700 hover:border-gold-DEFAULT/50'
+                          isCover
+                            ? 'border-gold-DEFAULT shadow-md shadow-gold-DEFAULT/20'
+                            : 'border-night-700 hover:border-gold-DEFAULT/50'
                         }`}
                       >
                         <img
@@ -356,7 +359,8 @@ export const AdminProductModal = ({
                           alt={`Foto ${idx + 1}`}
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                            e.currentTarget.src =
+                              'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
                           }}
                         />
 
@@ -454,7 +458,9 @@ export const AdminProductModal = ({
       <PhotoEditorModal
         isOpen={isPhotoEditorOpen}
         onClose={() => setIsPhotoEditorOpen(false)}
-        imageSrc={editingImageSrc || 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80'}
+        imageSrc={
+          editingImageSrc || 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80'
+        }
         onSave={(newImg) => {
           setImages((prev) => [...prev, newImg.url]);
         }}

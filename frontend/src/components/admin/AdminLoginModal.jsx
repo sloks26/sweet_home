@@ -63,9 +63,7 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
       }}
     >
       {/* Velo oscuro sutil para realzar el contraste estético (sin cerrar al tocar fuera) */}
-      <div
-        className="fixed inset-0 bg-night-950/40 backdrop-blur-[2px] pointer-events-none"
-      />
+      <div className="fixed inset-0 bg-night-950/40 backdrop-blur-[2px] pointer-events-none" />
 
       {/* Tarjeta Limpia y Elegante estilo Bloomed Studio */}
       <div

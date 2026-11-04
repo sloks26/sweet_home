@@ -116,11 +116,12 @@ export const AccountingExpenses = ({ expenses = [], onRefresh }) => {
                   <td className="py-3 text-text-muted whitespace-nowrap">
                     {exp.date ? new Date(exp.date).toLocaleDateString('es-CR') : 'Hoy'}
                   </td>
-                  <td className="py-3 font-medium text-white max-w-[200px] truncate" title={exp.concept}>
+                  <td
+                    className="py-3 font-medium text-white max-w-[200px] truncate"
+                    title={exp.concept}
+                  >
                     <div>{exp.concept}</div>
-                    {exp.notes && (
-                      <div className="text-[10px] text-text-muted">{exp.notes}</div>
-                    )}
+                    {exp.notes && <div className="text-[10px] text-text-muted">{exp.notes}</div>}
                   </td>
                   <td className="py-3 text-text-secondary">
                     <span className="px-2 py-0.5 rounded-md bg-night-900 border border-night-700 text-[10px] font-medium">

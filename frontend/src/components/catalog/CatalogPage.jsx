@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Filter,
-  ChevronRight,
-  X,
-  PackageX
-} from 'lucide-react';
+import { Filter, ChevronRight, X, PackageX } from 'lucide-react';
 import ProductCard from '../home/ProductCard';
 import Skeleton from '../ui/Skeleton';
 import Button from '../ui/Button';
@@ -37,19 +32,7 @@ export const CatalogPage = ({
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-  useEffect(() => {
-    if (initialCategory) {
-      setSelectedCategory(initialCategory);
-      setSelectedSubcategory(null);
-      setCurrentPage(1);
-    }
-  }, [initialCategory]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [selectedCategory, selectedSubcategory, searchQuery, priceRange[1], onlyInStock, onlyOnSale, sortBy, currentPage]);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -69,7 +52,7 @@ export const CatalogPage = ({
       const data = await res.json();
 
       if (data.success) {
-        const prodList = Array.isArray(data.data) ? data.data : (data.data?.products || []);
+        const prodList = Array.isArray(data.data) ? data.data : data.data?.products || [];
         const pagination = data.pagination || data.data?.pagination || {};
         setProducts(prodList);
         setTotalPages(pagination.totalPages || 1);
@@ -85,7 +68,29 @@ export const CatalogPage = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [
+    currentPage,
+    sortBy,
+    selectedCategory,
+    selectedSubcategory,
+    searchQuery,
+    priceRange,
+    maxDbPrice,
+    onlyInStock,
+    onlyOnSale
+  ]);
+
+  useEffect(() => {
+    if (initialCategory) {
+      setSelectedCategory(initialCategory);
+      setSelectedSubcategory(null);
+      setCurrentPage(1);
+    }
+  }, [initialCategory]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleResetFilters = () => {
     setSelectedCategory(null);
@@ -105,7 +110,10 @@ export const CatalogPage = ({
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-8 select-none">
       {/* 1. Miga de Pan (Breadcrumbs) */}
       <nav className="flex items-center gap-2 text-xs text-text-muted">
-        <button onClick={onBackToHome} className="hover:text-gold-light transition-colors cursor-pointer">
+        <button
+          onClick={onBackToHome}
+          className="hover:text-gold-light transition-colors cursor-pointer"
+        >
           Inicio
         </button>
         <ChevronRight className="w-3.5 h-3.5" />
@@ -169,37 +177,51 @@ export const CatalogPage = ({
         {/* Listado de Productos */}
         <section className="lg:col-span-9 space-y-8">
           {/* Pills de Filtros Activos */}
-          {(selectedCategory || selectedSubcategory || searchQuery || onlyInStock || onlyOnSale) && (
+          {(selectedCategory ||
+            selectedSubcategory ||
+            searchQuery ||
+            onlyInStock ||
+            onlyOnSale) && (
             <div className="flex flex-wrap items-center gap-2 text-xs">
               <span className="text-text-muted">Filtros activos:</span>
               {selectedCategory && (
                 <span className="px-2.5 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/30 text-gold-light flex items-center gap-1.5">
                   {activeCategoryObj?.name || selectedCategory}
-                  <button onClick={() => setSelectedCategory(null)}><X className="w-3 h-3" /></button>
+                  <button onClick={() => setSelectedCategory(null)}>
+                    <X className="w-3 h-3" />
+                  </button>
                 </span>
               )}
               {selectedSubcategory && (
                 <span className="px-2.5 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/30 text-gold-light flex items-center gap-1.5">
                   {selectedSubcategory}
-                  <button onClick={() => setSelectedSubcategory(null)}><X className="w-3 h-3" /></button>
+                  <button onClick={() => setSelectedSubcategory(null)}>
+                    <X className="w-3 h-3" />
+                  </button>
                 </span>
               )}
               {searchQuery && (
                 <span className="px-2.5 py-1 rounded-full bg-night-700 border border-night-600 text-text-primary flex items-center gap-1.5">
                   "{searchQuery}"
-                  <button onClick={() => setSearchQuery('')}><X className="w-3 h-3" /></button>
+                  <button onClick={() => setSearchQuery('')}>
+                    <X className="w-3 h-3" />
+                  </button>
                 </span>
               )}
               {onlyInStock && (
                 <span className="px-2.5 py-1 rounded-full bg-status-success/15 border border-status-success/30 text-status-success flex items-center gap-1.5">
                   En Stock
-                  <button onClick={() => setOnlyInStock(false)}><X className="w-3 h-3" /></button>
+                  <button onClick={() => setOnlyInStock(false)}>
+                    <X className="w-3 h-3" />
+                  </button>
                 </span>
               )}
               {onlyOnSale && (
                 <span className="px-2.5 py-1 rounded-full bg-nebula-magenta/15 border border-nebula-magenta/30 text-nebula-light flex items-center gap-1.5">
                   En Oferta
-                  <button onClick={() => setOnlyOnSale(false)}><X className="w-3 h-3" /></button>
+                  <button onClick={() => setOnlyOnSale(false)}>
+                    <X className="w-3 h-3" />
+                  </button>
                 </span>
               )}
               <button
@@ -215,13 +237,14 @@ export const CatalogPage = ({
           {loading ? (
             <div
               className={`grid gap-4 sm:gap-6 ${
-                viewMode === 'grid'
-                  ? 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4'
-                  : 'grid-cols-1'
+                viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'
               }`}
             >
               {Array.from({ length: 8 }).map((_, idx) => (
-                <div key={idx} className="rounded-3xl border border-gold-DEFAULT/15 p-3 space-y-3 bg-night-900/60">
+                <div
+                  key={idx}
+                  className="rounded-3xl border border-gold-DEFAULT/15 p-3 space-y-3 bg-night-900/60"
+                >
                   <Skeleton className="w-full aspect-[4/5] rounded-2xl" />
                   <Skeleton className="w-3/4 h-4 rounded-lg" />
                   <Skeleton className="w-1/2 h-5 rounded-lg" />
@@ -237,7 +260,8 @@ export const CatalogPage = ({
                 No encontramos productos con estos filtros
               </h3>
               <p className="text-xs text-text-secondary max-w-md mx-auto">
-                Prueba relajando tu búsqueda, cambiando la categoría o ajustando el rango de precios en colones.
+                Prueba relajando tu búsqueda, cambiando la categoría o ajustando el rango de precios
+                en colones.
               </p>
               <Button variant="primary" size="sm" onClick={handleResetFilters}>
                 Ver Todo el Catálogo
@@ -246,9 +270,7 @@ export const CatalogPage = ({
           ) : (
             <div
               className={`grid gap-4 sm:gap-6 ${
-                viewMode === 'grid'
-                  ? 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4'
-                  : 'grid-cols-1'
+                viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'
               }`}
             >
               {products.map((prod) => (

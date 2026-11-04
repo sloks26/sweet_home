@@ -19,7 +19,8 @@ export const StarBackground = () => {
       <div
         className="absolute inset-0 opacity-40"
         style={{
-          background: 'radial-gradient(circle at 15% 20%, rgba(91, 33, 182, 0.28) 0%, transparent 45%), radial-gradient(circle at 85% 65%, rgba(192, 38, 211, 0.18) 0%, transparent 40%)'
+          background:
+            'radial-gradient(circle at 15% 20%, rgba(91, 33, 182, 0.28) 0%, transparent 45%), radial-gradient(circle at 85% 65%, rgba(192, 38, 211, 0.18) 0%, transparent 40%)'
         }}
       />
     </div>

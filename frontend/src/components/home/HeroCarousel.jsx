@@ -23,38 +23,50 @@ export const HeroCarousel = ({ banners = [], isMenuOpen = false, onSelectCategor
   }, []);
 
   // Banners por defecto de alta resolución y lujo si la API está cargando o vacía
-  const slides = banners.length > 0 ? banners : [
-    {
-      id: 'default-1',
-      title: 'Donde cada detalle ilumina tu hogar y tu estilo',
-      subtitle: 'Descubre piezas exclusivas, aromas cautivadores y moda que realza tu esencia con envíos a todo Costa Rica.',
-      badge: 'Nueva Colección 2026',
-      ctaText: 'Ver Colección Hogar',
-      ctaLink: '#hogar',
-      desktopImage: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1920&q=80&auto=format&fit=crop',
-      mobileImage: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=768&q=80&auto=format&fit=crop'
-    },
-    {
-      id: 'default-2',
-      title: 'Fragancias de autor que dejan una huella inolvidable',
-      subtitle: 'Perfumes selectos de lujo, difusores y esencias botánicas para crear momentos memorables.',
-      badge: 'Exclusivo en Sweet Home',
-      ctaText: 'Explorar Perfumes',
-      ctaLink: '#perfumes',
-      desktopImage: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=1920&q=80&auto=format&fit=crop',
-      mobileImage: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=768&q=80&auto=format&fit=crop'
-    },
-    {
-      id: 'default-3',
-      title: 'Regalos con amor para personas especiales',
-      subtitle: 'Sets armados a mano en cajas rígidas perfumadas, con lazos de satín y tarjetas con dedicatoria.',
-      badge: 'Detalles Únicos',
-      ctaText: 'Ver Sets de Regalo',
-      ctaLink: '#novedades-regalos',
-      desktopImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=1920&q=80&auto=format&fit=crop',
-      mobileImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=768&q=80&auto=format&fit=crop'
-    }
-  ];
+  const slides =
+    banners.length > 0
+      ? banners
+      : [
+          {
+            id: 'default-1',
+            title: 'Donde cada detalle ilumina tu hogar y tu estilo',
+            subtitle:
+              'Descubre piezas exclusivas, aromas cautivadores y moda que realza tu esencia con envíos a todo Costa Rica.',
+            badge: 'Nueva Colección 2026',
+            ctaText: 'Ver Colección Hogar',
+            ctaLink: '#hogar',
+            desktopImage:
+              'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1920&q=80&auto=format&fit=crop',
+            mobileImage:
+              'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=768&q=80&auto=format&fit=crop'
+          },
+          {
+            id: 'default-2',
+            title: 'Fragancias de autor que dejan una huella inolvidable',
+            subtitle:
+              'Perfumes selectos de lujo, difusores y esencias botánicas para crear momentos memorables.',
+            badge: 'Exclusivo en Sweet Home',
+            ctaText: 'Explorar Perfumes',
+            ctaLink: '#perfumes',
+            desktopImage:
+              'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=1920&q=80&auto=format&fit=crop',
+            mobileImage:
+              'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=768&q=80&auto=format&fit=crop'
+          },
+          {
+            id: 'default-3',
+            title: 'Regalos con amor para personas especiales',
+            subtitle:
+              'Sets armados a mano en cajas rígidas perfumadas, con lazos de satín y tarjetas con dedicatoria.',
+            badge: 'Detalles Únicos',
+            ctaText: 'Ver Sets de Regalo',
+            ctaLink: '#novedades-regalos',
+            desktopImage:
+              'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=1920&q=80&auto=format&fit=crop',
+            mobileImage:
+              'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=768&q=80&auto=format&fit=crop'
+          }
+        ];
 
   // Autoplay cada 7 segundos (se pausa al interactuar, pasar el ratón, tocar la pantalla o tener el mega menú abierto)
   useEffect(() => {
@@ -130,7 +142,10 @@ export const HeroCarousel = ({ banners = [], isMenuOpen = false, onSelectCategor
             <picture className="absolute inset-0 w-full h-full block">
               <source
                 media="(max-width: 640px)"
-                srcSet={slide.mobileImage || `${slide.desktopImage.split('?')[0]}?w=768&q=80&auto=format&fit=crop`}
+                srcSet={
+                  slide.mobileImage ||
+                  `${slide.desktopImage.split('?')[0]}?w=768&q=80&auto=format&fit=crop`
+                }
               />
               <img
                 src={slide.desktopImage}
@@ -171,7 +186,10 @@ export const HeroCarousel = ({ banners = [], isMenuOpen = false, onSelectCategor
                     ) : (
                       slide.title
                     )}
-                    <span className="sr-only"> - Sweet Home & Boutique CR | Tienda en Línea Costa Rica</span>
+                    <span className="sr-only">
+                      {' '}
+                      - Sweet Home & Boutique CR | Tienda en Línea Costa Rica
+                    </span>
                   </h1>
                 ) : (
                   <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.15] tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">

@@ -1,24 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Check,
-  Lock,
-  Image as ImageIcon,
-  Crop,
-  X,
-  UploadCloud,
-  Loader2
-} from 'lucide-react';
+import { Check, Lock, Image as ImageIcon, Crop, X, UploadCloud, Loader2 } from 'lucide-react';
 import Button from '../../ui/Button';
 import Input from '../../ui/Input';
 import Modal from '../../ui/Modal';
 import PhotoEditorModal from '../PhotoEditorModal';
 
-export const AdminCategoryModal = ({
-  isOpen,
-  onClose,
-  editingCategory,
-  onSaveSuccess
-}) => {
+export const AdminCategoryModal = ({ isOpen, onClose, editingCategory, onSaveSuccess }) => {
   const catFileInputRef = useRef(null);
   const [categoryName, setCategoryName] = useState('');
   const [categorySlug, setCategorySlug] = useState('');
@@ -98,10 +85,10 @@ export const AdminCategoryModal = ({
       slug: categorySlug.trim() || undefined,
       description: categoryDesc,
       icon: categoryIcon,
-      image: isAdult ? null : (categoryImage.trim() || null),
-      menuBadge: isAdult ? null : (menuBadge.trim() || null),
-      menuTitle: isAdult ? null : (menuTitle.trim() || null),
-      menuLink: isAdult ? null : (menuLink.trim() || null),
+      image: isAdult ? null : categoryImage.trim() || null,
+      menuBadge: isAdult ? null : menuBadge.trim() || null,
+      menuTitle: isAdult ? null : menuTitle.trim() || null,
+      menuLink: isAdult ? null : menuLink.trim() || null,
       isAdult,
       featuredInMenu
     };
@@ -186,7 +173,9 @@ export const AdminCategoryModal = ({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-text-secondary">Enlace Destacado (opcional)</label>
+              <label className="text-xs font-medium text-text-secondary">
+                Enlace Destacado (opcional)
+              </label>
               <input
                 type="text"
                 value={menuLink}
@@ -218,7 +207,9 @@ export const AdminCategoryModal = ({
 
             {isAdult ? (
               <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs">
-                🔒 <strong>Bienestar Íntimo (+18):</strong> Por política de discreción y privacidad del cliente, esta categoría <strong>no muestra fotografías</strong> en el menú desplegable. Las columnas se reacomodan automáticamente sin dejar espacios vacíos.
+                🔒 <strong>Bienestar Íntimo (+18):</strong> Por política de discreción y privacidad
+                del cliente, esta categoría <strong>no muestra fotografías</strong> en el menú
+                desplegable. Las columnas se reacomodan automáticamente sin dejar espacios vacíos.
               </div>
             ) : (
               <div className="space-y-3">
@@ -295,14 +286,19 @@ export const AdminCategoryModal = ({
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-night-950 via-night-950/40 to-transparent p-3 flex flex-col justify-end">
                       {menuBadge && (
-                        <span className="text-[10px] text-gold-bright font-bold uppercase">{menuBadge}</span>
+                        <span className="text-[10px] text-gold-bright font-bold uppercase">
+                          {menuBadge}
+                        </span>
                       )}
-                      <span className="text-xs font-bold text-white">{menuTitle || categoryName}</span>
+                      <span className="text-xs font-bold text-white">
+                        {menuTitle || categoryName}
+                      </span>
                     </div>
                   </div>
                 ) : (
                   <p className="text-[11px] text-text-muted italic">
-                    Sin imagen asignada: el mega menú desplegará las subcategorías en columnas completas sin dejar huecos.
+                    Sin imagen asignada: el mega menú desplegará las subcategorías en columnas
+                    completas sin dejar huecos.
                   </p>
                 )}
               </div>
@@ -340,21 +336,10 @@ export const AdminCategoryModal = ({
 
           {/* Botones al pie del modal con espaciado móvil */}
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-night-700">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={onClose}>
               Cancelar
             </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              icon={Check}
-              isLoading={isSubmitting}
-            >
+            <Button type="submit" variant="primary" size="md" icon={Check} isLoading={isSubmitting}>
               {editingCategory ? 'Guardar Cambios' : 'Crear Categoría'}
             </Button>
           </div>

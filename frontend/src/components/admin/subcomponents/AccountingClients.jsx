@@ -5,10 +5,7 @@ import ApartadosTable from './ApartadosTable';
 import ContraEntregaTable from './ContraEntregaTable';
 import { CreateClientModal, AddPaymentModal } from './AccountingClientModals';
 
-export const AccountingClients = ({
-  layaways = [],
-  onRefresh
-}) => {
+export const AccountingClients = ({ layaways = [], onRefresh }) => {
   const [filterMode, setFilterMode] = useState('both'); // 'both' | 'apartados' | 'contra_entrega'
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [createType, setCreateType] = useState('APARTADO');
@@ -31,11 +28,11 @@ export const AccountingClients = ({
   const contraEntrega = layaways.filter((l) => l.type === 'CONTRA_ENTREGA');
 
   const pendingApartadosSaldo = apartados.reduce(
-    (sum, l) => sum + (l.status !== 'COMPLETED' ? (l.remainingAmount || 0) : 0),
+    (sum, l) => sum + (l.status !== 'COMPLETED' ? l.remainingAmount || 0 : 0),
     0
   );
   const pendingContraEntregaSaldo = contraEntrega.reduce(
-    (sum, l) => sum + (l.status !== 'COMPLETED' ? (l.totalAmount || 0) : 0),
+    (sum, l) => sum + (l.status !== 'COMPLETED' ? l.totalAmount || 0 : 0),
     0
   );
 
@@ -171,7 +168,8 @@ export const AccountingClients = ({
             Control de Clientes: A Pagos y Contra Entrega
           </h3>
           <p className="text-xs text-text-secondary mt-0.5">
-            Ambas listas visibles simultáneamente en pantalla para gestionar apartados y entregas sin perder ningún cliente.
+            Ambas listas visibles simultáneamente en pantalla para gestionar apartados y entregas
+            sin perder ningún cliente.
           </p>
         </div>
 

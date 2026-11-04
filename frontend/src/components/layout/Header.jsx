@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Heart,
-  ShoppingBag,
-  User,
-  Truck,
-  Menu,
-  Sliders,
-  Search,
-  X
-} from 'lucide-react';
+import { Heart, ShoppingBag, User, Truck, Menu, Sliders, Search, X } from 'lucide-react';
 import Logo from '../ui/Logo';
 import MobileMenuDrawer from './MobileMenuDrawer';
 import HeaderPromoBar from './subcomponents/HeaderPromoBar';
@@ -156,7 +147,11 @@ export const Header = ({
               className="md:hidden p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
               aria-label="Buscar en la tienda"
             >
-              {isMobileSearchOpen ? <X className="w-5 h-5 text-gold-bright" /> : <Search className="w-5 h-5" />}
+              {isMobileSearchOpen ? (
+                <X className="w-5 h-5 text-gold-bright" />
+              ) : (
+                <Search className="w-5 h-5" />
+              )}
             </button>
 
             {/* Favoritos */}

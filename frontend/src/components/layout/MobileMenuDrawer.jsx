@@ -148,7 +148,11 @@ export const MobileMenuDrawer = ({
                         className="w-full flex items-center justify-between py-2 text-sm font-medium text-text-primary hover:text-gold-light transition-colors"
                       >
                         <span className="flex items-center gap-2.5">
-                          {cat.isAdult && <Badge variant="adult" size="sm">🔞 +18</Badge>}
+                          {cat.isAdult && (
+                            <Badge variant="adult" size="sm">
+                              🔞 +18
+                            </Badge>
+                          )}
                           <span>{cat.name}</span>
                         </span>
                         {subcats.length > 0 ? (

@@ -16,35 +16,55 @@ import { useAgeGateStore } from '../../store/ageGateStore';
 
 // Fotografías reales de alta resolución y lujo para las 10 categorías
 const categoryPhotos = {
-  'hogar': 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1000&q=80&auto=format&fit=crop',
-  'moda': 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80&auto=format&fit=crop',
-  'accesorios': 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80&auto=format&fit=crop',
-  'belleza': 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80&auto=format&fit=crop',
-  'perfumes': 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1000&q=80&auto=format&fit=crop',
-  'maquillaje': 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&q=80&auto=format&fit=crop',
-  'cuidado-personal': 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&q=80&auto=format&fit=crop',
-  'bienestar-intimo': 'https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=800&q=80&auto=format&fit=crop',
-  'novedades-regalos': 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80&auto=format&fit=crop',
-  'omnilife-y-mas': 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&q=80&auto=format&fit=crop'
+  hogar:
+    'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1000&q=80&auto=format&fit=crop',
+  moda: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80&auto=format&fit=crop',
+  accesorios:
+    'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80&auto=format&fit=crop',
+  belleza:
+    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80&auto=format&fit=crop',
+  perfumes:
+    'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1000&q=80&auto=format&fit=crop',
+  maquillaje:
+    'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&q=80&auto=format&fit=crop',
+  'cuidado-personal':
+    'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&q=80&auto=format&fit=crop',
+  'bienestar-intimo':
+    'https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?w=800&q=80&auto=format&fit=crop',
+  'novedades-regalos':
+    'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80&auto=format&fit=crop',
+  'omnilife-y-mas':
+    'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&q=80&auto=format&fit=crop'
 };
 
 export const CategoryGrid = ({ categories = [], onSelectCategory }) => {
   const { isAdultVerified, promptAgeGate } = useAgeGateStore();
 
   const getLinearIcon = (slug) => {
-    const iconClass = "w-4 h-4 text-gold-bright";
+    const iconClass = 'w-4 h-4 text-gold-bright';
     switch (slug) {
-      case 'hogar': return <Home className={iconClass} />;
-      case 'moda': return <Shirt className={iconClass} />;
-      case 'accesorios': return <Watch className={iconClass} />;
-      case 'belleza': return <Sparkles className={iconClass} />;
-      case 'perfumes': return <Heart className={iconClass} />;
-      case 'maquillaje': return <Smile className={iconClass} />;
-      case 'cuidado-personal': return <ShieldCheck className={iconClass} />;
-      case 'bienestar-intimo': return <Lock className={iconClass} />;
-      case 'novedades-regalos': return <Gift className={iconClass} />;
-      case 'omnilife-y-mas': return <Activity className={iconClass} />;
-      default: return <Sparkles className={iconClass} />;
+      case 'hogar':
+        return <Home className={iconClass} />;
+      case 'moda':
+        return <Shirt className={iconClass} />;
+      case 'accesorios':
+        return <Watch className={iconClass} />;
+      case 'belleza':
+        return <Sparkles className={iconClass} />;
+      case 'perfumes':
+        return <Heart className={iconClass} />;
+      case 'maquillaje':
+        return <Smile className={iconClass} />;
+      case 'cuidado-personal':
+        return <ShieldCheck className={iconClass} />;
+      case 'bienestar-intimo':
+        return <Lock className={iconClass} />;
+      case 'novedades-regalos':
+        return <Gift className={iconClass} />;
+      case 'omnilife-y-mas':
+        return <Activity className={iconClass} />;
+      default:
+        return <Sparkles className={iconClass} />;
     }
   };
 
@@ -79,7 +99,10 @@ export const CategoryGrid = ({ categories = [], onSelectCategory }) => {
   };
 
   return (
-    <section id="catalogo" className="w-full bg-[#FBF6F0] text-[#1A0D26] py-16 sm:py-24 px-4 sm:px-8 border-y border-[#EEDDE8]">
+    <section
+      id="catalogo"
+      className="w-full bg-[#FBF6F0] text-[#1A0D26] py-16 sm:py-24 px-4 sm:px-8 border-y border-[#EEDDE8]"
+    >
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Encabezado Editorial Refinado */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E6D8E3] pb-6">
@@ -88,10 +111,12 @@ export const CategoryGrid = ({ categories = [], onSelectCategory }) => {
               Boutique & Colecciones
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A0D26] tracking-tight">
-              Explora Nuestro <span className="italic font-normal text-galaxy-DEFAULT">Universo</span>
+              Explora Nuestro{' '}
+              <span className="italic font-normal text-galaxy-DEFAULT">Universo</span>
             </h2>
             <p className="text-xs sm:text-sm text-[#685B78] max-w-xl leading-relaxed">
-              Diez mundos seleccionados con esmero para inspirar tu día a día, consentir tus sentidos y transformar cada rincón de tu hogar en Costa Rica.
+              Diez mundos seleccionados con esmero para inspirar tu día a día, consentir tus
+              sentidos y transformar cada rincón de tu hogar en Costa Rica.
             </p>
           </div>
 
@@ -105,7 +130,10 @@ export const CategoryGrid = ({ categories = [], onSelectCategory }) => {
         {/* COMPOSICIÓN BENTO ASIMÉTRICA CON FOTOGRAFÍA REAL */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 auto-rows-fr">
           {categories.map((cat, idx) => {
-            const photoUrl = cat.image || categoryPhotos[cat.slug] || 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80';
+            const photoUrl =
+              cat.image ||
+              categoryPhotos[cat.slug] ||
+              'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80';
             const bentoSpan = getBentoClasses(cat.slug, idx);
 
             return (
@@ -147,7 +175,8 @@ export const CategoryGrid = ({ categories = [], onSelectCategory }) => {
 
                   {/* Descripción corta de marca */}
                   <p className="text-xs text-text-secondary leading-relaxed line-clamp-2 max-h-0 sm:max-h-0 opacity-0 sm:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-all duration-400 ease-in-out">
-                    {cat.description || 'Piezas y detalles elegidos con el estándar de elegancia de Sweet Home.'}
+                    {cat.description ||
+                      'Piezas y detalles elegidos con el estándar de elegancia de Sweet Home.'}
                   </p>
 
                   <div className="pt-1 flex items-center gap-1.5 text-xs text-gold-bright font-semibold opacity-90 group-hover:opacity-100 transition-opacity">

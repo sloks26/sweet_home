@@ -11,6 +11,10 @@ router.post('/', orderController.createOrder);
 router.get('/:orderNumber', orderController.getOrderByNumber);
 
 // Subir comprobante de pago de SINPE Móvil o Transferencia
-router.post('/:orderNumber/voucher', uploadMiddleware.single('voucher'), orderController.uploadVoucher);
+router.post(
+  '/:orderNumber/voucher',
+  uploadMiddleware.single('voucher'),
+  orderController.uploadVoucher
+);
 
 export default router;

@@ -30,7 +30,9 @@ export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow }) => {
   const isFavorited = product ? isInWishlist(product.id) : false;
 
   const isOutOfStock = product ? product.stock <= 0 : false;
-  const isLowStock = product ? product.stock > 0 && product.stock <= (product.lowStockThreshold || 5) : false;
+  const isLowStock = product
+    ? product.stock > 0 && product.stock <= (product.lowStockThreshold || 5)
+    : false;
 
   const hasDiscount = product && product.compareAtPrice && product.compareAtPrice > product.price;
   const discountPercent = hasDiscount
@@ -44,7 +46,10 @@ export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow }) => {
     if (selectedVariants) {
       const entries = Object.entries(selectedVariants).filter(([_, v]) => Boolean(v));
       if (entries.length > 0) {
-        variantKey = entries.sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => `${k}:${v}`).join('|');
+        variantKey = entries
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([k, v]) => `${k}:${v}`)
+          .join('|');
       }
     }
     const itemKey = `${product.id}_${variantKey}`;
@@ -94,9 +99,12 @@ export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow }) => {
   };
 
   const handleWhatsAppConsult = () => {
-    const variantText = Object.entries(selectedVariants).length > 0
-      ? ` (${Object.entries(selectedVariants).map(([k, v]) => `${k}: ${v}`).join(', ')})`
-      : '';
+    const variantText =
+      Object.entries(selectedVariants).length > 0
+        ? ` (${Object.entries(selectedVariants)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(', ')})`
+        : '';
     const message = encodeURIComponent(
       `Hola Sweet Home & Boutique CR! 💕 Me gustaría consultar sobre el producto: ${product.name}${variantText} por ₡${product.price.toLocaleString('es-CR')}. ¿Tienen disponibilidad?`
     );
@@ -227,7 +235,8 @@ export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow }) => {
                     {product.variants.map((v) => {
                       let optionsList = [];
                       try {
-                        optionsList = typeof v.options === 'string' ? JSON.parse(v.options) : v.options;
+                        optionsList =
+                          typeof v.options === 'string' ? JSON.parse(v.options) : v.options;
                       } catch (e) {
                         optionsList = [v.options];
                       }

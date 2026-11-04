@@ -90,9 +90,7 @@ export const DashboardSalesGoal = ({ currentSales = 0 }) => {
           <span className="text-2xl sm:text-3xl font-extrabold text-gold-bright">
             ₡{currentSales.toLocaleString('es-CR')}
           </span>
-          <span className="text-xs text-text-muted">
-            de ₡{goal.toLocaleString('es-CR')}
-          </span>
+          <span className="text-xs text-text-muted">de ₡{goal.toLocaleString('es-CR')}</span>
         </div>
         <div className="text-xs font-semibold text-emerald-400 flex items-center gap-1">
           <TrendingUp className="w-4 h-4" />
@@ -113,7 +111,9 @@ export const DashboardSalesGoal = ({ currentSales = 0 }) => {
         <div className="flex justify-between text-[11px] text-text-muted pt-0.5">
           <span>0%</span>
           {remainingToGoal > 0 ? (
-            <span className="text-amber-300 font-medium">Faltan ₡{remainingToGoal.toLocaleString('es-CR')}</span>
+            <span className="text-amber-300 font-medium">
+              Faltan ₡{remainingToGoal.toLocaleString('es-CR')}
+            </span>
           ) : (
             <span className="text-emerald-400 font-bold">¡Objetivo superado!</span>
           )}

@@ -7,11 +7,26 @@ export const InstagramFeedSection = () => {
   const [subscribed, setSubscribed] = useState(false);
 
   const instaPhotos = [
-    { url: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&q=80', alt: 'Hogar cálido' },
-    { url: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=500&q=80', alt: 'Perfumes exclusivos' },
-    { url: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&q=80', alt: 'Bolsos y moda' },
-    { url: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&q=80', alt: 'Velas y aromaterapia' },
-    { url: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&q=80', alt: 'Empaques de regalo' },
+    {
+      url: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&q=80',
+      alt: 'Hogar cálido'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=500&q=80',
+      alt: 'Perfumes exclusivos'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&q=80',
+      alt: 'Bolsos y moda'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&q=80',
+      alt: 'Velas y aromaterapia'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&q=80',
+      alt: 'Empaques de regalo'
+    }
   ];
 
   const handleSubscribe = (e) => {
@@ -29,7 +44,10 @@ export const InstagramFeedSection = () => {
             Comunidad Sweet Home
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-text-primary">
-            Síguenos en Instagram <span className="text-gold-gradient font-script text-4xl sm:text-5xl">@sweethomeboutiquecr</span>
+            Síguenos en Instagram{' '}
+            <span className="text-gold-gradient font-script text-4xl sm:text-5xl">
+              @sweethomeboutiquecr
+            </span>
           </h2>
         </div>
 
@@ -63,7 +81,9 @@ export const InstagramFeedSection = () => {
             Recibe 10% de descuento en tu primer pedido
           </h3>
           <p className="text-xs sm:text-sm text-text-secondary">
-            Ingresa tu correo y usa el código <strong className="text-gold-light">BIENVENIDA10</strong> al finalizar tu compra por SINPE Móvil o Transferencia.
+            Ingresa tu correo y usa el código{' '}
+            <strong className="text-gold-light">BIENVENIDA10</strong> al finalizar tu compra por
+            SINPE Móvil o Transferencia.
           </p>
         </div>
 
@@ -73,7 +93,10 @@ export const InstagramFeedSection = () => {
             <span>¡Gracias por suscribirte! Ya puedes usar el cupón BIENVENIDA10.</span>
           </div>
         ) : (
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row w-full md:w-auto gap-2.5">
+          <form
+            onSubmit={handleSubscribe}
+            className="flex flex-col sm:flex-row w-full md:w-auto gap-2.5"
+          >
             <input
               type="email"
               value={email}
@@ -82,12 +105,7 @@ export const InstagramFeedSection = () => {
               required
               className="px-4 py-3 rounded-xl bg-night-950 border border-gold-DEFAULT/30 text-text-primary placeholder:text-text-muted text-sm focus:outline-none focus:border-gold-DEFAULT focus:ring-2 focus:ring-gold-DEFAULT/25 min-w-[260px]"
             />
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              iconRight={ArrowRight}
-            >
+            <Button type="submit" variant="primary" size="md" iconRight={ArrowRight}>
               Suscribirme
             </Button>
           </form>

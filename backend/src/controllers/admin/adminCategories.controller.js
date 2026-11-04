@@ -20,9 +20,22 @@ export async function getAdminCategories(req, res) {
 
 export async function createAdminCategory(req, res) {
   try {
-    const { name, slug, description, icon, image, menuBadge, menuTitle, menuLink, isAdult, featuredInMenu } = req.body;
+    const {
+      name,
+      slug,
+      description,
+      icon,
+      image,
+      menuBadge,
+      menuTitle,
+      menuLink,
+      isAdult,
+      featuredInMenu
+    } = req.body;
     if (!name) {
-      return res.status(400).json({ error: true, message: 'El nombre de categoría es obligatorio' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'El nombre de categoría es obligatorio' });
     }
 
     const finalSlug = (slug || name)
@@ -41,10 +54,10 @@ export async function createAdminCategory(req, res) {
         slug: finalSlug,
         description: description || null,
         icon: icon || 'Sparkles',
-        image: adult ? null : (image || null),
-        menuBadge: adult ? null : (menuBadge || null),
-        menuTitle: adult ? null : (menuTitle || null),
-        menuLink: adult ? null : (menuLink || null),
+        image: adult ? null : image || null,
+        menuBadge: adult ? null : menuBadge || null,
+        menuTitle: adult ? null : menuTitle || null,
+        menuLink: adult ? null : menuLink || null,
         order: count + 1,
         isAdult: adult,
         featuredInMenu: featuredInMenu !== undefined ? Boolean(featuredInMenu) : true,
@@ -64,14 +77,29 @@ export async function createAdminCategory(req, res) {
     return res.json({ success: true, message: 'Categoría creada con éxito', data: category });
   } catch (err) {
     console.error('Error al crear categoría:', err);
-    return res.status(500).json({ error: true, message: err.message || 'Error al crear categoría' });
+    return res
+      .status(500)
+      .json({ error: true, message: err.message || 'Error al crear categoría' });
   }
 }
 
 export async function updateAdminCategory(req, res) {
   try {
     const { id } = req.params;
-    const { name, slug, description, icon, image, menuBadge, menuTitle, menuLink, isAdult, featuredInMenu, isActive, order } = req.body;
+    const {
+      name,
+      slug,
+      description,
+      icon,
+      image,
+      menuBadge,
+      menuTitle,
+      menuLink,
+      isAdult,
+      featuredInMenu,
+      isActive,
+      order
+    } = req.body;
     const adult = isAdult !== undefined ? Boolean(isAdult) : undefined;
 
     const category = await prisma.category.update({
@@ -81,10 +109,10 @@ export async function updateAdminCategory(req, res) {
         ...(slug && { slug }),
         ...(description !== undefined && { description }),
         ...(icon !== undefined && { icon }),
-        ...(image !== undefined && { image: adult === true ? null : (image || null) }),
-        ...(menuBadge !== undefined && { menuBadge: adult === true ? null : (menuBadge || null) }),
-        ...(menuTitle !== undefined && { menuTitle: adult === true ? null : (menuTitle || null) }),
-        ...(menuLink !== undefined && { menuLink: adult === true ? null : (menuLink || null) }),
+        ...(image !== undefined && { image: adult === true ? null : image || null }),
+        ...(menuBadge !== undefined && { menuBadge: adult === true ? null : menuBadge || null }),
+        ...(menuTitle !== undefined && { menuTitle: adult === true ? null : menuTitle || null }),
+        ...(menuLink !== undefined && { menuLink: adult === true ? null : menuLink || null }),
         ...(adult !== undefined && { isAdult: adult }),
         ...(featuredInMenu !== undefined && { featuredInMenu: Boolean(featuredInMenu) }),
         ...(isActive !== undefined && { isActive: Boolean(isActive) }),
@@ -203,7 +231,9 @@ export async function createAdminSubcategory(req, res) {
     return res.json({ success: true, message: 'Subcategoría creada con éxito', data: subcategory });
   } catch (err) {
     console.error('Error al crear subcategoría:', err);
-    return res.status(500).json({ error: true, message: err.message || 'Error al crear subcategoría' });
+    return res
+      .status(500)
+      .json({ error: true, message: err.message || 'Error al crear subcategoría' });
   }
 }
 

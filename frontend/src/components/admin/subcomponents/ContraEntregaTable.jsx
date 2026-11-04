@@ -13,7 +13,10 @@ export const ContraEntregaTable = ({
   getWhatsAppLink
 }) => {
   return (
-    <div id="section-contra-entrega" className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-sky-500/30 space-y-4 scroll-mt-24">
+    <div
+      id="section-contra-entrega"
+      className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-sky-500/30 space-y-4 scroll-mt-24"
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-night-700">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-sky-500/15 text-sky-400">
@@ -27,7 +30,8 @@ export const ContraEntregaTable = ({
               </span>
             </h4>
             <p className="text-xs text-text-secondary">
-              Por cobrar contra entrega: <strong className="text-sky-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
+              Por cobrar contra entrega:{' '}
+              <strong className="text-sky-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
             </p>
           </div>
         </div>
@@ -70,14 +74,20 @@ export const ContraEntregaTable = ({
                     </a>
                   </div>
                   {item.status === 'COMPLETED' ? (
-                    <Badge variant="success" size="sm">Cobrado</Badge>
+                    <Badge variant="success" size="sm">
+                      Cobrado
+                    </Badge>
                   ) : (
-                    <Badge variant="warning" size="sm">Por Cobrar</Badge>
+                    <Badge variant="warning" size="sm">
+                      Por Cobrar
+                    </Badge>
                   )}
                 </div>
 
                 <div className="text-xs text-text-secondary bg-night-900 p-2 rounded-lg border border-night-800">
-                  <span className="text-[10px] uppercase font-semibold text-text-muted block">Detalle Pedido:</span>
+                  <span className="text-[10px] uppercase font-semibold text-text-muted block">
+                    Detalle Pedido:
+                  </span>
                   <span className="font-medium text-text-primary">{item.productDetails}</span>
                 </div>
 
@@ -109,7 +119,9 @@ export const ContraEntregaTable = ({
                       </a>
                     </div>
                   ) : (
-                    <div className="flex-1 text-xs text-emerald-400 font-medium">Pedido entregado y cobrado</div>
+                    <div className="flex-1 text-xs text-emerald-400 font-medium">
+                      Pedido entregado y cobrado
+                    </div>
                   )}
 
                   <button
@@ -152,7 +164,10 @@ export const ContraEntregaTable = ({
                         <span>{item.customerPhone}</span>
                       </a>
                     </td>
-                    <td className="py-3 text-text-secondary max-w-[200px] truncate" title={item.productDetails}>
+                    <td
+                      className="py-3 text-text-secondary max-w-[200px] truncate"
+                      title={item.productDetails}
+                    >
                       {item.productDetails}
                     </td>
                     <td className="py-3 font-bold text-sky-300">
@@ -160,9 +175,13 @@ export const ContraEntregaTable = ({
                     </td>
                     <td className="py-3">
                       {item.status === 'COMPLETED' ? (
-                        <Badge variant="success" size="sm">Cobrado</Badge>
+                        <Badge variant="success" size="sm">
+                          Cobrado
+                        </Badge>
                       ) : (
-                        <Badge variant="warning" size="sm">Por Cobrar</Badge>
+                        <Badge variant="warning" size="sm">
+                          Por Cobrar
+                        </Badge>
                       )}
                     </td>
                     <td className="py-3 text-right space-x-1.5 whitespace-nowrap">

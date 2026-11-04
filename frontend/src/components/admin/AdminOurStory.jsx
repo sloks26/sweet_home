@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  BookOpen,
-  Check,
-  Heart,
-  Sparkles,
-  Image,
-  Eye,
-  UploadCloud,
-  Loader2
-} from 'lucide-react';
+import { BookOpen, Check, Heart, Sparkles, Image, Eye, UploadCloud, Loader2 } from 'lucide-react';
 import Button from '../ui/Button';
 import Input, { Textarea } from '../ui/Input';
 import PhotoEditorModal from './PhotoEditorModal';
@@ -22,10 +13,14 @@ export const AdminOurStory = () => {
   // Campos de Nuestra Historia
   const [badge, setBadge] = useState('El corazón de nuestra boutique');
   const [title, setTitle] = useState('Nuestra Historia');
-  const [subtitle, setSubtitle] = useState('Un sueño costarricense que nació para iluminar hogares');
+  const [subtitle, setSubtitle] = useState(
+    'Un sueño costarricense que nació para iluminar hogares'
+  );
   const [founderName, setFounderName] = useState('Fundadora & Directora Creativa');
   const [founderRole, setFounderRole] = useState('Sweet Home & Boutique CR');
-  const [founderPhoto, setFounderPhoto] = useState('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80');
+  const [founderPhoto, setFounderPhoto] = useState(
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80'
+  );
   const [paragraphsText, setParagraphsText] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [mobileTab, setMobileTab] = useState('edit');
@@ -147,7 +142,8 @@ export const AdminOurStory = () => {
             Editar "Nuestra Historia"
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Personaliza la sección especial del Home: tu fotografía, tu relato, firma y valores de marca.
+            Personaliza la sección especial del Home: tu fotografía, tu relato, firma y valores de
+            marca.
           </p>
         </div>
 
@@ -192,14 +188,17 @@ export const AdminOurStory = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Formulario de Edición */}
-        <div className={`lg:col-span-6 space-y-6 ${mobileTab === 'preview' ? 'hidden lg:block' : 'block'}`}>
+        <div
+          className={`lg:col-span-6 space-y-6 ${mobileTab === 'preview' ? 'hidden lg:block' : 'block'}`}
+        >
           <div className="p-4 rounded-2xl bg-gold-DEFAULT/10 border border-gold-DEFAULT/30 text-xs text-gold-light space-y-1">
             <span className="font-bold flex items-center gap-1.5 text-gold-bright">
               <Sparkles className="w-4 h-4" />
               <span>Conexión Emocional con tus Clientes</span>
             </span>
             <p>
-              Esta sección transmite calidez y confianza a quienes compran en tu boutique. Puedes subir tu foto directamente desde tu celular o computadora.
+              Esta sección transmite calidez y confianza a quienes compran en tu boutique. Puedes
+              subir tu foto directamente desde tu celular o computadora.
             </p>
           </div>
 
@@ -308,7 +307,10 @@ export const AdminOurStory = () => {
                 onChange={(e) => setIsActive(e.target.checked)}
                 className="w-4 h-4 rounded text-gold-DEFAULT focus:ring-gold-DEFAULT accent-gold-DEFAULT cursor-pointer"
               />
-              <label htmlFor="storyActive" className="text-xs text-text-primary cursor-pointer select-none">
+              <label
+                htmlFor="storyActive"
+                className="text-xs text-text-primary cursor-pointer select-none"
+              >
                 Mostrar sección "Nuestra Historia" activa en el Home
               </label>
             </div>
@@ -316,7 +318,9 @@ export const AdminOurStory = () => {
         </div>
 
         {/* Vista Previa en Vivo (Side-by-side en Desktop, Pestaña en Móvil) */}
-        <div className={`lg:col-span-6 space-y-3 sticky top-24 ${mobileTab === 'edit' ? 'hidden lg:block' : 'block'}`}>
+        <div
+          className={`lg:col-span-6 space-y-3 sticky top-24 ${mobileTab === 'edit' ? 'hidden lg:block' : 'block'}`}
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gold-bright uppercase tracking-wider flex items-center gap-1.5">
               <Eye className="w-4 h-4" />
@@ -331,7 +335,10 @@ export const AdminOurStory = () => {
               <div className="relative p-2 rounded-t-[90px] rounded-b-[25px] bg-gradient-to-b from-gold-light via-gold-DEFAULT to-gold-dark shadow-gold-md shrink-0">
                 <div className="w-36 h-48 rounded-t-[84px] rounded-b-[20px] overflow-hidden bg-night-950 relative">
                   <img
-                    src={founderPhoto || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80'}
+                    src={
+                      founderPhoto ||
+                      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80'
+                    }
                     alt="Fundadora"
                     className="w-full h-full object-cover object-top"
                   />
@@ -350,13 +357,9 @@ export const AdminOurStory = () => {
                 <h3 className="font-serif text-3xl font-bold text-[#1A0B2E] leading-tight truncate">
                   {title}
                 </h3>
-                <p className="text-xs text-[#5C4A6E] font-medium">
-                  {subtitle}
-                </p>
+                <p className="text-xs text-[#5C4A6E] font-medium">{subtitle}</p>
                 <div className="pt-2">
-                  <span className="font-script text-2xl text-[#B8860B] block">
-                    {founderName}
-                  </span>
+                  <span className="font-script text-2xl text-[#B8860B] block">{founderName}</span>
                   <span className="text-[10px] text-[#7A6B8A] uppercase font-semibold">
                     {founderRole}
                   </span>

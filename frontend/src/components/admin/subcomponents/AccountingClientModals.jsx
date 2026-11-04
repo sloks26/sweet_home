@@ -131,7 +131,8 @@ export const AddPaymentModal = ({
         />
 
         <div className="p-3 rounded-xl bg-gold-DEFAULT/10 border border-gold-DEFAULT/30 text-xs text-gold-light">
-          Al registrar este abono, se incrementará el total de ingresos de la tienda y se descontará del saldo pendiente de la cliente.
+          Al registrar este abono, se incrementará el total de ingresos de la tienda y se descontará
+          del saldo pendiente de la cliente.
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-night-700">

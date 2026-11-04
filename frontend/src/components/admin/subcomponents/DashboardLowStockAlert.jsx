@@ -69,7 +69,8 @@ export const DashboardLowStockAlert = ({ items = [], onNavigate }) => {
                       {prod.name}
                     </span>
                     <span className="text-[10px] text-text-muted block">
-                      {prod.sku ? `SKU: ${prod.sku} • ` : ''}₡{(prod.price || 0).toLocaleString('es-CR')}
+                      {prod.sku ? `SKU: ${prod.sku} • ` : ''}₡
+                      {(prod.price || 0).toLocaleString('es-CR')}
                     </span>
                   </div>
                 </div>

@@ -34,11 +34,21 @@ export const adminAccountingController = {
       const netProfit = totalRevenue - totalExpenses;
 
       // Apartados y Contra Entrega
-      const activeApartados = allLayaways.filter(l => l.type === 'APARTADO' && l.status === 'ACTIVE');
-      const pendingApartadosAmount = activeApartados.reduce((sum, l) => sum + (l.remainingAmount || 0), 0);
+      const activeApartados = allLayaways.filter(
+        (l) => l.type === 'APARTADO' && l.status === 'ACTIVE'
+      );
+      const pendingApartadosAmount = activeApartados.reduce(
+        (sum, l) => sum + (l.remainingAmount || 0),
+        0
+      );
 
-      const activeContraEntrega = allLayaways.filter(l => l.type === 'CONTRA_ENTREGA' && l.status === 'ACTIVE');
-      const pendingContraEntregaAmount = activeContraEntrega.reduce((sum, l) => sum + (l.remainingAmount || 0), 0);
+      const activeContraEntrega = allLayaways.filter(
+        (l) => l.type === 'CONTRA_ENTREGA' && l.status === 'ACTIVE'
+      );
+      const pendingContraEntregaAmount = activeContraEntrega.reduce(
+        (sum, l) => sum + (l.remainingAmount || 0),
+        0
+      );
 
       // Gráficas por DÍA (Últimos 7 días)
       const dailyMap = {};
@@ -59,7 +69,20 @@ export const adminAccountingController = {
       ];
 
       // Gráficas por MES (Año actual)
-      const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      const monthNames = [
+        'Ene',
+        'Feb',
+        'Mar',
+        'Abr',
+        'May',
+        'Jun',
+        'Jul',
+        'Ago',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dic'
+      ];
       const monthlyData = monthNames.map((name, index) => ({
         label: name,
         month: name,
@@ -80,14 +103,14 @@ export const adminAccountingController = {
       };
 
       // Distribuir ingresos de pedidos
-      confirmedOrders.forEach(o => {
+      confirmedOrders.forEach((o) => {
         const d = new Date(o.createdAt);
         const dayKey = d.toISOString().split('T')[0];
         if (dailyMap[dayKey]) dailyMap[dayKey].income += o.total;
 
         const wDiff = getWeekDiff(d);
         if (wDiff >= 0 && wDiff <= 3) {
-          const wItem = weeklyData.find(w => w.weekIdx === wDiff);
+          const wItem = weeklyData.find((w) => w.weekIdx === wDiff);
           if (wItem) wItem.income += o.total;
         }
 
@@ -97,7 +120,7 @@ export const adminAccountingController = {
       });
 
       // Distribuir abonos de apartados
-      allLayaways.forEach(l => {
+      allLayaways.forEach((l) => {
         if (l.paidAmount > 0) {
           const d = new Date(l.updatedAt || l.createdAt);
           const dayKey = d.toISOString().split('T')[0];
@@ -105,7 +128,7 @@ export const adminAccountingController = {
 
           const wDiff = getWeekDiff(d);
           if (wDiff >= 0 && wDiff <= 3) {
-            const wItem = weeklyData.find(w => w.weekIdx === wDiff);
+            const wItem = weeklyData.find((w) => w.weekIdx === wDiff);
             if (wItem) wItem.income += l.paidAmount;
           }
 
@@ -116,14 +139,14 @@ export const adminAccountingController = {
       });
 
       // Distribuir egresos
-      allExpenses.forEach(e => {
+      allExpenses.forEach((e) => {
         const d = new Date(e.date);
         const dayKey = d.toISOString().split('T')[0];
         if (dailyMap[dayKey]) dailyMap[dayKey].expense += e.amount;
 
         const wDiff = getWeekDiff(d);
         if (wDiff >= 0 && wDiff <= 3) {
-          const wItem = weeklyData.find(w => w.weekIdx === wDiff);
+          const wItem = weeklyData.find((w) => w.weekIdx === wDiff);
           if (wItem) wItem.expense += e.amount;
         }
 
@@ -133,16 +156,16 @@ export const adminAccountingController = {
       });
 
       // Calcular netos
-      const dailyChart = Object.values(dailyMap).map(d => ({
+      const dailyChart = Object.values(dailyMap).map((d) => ({
         ...d,
         net: d.income - d.expense
       }));
 
-      weeklyData.forEach(w => {
+      weeklyData.forEach((w) => {
         w.net = w.income - w.expense;
       });
 
-      monthlyData.forEach(m => {
+      monthlyData.forEach((m) => {
         m.net = m.income - m.expense;
       });
 
@@ -171,7 +194,9 @@ export const adminAccountingController = {
       });
     } catch (err) {
       console.error('Error obteniendo contabilidad:', err);
-      return res.status(500).json({ error: true, message: 'Error interno obteniendo contabilidad' });
+      return res
+        .status(500)
+        .json({ error: true, message: 'Error interno obteniendo contabilidad' });
     }
   },
 
@@ -182,7 +207,9 @@ export const adminAccountingController = {
     try {
       const { concept, category = 'OPERATIVO', amount, notes, date } = req.body;
       if (!concept || !amount || Number(amount) <= 0) {
-        return res.status(400).json({ error: true, message: 'Concepto y monto válido son requeridos' });
+        return res
+          .status(400)
+          .json({ error: true, message: 'Concepto y monto válido son requeridos' });
       }
 
       const expense = await prisma.expense.create({
@@ -268,7 +295,9 @@ export const adminAccountingController = {
       } = req.body;
 
       if (!customerName || !customerPhone || !totalAmount) {
-        return res.status(400).json({ error: true, message: 'Nombre, teléfono y monto total son obligatorios' });
+        return res
+          .status(400)
+          .json({ error: true, message: 'Nombre, teléfono y monto total son obligatorios' });
       }
 
       const total = parseFloat(totalAmount);
@@ -337,7 +366,11 @@ export const adminAccountingController = {
         }
       });
 
-      return res.json({ success: true, message: 'Apartado actualizado correctamente', data: updated });
+      return res.json({
+        success: true,
+        message: 'Apartado actualizado correctamente',
+        data: updated
+      });
     } catch (err) {
       console.error('Error actualizando apartado:', err);
       return res.status(500).json({ error: true, message: 'Error actualizando apartado' });

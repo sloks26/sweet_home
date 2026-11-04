@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import StarBackground from './components/ui/StarBackground';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -24,16 +24,77 @@ const OrderTrackingModal = lazy(() => import('./components/layout/OrderTrackingM
 const InfoModal = lazy(() => import('./components/layout/InfoModal'));
 
 const defaultCategories = [
-  { id: '1', name: 'Hogar', slug: 'hogar', description: 'Todo para hacer de tu hogar un lugar único y especial.', icon: 'Home' },
-  { id: '2', name: 'Moda', slug: 'moda', description: 'Estilos que te hacen brillar cada día.', icon: 'Shirt' },
-  { id: '3', name: 'Accesorios', slug: 'accesorios', description: 'Los detalles que complementan tu esencia.', icon: 'Watch' },
-  { id: '4', name: 'Belleza', slug: 'belleza', description: 'Cuídate, quiérete y resalta tu belleza natural.', icon: 'Sparkles' },
-  { id: '5', name: 'Perfumes', slug: 'perfumes', description: 'Aromas que cuentan tu historia y dejan huella.', icon: 'Heart' },
-  { id: '6', name: 'Maquillaje', slug: 'maquillaje', description: 'Colores que realzan tu belleza y tu personalidad.', icon: 'Smile' },
-  { id: '7', name: 'Cuidado Personal', slug: 'cuidado-personal', description: 'Productos que miman tu piel y tu cuerpo.', icon: 'Shield' },
-  { id: '8', name: 'Bienestar Íntimo (+18)', slug: 'bienestar-intimo', description: 'Bienestar, confianza y momentos para ti. Descúbrelo con libertad y discreción.', icon: 'Lock', isAdult: true },
-  { id: '9', name: 'Novedades y Regalos', slug: 'novedades-regalos', description: 'Descubre lo nuevo que llega para ti cada semana.', icon: 'Gift' },
-  { id: '10', name: 'Omnilife y Más', slug: 'omnilife-y-mas', description: 'Productos que apoyan tu bienestar y tu día a día.', icon: 'Activity' },
+  {
+    id: '1',
+    name: 'Hogar',
+    slug: 'hogar',
+    description: 'Todo para hacer de tu hogar un lugar único y especial.',
+    icon: 'Home'
+  },
+  {
+    id: '2',
+    name: 'Moda',
+    slug: 'moda',
+    description: 'Estilos que te hacen brillar cada día.',
+    icon: 'Shirt'
+  },
+  {
+    id: '3',
+    name: 'Accesorios',
+    slug: 'accesorios',
+    description: 'Los detalles que complementan tu esencia.',
+    icon: 'Watch'
+  },
+  {
+    id: '4',
+    name: 'Belleza',
+    slug: 'belleza',
+    description: 'Cuídate, quiérete y resalta tu belleza natural.',
+    icon: 'Sparkles'
+  },
+  {
+    id: '5',
+    name: 'Perfumes',
+    slug: 'perfumes',
+    description: 'Aromas que cuentan tu historia y dejan huella.',
+    icon: 'Heart'
+  },
+  {
+    id: '6',
+    name: 'Maquillaje',
+    slug: 'maquillaje',
+    description: 'Colores que realzan tu belleza y tu personalidad.',
+    icon: 'Smile'
+  },
+  {
+    id: '7',
+    name: 'Cuidado Personal',
+    slug: 'cuidado-personal',
+    description: 'Productos que miman tu piel y tu cuerpo.',
+    icon: 'Shield'
+  },
+  {
+    id: '8',
+    name: 'Bienestar Íntimo (+18)',
+    slug: 'bienestar-intimo',
+    description: 'Bienestar, confianza y momentos para ti. Descúbrelo con libertad y discreción.',
+    icon: 'Lock',
+    isAdult: true
+  },
+  {
+    id: '9',
+    name: 'Novedades y Regalos',
+    slug: 'novedades-regalos',
+    description: 'Descubre lo nuevo que llega para ti cada semana.',
+    icon: 'Gift'
+  },
+  {
+    id: '10',
+    name: 'Omnilife y Más',
+    slug: 'omnilife-y-mas',
+    description: 'Productos que apoyan tu bienestar y tu día a día.',
+    icon: 'Activity'
+  }
 ];
 
 export function App() {
@@ -55,9 +116,9 @@ export function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Estados del Panel Administrativo
-  const isInitialAdminHash = typeof window !== 'undefined' && (
-    window.location.hash === '#admin' || window.location.pathname.startsWith('/admin')
-  );
+  const isInitialAdminHash =
+    typeof window !== 'undefined' &&
+    (window.location.hash === '#admin' || window.location.pathname.startsWith('/admin'));
   const [isAdminView, setIsAdminView] = useState(isInitialAdminHash);
   const [isVerifyingAdminAuth, setIsVerifyingAdminAuth] = useState(isInitialAdminHash);
   const [adminTab, setAdminTab] = useState('dashboard');
@@ -68,6 +129,18 @@ export function App() {
   const [isFullStoryOpen, setIsFullStoryOpen] = useState(false);
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const [infoModalTopic, setInfoModalTopic] = useState(null);
+
+  const fetchAdminStats = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/dashboard');
+      const data = await res.json();
+      if (data.success) {
+        setAdminStats(data.data);
+      }
+    } catch (err) {
+      console.error('Error al cargar métricas del panel:', err);
+    }
+  }, []);
 
   useEffect(() => {
     fetch('/api/home')
@@ -87,7 +160,8 @@ export function App() {
     fetch('/api/auth/me')
       .then((res) => res.json())
       .then((data) => {
-        const isAdminRoute = window.location.hash === '#admin' || window.location.pathname.startsWith('/admin');
+        const isAdminRoute =
+          window.location.hash === '#admin' || window.location.pathname.startsWith('/admin');
         if (data.authenticated) {
           setAuthUser(data.user);
           if (isAdminRoute) {
@@ -107,19 +181,7 @@ export function App() {
       .catch(() => {
         setIsVerifyingAdminAuth(false);
       });
-  }, []);
-
-  const fetchAdminStats = async () => {
-    try {
-      const res = await fetch('/api/admin/dashboard');
-      const data = await res.json();
-      if (data.success) {
-        setAdminStats(data.data);
-      }
-    } catch (err) {
-      console.error('Error al cargar métricas del panel:', err);
-    }
-  };
+  }, [fetchAdminStats]);
 
   const handleOpenAdminPanel = () => {
     setIsAdminView(true);
@@ -229,14 +291,16 @@ export function App() {
 
   if (isAdminView) {
     return (
-      <Suspense fallback={
-        <div className="min-h-screen bg-night-950 flex flex-col items-center justify-center text-gold-light space-y-3">
-          <div className="w-10 h-10 border-2 border-gold-DEFAULT/30 border-t-gold-bright rounded-full animate-spin" />
-          <span className="font-serif text-base tracking-wide text-gold-light">
-            Cargando Panel Administrativo...
-          </span>
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-night-950 flex flex-col items-center justify-center text-gold-light space-y-3">
+            <div className="w-10 h-10 border-2 border-gold-DEFAULT/30 border-t-gold-bright rounded-full animate-spin" />
+            <span className="font-serif text-base tracking-wide text-gold-light">
+              Cargando Panel Administrativo...
+            </span>
+          </div>
+        }
+      >
         <AdminView
           adminTab={adminTab}
           setAdminTab={setAdminTab}
@@ -273,11 +337,13 @@ export function App() {
       {/* VISTA DINÁMICA: CATÁLOGO O HOME */}
       <div className="pt-16 sm:pt-24">
         {currentView === 'catalog' ? (
-          <Suspense fallback={
-            <div className="min-h-[500px] flex items-center justify-center text-gold-light font-serif text-lg">
-              Cargando catálogo exclusivo...
-            </div>
-          }>
+          <Suspense
+            fallback={
+              <div className="min-h-[500px] flex items-center justify-center text-gold-light font-serif text-lg">
+                Cargando catálogo exclusivo...
+              </div>
+            }
+          >
             <CatalogPage
               initialCategory={catalogCategory}
               initialSearch={catalogSearch}
@@ -293,10 +359,7 @@ export function App() {
               isMenuOpen={isMegaMenuOpen}
               onSelectCategory={handleSelectCategory}
             />
-            <CategoryGrid
-              categories={categories}
-              onSelectCategory={handleSelectCategory}
-            />
+            <CategoryGrid categories={categories} onSelectCategory={handleSelectCategory} />
             <div className="content-visibility-auto">
               <ProductSection
                 products={products}

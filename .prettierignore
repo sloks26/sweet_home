@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+backend/uploads/
+*.min.js
+*.min.css
+package-lock.json
+dev.db
+dev.db-journal
+.system_generated/

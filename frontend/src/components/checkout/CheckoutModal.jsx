@@ -76,7 +76,9 @@ export const CheckoutModal = ({ isOpen, onClose, storeSettings }) => {
 
     if (shippingMethod !== 'RETIRO_TIENDA') {
       if (!canton.trim() || !district.trim() || !details.trim()) {
-        setErrorMessage('Por favor especifica tu cantón, distrito y dirección detallada para el envío.');
+        setErrorMessage(
+          'Por favor especifica tu cantón, distrito y dirección detallada para el envío.'
+        );
         return;
       }
     }

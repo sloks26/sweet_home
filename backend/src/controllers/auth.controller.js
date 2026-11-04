@@ -102,9 +102,10 @@ export const authController = {
         const remainingAttempts = Math.max(0, 5 - failedAttempts);
         return res.status(401).json({
           error: true,
-          message: remainingAttempts > 0
-            ? `Contraseña incorrecta. Te quedan ${remainingAttempts} intento(s) antes del bloqueo temporal.`
-            : 'Has excedido el número de intentos permitidos. Cuenta bloqueada por 15 minutos.',
+          message:
+            remainingAttempts > 0
+              ? `Contraseña incorrecta. Te quedan ${remainingAttempts} intento(s) antes del bloqueo temporal.`
+              : 'Has excedido el número de intentos permitidos. Cuenta bloqueada por 15 minutos.',
           code: 'INVALID_CREDENTIALS'
         });
       }

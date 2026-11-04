@@ -65,13 +65,13 @@ export const AdminCategoryRow = ({
           {/* Info de la Categoría */}
           <div className="space-y-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h3 className="font-serif text-lg font-bold text-text-primary">
-                {cat.name}
-              </h3>
-              {cat.isAdult && <Badge variant="adult" size="sm">🔞 +18</Badge>}
-              <span className="text-[11px] text-text-muted">
-                ({prodCount} productos)
-              </span>
+              <h3 className="font-serif text-lg font-bold text-text-primary">{cat.name}</h3>
+              {cat.isAdult && (
+                <Badge variant="adult" size="sm">
+                  🔞 +18
+                </Badge>
+              )}
+              <span className="text-[11px] text-text-muted">({prodCount} productos)</span>
             </div>
             <p className="text-xs text-text-secondary truncate max-w-md">
               {cat.description || 'Sin descripción'}
@@ -95,12 +95,7 @@ export const AdminCategoryRow = ({
             />
           </button>
 
-          <Button
-            variant="secondary"
-            size="sm"
-            icon={Edit2}
-            onClick={() => onEdit(cat)}
-          >
+          <Button variant="secondary" size="sm" icon={Edit2} onClick={() => onEdit(cat)}>
             Editar
           </Button>
 

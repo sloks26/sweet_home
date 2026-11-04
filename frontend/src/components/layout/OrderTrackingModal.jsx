@@ -81,7 +81,10 @@ export const OrderTrackingModal = ({ isOpen, onClose, defaultOrderNumber = '' })
       const data = await res.json();
 
       if (!res.ok || data.error) {
-        throw new Error(data.message || 'No encontramos ningún pedido con ese código. Verifica el número ingresado.');
+        throw new Error(
+          data.message ||
+            'No encontramos ningún pedido con ese código. Verifica el número ingresado.'
+        );
       }
 
       setOrderData(data.data);
@@ -100,7 +103,7 @@ export const OrderTrackingModal = ({ isOpen, onClose, defaultOrderNumber = '' })
     }
   };
 
-  const statusInfo = orderData ? (STATUS_MAP[orderData.status] || STATUS_MAP.PENDING_PAYMENT) : null;
+  const statusInfo = orderData ? STATUS_MAP[orderData.status] || STATUS_MAP.PENDING_PAYMENT : null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-night-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
@@ -146,12 +149,7 @@ export const OrderTrackingModal = ({ isOpen, onClose, defaultOrderNumber = '' })
               />
               <Search className="w-4 h-4 text-gold-bright absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              isLoading={loading}
-            >
+            <Button type="submit" variant="primary" size="md" isLoading={loading}>
               Consultar
             </Button>
           </form>
@@ -171,30 +169,40 @@ export const OrderTrackingModal = ({ isOpen, onClose, defaultOrderNumber = '' })
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-night-700/60 pb-3">
                   <div>
                     <span className="text-[10px] text-text-muted block">Número de Pedido</span>
-                    <strong className="text-lg font-mono text-gold-bright">{orderData.orderNumber}</strong>
+                    <strong className="text-lg font-mono text-gold-bright">
+                      {orderData.orderNumber}
+                    </strong>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold border ${statusInfo.color}`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-bold border ${statusInfo.color}`}
+                  >
                     {statusInfo.label}
                   </span>
                 </div>
 
-                <p className="text-xs text-text-secondary leading-relaxed">
-                  {statusInfo.desc}
-                </p>
+                <p className="text-xs text-text-secondary leading-relaxed">{statusInfo.desc}</p>
 
                 {/* Número de Guía si fue despachado */}
                 {orderData.trackingNumber && (
                   <div className="flex items-center justify-between p-3 rounded-xl bg-night-900 border border-night-700">
                     <div>
-                      <span className="text-[10px] text-text-muted block">Número de Guía de Entrega</span>
-                      <strong className="text-xs font-mono text-text-primary">{orderData.trackingNumber}</strong>
+                      <span className="text-[10px] text-text-muted block">
+                        Número de Guía de Entrega
+                      </span>
+                      <strong className="text-xs font-mono text-text-primary">
+                        {orderData.trackingNumber}
+                      </strong>
                     </div>
                     <button
                       type="button"
                       onClick={() => handleCopyTracking(orderData.trackingNumber)}
                       className="px-2.5 py-1 rounded-lg bg-gold-DEFAULT/20 text-gold-light text-xs font-semibold flex items-center gap-1.5"
                     >
-                      {copiedTracking ? <Check className="w-3.5 h-3.5 text-status-success" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copiedTracking ? (
+                        <Check className="w-3.5 h-3.5 text-status-success" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
                       <span>{copiedTracking ? '¡Copiado!' : 'Copiar'}</span>
                     </button>
                   </div>
@@ -209,7 +217,9 @@ export const OrderTrackingModal = ({ isOpen, onClose, defaultOrderNumber = '' })
                     <span>Método de Envío</span>
                   </span>
                   <strong className="text-text-primary block">{orderData.shippingMethod}</strong>
-                  <span className="text-[11px] text-text-secondary block truncate">{orderData.shippingAddress}</span>
+                  <span className="text-[11px] text-text-secondary block truncate">
+                    {orderData.shippingAddress}
+                  </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-night-900/60 border border-night-700 space-y-1">
@@ -218,9 +228,13 @@ export const OrderTrackingModal = ({ isOpen, onClose, defaultOrderNumber = '' })
                     <span>Pago y Total</span>
                   </span>
                   <strong className="text-text-primary block">
-                    {orderData.paymentMethod === 'SINPE_MOVIL' ? 'SINPE Móvil' : 'Transferencia Bancaria'}
+                    {orderData.paymentMethod === 'SINPE_MOVIL'
+                      ? 'SINPE Móvil'
+                      : 'Transferencia Bancaria'}
                   </strong>
-                  <span className="text-gold-light font-bold text-sm block">₡{orderData.total.toLocaleString('es-CR')}</span>
+                  <span className="text-gold-light font-bold text-sm block">
+                    ₡{orderData.total.toLocaleString('es-CR')}
+                  </span>
                 </div>
               </div>
 
@@ -238,20 +252,32 @@ export const OrderTrackingModal = ({ isOpen, onClose, defaultOrderNumber = '' })
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           {it.image ? (
-                            <img src={it.image} alt={it.name} className="w-9 h-9 rounded-lg object-cover bg-night-950 shrink-0" />
+                            <img
+                              src={it.image}
+                              alt={it.name}
+                              className="w-9 h-9 rounded-lg object-cover bg-night-950 shrink-0"
+                            />
                           ) : (
                             <div className="w-9 h-9 rounded-lg bg-night-950 flex items-center justify-center text-text-muted shrink-0">
                               <Package className="w-4 h-4" />
                             </div>
                           )}
                           <div className="min-w-0 truncate">
-                            <span className="font-semibold text-text-primary block truncate">{it.name}</span>
-                            {it.variant && <span className="text-[10px] text-gold-bright block">{it.variant}</span>}
+                            <span className="font-semibold text-text-primary block truncate">
+                              {it.name}
+                            </span>
+                            {it.variant && (
+                              <span className="text-[10px] text-gold-bright block">
+                                {it.variant}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="text-right shrink-0 pl-2">
                           <span className="text-text-muted block">Cant: {it.quantity}</span>
-                          <span className="font-bold text-gold-light">₡{(it.price * it.quantity).toLocaleString('es-CR')}</span>
+                          <span className="font-bold text-gold-light">
+                            ₡{(it.price * it.quantity).toLocaleString('es-CR')}
+                          </span>
                         </div>
                       </div>
                     ))}

@@ -9,7 +9,8 @@ export const useAgeGateStore = create(
       pendingDestination: null,
 
       verifyAge: () => set({ isAdultVerified: true, isModalOpen: false }),
-      promptAgeGate: (destination = null) => set({ isModalOpen: true, pendingDestination: destination }),
+      promptAgeGate: (destination = null) =>
+        set({ isModalOpen: true, pendingDestination: destination }),
       closeModal: () => set({ isModalOpen: false, pendingDestination: null }),
       resetVerification: () => set({ isAdultVerified: false })
     }),

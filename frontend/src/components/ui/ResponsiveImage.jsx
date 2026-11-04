@@ -28,10 +28,16 @@ export const ResponsiveImage = ({
     return (
       <div
         className={`bg-night-900/60 flex flex-col items-center justify-center text-text-muted text-xs p-3 text-center border border-night-800 ${containerClassName}`}
-        style={{ aspectRatio, width: width ? `${width}px` : undefined, height: height ? `${height}px` : undefined }}
+        style={{
+          aspectRatio,
+          width: width ? `${width}px` : undefined,
+          height: height ? `${height}px` : undefined
+        }}
       >
         <span className="text-gold-light/40 text-lg mb-1">✨</span>
-        <span className="line-clamp-2 text-[11px] font-medium">{fallbackPlaceholder || alt || 'Sweet Home & Boutique'}</span>
+        <span className="line-clamp-2 text-[11px] font-medium">
+          {fallbackPlaceholder || alt || 'Sweet Home & Boutique'}
+        </span>
       </div>
     );
   }
@@ -62,9 +68,10 @@ export const ResponsiveImage = ({
     defaultSrc = src;
   }
 
-  const srcSetWebp = isUnsplash || isLocalUpload
-    ? `${src480} 480w, ${src768} 768w, ${src1200} 1200w, ${src1920} 1920w`
-    : undefined;
+  const srcSetWebp =
+    isUnsplash || isLocalUpload
+      ? `${src480} 480w, ${src768} 768w, ${src1200} 1200w, ${src1920} 1920w`
+      : undefined;
 
   return (
     <div

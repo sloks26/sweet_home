@@ -9,12 +9,15 @@ export const ProductCard = ({ product, onQuickView, onClick }) => {
   const { isInWishlist, toggleWishlist } = useWishlistStore();
 
   const isFavorited = isInWishlist(product.id);
-  const coverImage = product.images?.[0]?.url || 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80';
+  const coverImage =
+    product.images?.[0]?.url ||
+    'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80';
 
   // Descuento porcentual si aplica
-  const discountPercent = product.compareAtPrice && product.compareAtPrice > product.price
-    ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
-    : null;
+  const discountPercent =
+    product.compareAtPrice && product.compareAtPrice > product.price
+      ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
+      : null;
 
   const handleCardClick = (e) => {
     if (onClick && !e.target.closest('button')) {

@@ -193,7 +193,8 @@ export const PhotoEditorModal = ({ isOpen, onClose, imageSrc, onSave }) => {
                 className="max-h-[360px] max-w-full rounded-xl shadow-lg object-contain border border-gold-DEFAULT/20"
               />
               <span className="text-[11px] text-text-muted mt-2">
-                Relación de aspecto activa: <strong className="text-gold-light">{aspectRatio}</strong>
+                Relación de aspecto activa:{' '}
+                <strong className="text-gold-light">{aspectRatio}</strong>
               </span>
             </div>
 
@@ -209,7 +210,7 @@ export const PhotoEditorModal = ({ isOpen, onClose, imageSrc, onSave }) => {
                     { id: '4:5', label: '4:5 Editorial', note: 'Catálogo Lujo' },
                     { id: '1:1', label: '1:1 Cuadrado', note: 'Productos' },
                     { id: '16:9', label: '16:9 Banner', note: 'Carrusel' },
-                    { id: '3:4', label: '3:4 Retrato', note: 'Fundadora' },
+                    { id: '3:4', label: '3:4 Retrato', note: 'Fundadora' }
                   ].map((ratio) => (
                     <button
                       key={ratio.id}

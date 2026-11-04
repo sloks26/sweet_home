@@ -10,14 +10,16 @@ export const DashboardShippingSummary = ({ orders = [], onNavigate }) => {
   const correosOrders = orders.filter((o) =>
     (o.shippingMethod || '').toLowerCase().includes('correo')
   );
-  const expressOrders = orders.filter((o) =>
-    (o.shippingMethod || '').toLowerCase().includes('mensajer') ||
-    (o.shippingMethod || '').toLowerCase().includes('express') ||
-    (o.shippingMethod || '').toLowerCase().includes('gam')
+  const expressOrders = orders.filter(
+    (o) =>
+      (o.shippingMethod || '').toLowerCase().includes('mensajer') ||
+      (o.shippingMethod || '').toLowerCase().includes('express') ||
+      (o.shippingMethod || '').toLowerCase().includes('gam')
   );
-  const pickupOrders = orders.filter((o) =>
-    (o.shippingMethod || '').toLowerCase().includes('retiro') ||
-    (o.shippingMethod || '').toLowerCase().includes('tienda')
+  const pickupOrders = orders.filter(
+    (o) =>
+      (o.shippingMethod || '').toLowerCase().includes('retiro') ||
+      (o.shippingMethod || '').toLowerCase().includes('tienda')
   );
 
   const handleCopyShippingList = async () => {

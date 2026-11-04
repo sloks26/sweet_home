@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  ShoppingBag,
-  Search,
-  Eye,
-  Trash2,
-  PackageCheck,
-  RefreshCw
-} from 'lucide-react';
+import { ShoppingBag, Search, Eye, Trash2, PackageCheck, RefreshCw } from 'lucide-react';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 import WhatsAppIcon from '../ui/WhatsAppIcon';
@@ -103,15 +96,22 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
   };
 
   const handleRejectVoucher = (customReason) => {
-    const reason = typeof customReason === 'string' && customReason.trim()
-      ? customReason.trim()
-      : prompt('Ingrese el motivo del rechazo del comprobante (ej: comprobante ilegible, monto no coincide):');
+    const reason =
+      typeof customReason === 'string' && customReason.trim()
+        ? customReason.trim()
+        : prompt(
+            'Ingrese el motivo del rechazo del comprobante (ej: comprobante ilegible, monto no coincide):'
+          );
     if (!reason) return;
     handleUpdateStatus('PENDING_PAYMENT', { rejectionReason: reason });
   };
 
   const handleDeleteOrder = async (orderId, orderNumber) => {
-    if (!window.confirm(`¿Estás segura de eliminar permanentemente el pedido ${orderNumber}? Esta acción no se puede deshacer.`)) {
+    if (
+      !window.confirm(
+        `¿Estás segura de eliminar permanentemente el pedido ${orderNumber}? Esta acción no se puede deshacer.`
+      )
+    ) {
       return;
     }
     try {
@@ -133,21 +133,53 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'PENDING_PAYMENT':
-        return <Badge variant="outline" size="sm">Pendiente de Pago</Badge>;
+        return (
+          <Badge variant="outline" size="sm">
+            Pendiente de Pago
+          </Badge>
+        );
       case 'VOUCHER_RECEIVED':
-        return <Badge variant="warning" size="sm" withDot>Comprobante por Verificar</Badge>;
+        return (
+          <Badge variant="warning" size="sm" withDot>
+            Comprobante por Verificar
+          </Badge>
+        );
       case 'PAYMENT_CONFIRMED':
-        return <Badge variant="success" size="sm">Pago Confirmado</Badge>;
+        return (
+          <Badge variant="success" size="sm">
+            Pago Confirmado
+          </Badge>
+        );
       case 'PREPARING':
-        return <Badge variant="gold" size="sm">En Preparación</Badge>;
+        return (
+          <Badge variant="gold" size="sm">
+            En Preparación
+          </Badge>
+        );
       case 'SHIPPED':
-        return <Badge variant="gold" size="sm">Enviado</Badge>;
+        return (
+          <Badge variant="gold" size="sm">
+            Enviado
+          </Badge>
+        );
       case 'DELIVERED':
-        return <Badge variant="success" size="sm">Entregado</Badge>;
+        return (
+          <Badge variant="success" size="sm">
+            Entregado
+          </Badge>
+        );
       case 'CANCELLED':
-        return <Badge variant="error" size="sm">Cancelado</Badge>;
+        return (
+          <Badge variant="error" size="sm">
+            Cancelado
+          </Badge>
+        );
       default:
-        return <Badge variant="outline" size="sm">{status}</Badge>;
+        return (
+          <Badge variant="outline" size="sm">
+            {status}
+          </Badge>
+        );
     }
   };
 
@@ -180,15 +212,12 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
             <span>Gestión de Pedidos & Comprobantes</span>
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Valida transferencias y SINPE Móvil en tiempo real, despacha envíos y mantén comunicación directa por WhatsApp.
+            Valida transferencias y SINPE Móvil en tiempo real, despacha envíos y mantén
+            comunicación directa por WhatsApp.
           </p>
         </div>
 
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={fetchOrders}
-        >
+        <Button variant="secondary" size="sm" onClick={fetchOrders}>
           Actualizar Lista
         </Button>
       </div>
@@ -212,8 +241,8 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
               statusFilter === tab.id
                 ? 'bg-gradient-to-r from-gold-light via-gold-DEFAULT to-gold-dark text-night-950 font-bold shadow-sm'
                 : tab.highlight
-                ? 'text-amber-300 hover:bg-night-800'
-                : 'text-text-secondary hover:text-gold-light hover:bg-night-800'
+                  ? 'text-amber-300 hover:bg-night-800'
+                  : 'text-text-secondary hover:text-gold-light hover:bg-night-800'
             }`}
           >
             {tab.label}
@@ -233,7 +262,12 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
           />
           <Search className="w-4 h-4 text-text-muted absolute left-3 top-3.5 sm:top-2.5" />
         </div>
-        <Button variant="outline" size="sm" type="submit" className="min-h-[44px] px-4 font-bold border-gold-DEFAULT/50 text-gold-light">
+        <Button
+          variant="outline"
+          size="sm"
+          type="submit"
+          className="min-h-[44px] px-4 font-bold border-gold-DEFAULT/50 text-gold-light"
+        >
           Buscar
         </Button>
       </form>
@@ -243,7 +277,10 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="p-4 rounded-2xl bg-[#150B24] border border-night-800 animate-pulse space-y-3">
+              <div
+                key={n}
+                className="p-4 rounded-2xl bg-[#150B24] border border-night-800 animate-pulse space-y-3"
+              >
                 <div className="flex justify-between">
                   <div className="h-4 w-28 bg-night-700 rounded" />
                   <div className="h-5 w-20 bg-night-700 rounded-full" />
@@ -284,35 +321,50 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
               {loading ? (
                 [1, 2, 3, 4, 5].map((n) => (
                   <tr key={n} className="animate-pulse">
-                    <td className="py-3 px-4"><div className="h-4 w-24 bg-night-800 rounded" /></td>
-                    <td className="py-3 px-4"><div className="h-3 w-20 bg-night-800 rounded" /></td>
-                    <td className="py-3 px-4"><div className="h-3 w-32 bg-night-800 rounded" /></td>
-                    <td className="py-3 px-4"><div className="h-3 w-28 bg-night-800 rounded" /></td>
-                    <td className="py-3 px-4"><div className="h-4 w-16 bg-night-800 rounded" /></td>
-                    <td className="py-3 px-4"><div className="h-4 w-20 bg-night-800 rounded" /></td>
-                    <td className="py-3 px-4"><div className="h-5 w-24 bg-night-800 rounded-full" /></td>
-                    <td className="py-3 px-4 text-right"><div className="h-7 w-20 bg-night-800 rounded ml-auto" /></td>
+                    <td className="py-3 px-4">
+                      <div className="h-4 w-24 bg-night-800 rounded" />
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="h-3 w-20 bg-night-800 rounded" />
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="h-3 w-32 bg-night-800 rounded" />
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="h-3 w-28 bg-night-800 rounded" />
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="h-4 w-16 bg-night-800 rounded" />
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="h-4 w-20 bg-night-800 rounded" />
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="h-5 w-24 bg-night-800 rounded-full" />
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="h-7 w-20 bg-night-800 rounded ml-auto" />
+                    </td>
                   </tr>
                 ))
               ) : orders.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-text-muted">
                     <PackageCheck className="w-8 h-8 text-gold-light/40 mx-auto mb-2" />
-                    <p className="font-semibold text-text-secondary">No se encontraron pedidos con los filtros actuales.</p>
-                    <p className="text-[11px] text-text-muted mt-1">Prueba seleccionando "Todos" o limpiando el buscador.</p>
+                    <p className="font-semibold text-text-secondary">
+                      No se encontraron pedidos con los filtros actuales.
+                    </p>
+                    <p className="text-[11px] text-text-muted mt-1">
+                      Prueba seleccionando "Todos" o limpiando el buscador.
+                    </p>
                   </td>
                 </tr>
               ) : (
                 orders.map((ord) => {
                   const hasVoucher = Boolean(ord.voucherUrl);
                   return (
-                    <tr
-                      key={ord.id}
-                      className="hover:bg-night-800/60 transition-colors"
-                    >
-                      <td className="py-3 px-4 font-bold text-gold-light">
-                        {ord.orderNumber}
-                      </td>
+                    <tr key={ord.id} className="hover:bg-night-800/60 transition-colors">
+                      <td className="py-3 px-4 font-bold text-gold-light">{ord.orderNumber}</td>
                       <td className="py-3 px-4 text-text-secondary whitespace-nowrap">
                         {new Date(ord.createdAt).toLocaleDateString('es-CR', {
                           day: '2-digit',
@@ -327,7 +379,9 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
                       </td>
                       <td className="py-3 px-4">
                         <div className="text-text-primary">
-                          {ord.paymentMethod === 'SINPE_MOVIL' ? 'SINPE Móvil' : 'Transferencia Bancaria'}
+                          {ord.paymentMethod === 'SINPE_MOVIL'
+                            ? 'SINPE Móvil'
+                            : 'Transferencia Bancaria'}
                         </div>
                         <div className="text-[11px] text-text-muted truncate max-w-[150px]">
                           {ord.shippingMethod}
@@ -349,9 +403,7 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
                           <span className="text-[11px] text-text-muted italic">Pendiente</span>
                         )}
                       </td>
-                      <td className="py-3 px-4">
-                        {getStatusBadge(ord.status)}
-                      </td>
+                      <td className="py-3 px-4">{getStatusBadge(ord.status)}</td>
                       <td className="py-3 px-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1.5">
                           <button

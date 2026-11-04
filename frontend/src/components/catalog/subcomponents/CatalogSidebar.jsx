@@ -96,7 +96,11 @@ export const CatalogSidebar = ({
                 }`}
               >
                 <span className="truncate">{cat.name}</span>
-                {cat.isAdult && <Badge variant="adult" size="sm">+18</Badge>}
+                {cat.isAdult && (
+                  <Badge variant="adult" size="sm">
+                    +18
+                  </Badge>
+                )}
               </button>
             );
           })}
@@ -135,7 +139,9 @@ export const CatalogSidebar = ({
       <div className="space-y-3 pt-2 border-t border-night-700/60">
         <label className="text-xs font-semibold text-gold-bright uppercase tracking-wider flex items-center justify-between">
           <span>Precio Máximo</span>
-          <span className="text-gold-light font-bold">₡{priceRange[1].toLocaleString('es-CR')}</span>
+          <span className="text-gold-light font-bold">
+            ₡{priceRange[1].toLocaleString('es-CR')}
+          </span>
         </label>
         <input
           type="range"

@@ -25,7 +25,9 @@ export async function getDashboardStats(req, res) {
       prisma.order.count(),
       prisma.order.count({ where: { status: 'PENDING_PAYMENT' } }),
       prisma.order.count({ where: { status: 'VOUCHER_RECEIVED' } }),
-      prisma.order.count({ where: { status: { in: ['PAYMENT_CONFIRMED', 'PREPARING', 'SHIPPED', 'DELIVERED'] } } }),
+      prisma.order.count({
+        where: { status: { in: ['PAYMENT_CONFIRMED', 'PREPARING', 'SHIPPED', 'DELIVERED'] } }
+      }),
       prisma.product.count({ where: { isActive: true } }),
       prisma.product.count({ where: { stock: { lte: 3 }, isActive: true } }),
       prisma.order.count({ where: { status: { in: ['PAYMENT_CONFIRMED', 'PREPARING'] } } }),
@@ -127,7 +129,9 @@ export async function getDashboardStats(req, res) {
     });
   } catch (err) {
     console.error('Error al obtener métricas del dashboard:', err);
-    return res.status(500).json({ error: true, message: 'Error al obtener métricas del dashboard' });
+    return res
+      .status(500)
+      .json({ error: true, message: 'Error al obtener métricas del dashboard' });
   }
 }
 
@@ -171,6 +175,8 @@ export async function updateSiteContent(req, res) {
     });
   } catch (err) {
     console.error('Error al actualizar contenido del sitio:', err);
-    return res.status(500).json({ error: true, message: 'Error al actualizar contenido del sitio' });
+    return res
+      .status(500)
+      .json({ error: true, message: 'Error al actualizar contenido del sitio' });
   }
 }

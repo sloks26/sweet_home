@@ -15,10 +15,8 @@ export async function listMedia(req, res) {
     const files = fs.readdirSync(uploadDir);
     // Filtrar solo las imágenes principales (excluir miniaturas _thumb y variantes de ancho _480, _768, _1200)
     const imageFiles = files
-      .filter((file) =>
-        file.endsWith('.webp') &&
-        !file.includes('_thumb.') &&
-        !/_\d+\.webp$/.test(file)
+      .filter(
+        (file) => file.endsWith('.webp') && !file.includes('_thumb.') && !/_\d+\.webp$/.test(file)
       )
       .map((filename) => {
         const filePath = path.join(uploadDir, filename);
@@ -46,7 +44,9 @@ export async function listMedia(req, res) {
 export async function uploadMedia(req, res) {
   try {
     if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ error: true, message: 'No se seleccionaron archivos para subir' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'No se seleccionaron archivos para subir' });
     }
 
     const processedResults = [];
@@ -71,7 +71,9 @@ export async function uploadMedia(req, res) {
     });
   } catch (err) {
     console.error('Error al subir medios:', err);
-    return res.status(500).json({ error: true, message: err.message || 'Error al procesar imágenes' });
+    return res
+      .status(500)
+      .json({ error: true, message: err.message || 'Error al procesar imágenes' });
   }
 }
 
@@ -94,10 +96,7 @@ export async function deleteMedia(req, res) {
 
     const usedByBanner = await prisma.banner.findFirst({
       where: {
-        OR: [
-          { desktopImage: { contains: filename } },
-          { mobileImage: { contains: filename } }
-        ]
+        OR: [{ desktopImage: { contains: filename } }, { mobileImage: { contains: filename } }]
       },
       select: { title: true }
     });

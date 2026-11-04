@@ -35,11 +35,10 @@ export const AgeVerificationModal = () => {
               <span className="text-xs font-serif font-bold tracking-widest text-gold-bright uppercase block">
                 Verificación Requerida • +18 Años
               </span>
-              <h3 className="font-serif text-2xl font-bold text-text-primary">
-                Bienestar Íntimo
-              </h3>
+              <h3 className="font-serif text-2xl font-bold text-text-primary">Bienestar Íntimo</h3>
               <p className="text-xs text-text-secondary leading-relaxed">
-                Esta sección contiene productos de cuidado y bienestar destinados exclusivamente a personas mayores de edad (+18).
+                Esta sección contiene productos de cuidado y bienestar destinados exclusivamente a
+                personas mayores de edad (+18).
               </p>
             </div>
 
@@ -48,7 +47,8 @@ export const AgeVerificationModal = () => {
                 <span>🔒 Política de Discreción Sweet Home:</span>
               </div>
               <p>
-                Tus pedidos se entregan en empaques neutros y discretos sin logos ni descripciones explícitas para tu absoluta privacidad.
+                Tus pedidos se entregan en empaques neutros y discretos sin logos ni descripciones
+                explícitas para tu absoluta privacidad.
               </p>
             </div>
 

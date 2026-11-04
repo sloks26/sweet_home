@@ -16,10 +16,23 @@ export async function getBanners(req, res) {
 
 export async function createBanner(req, res) {
   try {
-    const { title, subtitle, badge, ctaText, ctaLink, desktopImage, mobileImage, isActive, startsAt, endsAt } = req.body;
+    const {
+      title,
+      subtitle,
+      badge,
+      ctaText,
+      ctaLink,
+      desktopImage,
+      mobileImage,
+      isActive,
+      startsAt,
+      endsAt
+    } = req.body;
 
     if (!title || !desktopImage) {
-      return res.status(400).json({ error: true, message: 'Título e imagen para escritorio son requeridos.' });
+      return res
+        .status(400)
+        .json({ error: true, message: 'Título e imagen para escritorio son requeridos.' });
     }
 
     const count = await prisma.banner.count();
@@ -59,7 +72,19 @@ export async function createBanner(req, res) {
 export async function updateBanner(req, res) {
   try {
     const { id } = req.params;
-    const { title, subtitle, badge, ctaText, ctaLink, desktopImage, mobileImage, isActive, startsAt, endsAt, order } = req.body;
+    const {
+      title,
+      subtitle,
+      badge,
+      ctaText,
+      ctaLink,
+      desktopImage,
+      mobileImage,
+      isActive,
+      startsAt,
+      endsAt,
+      order
+    } = req.body;
 
     const banner = await prisma.banner.update({
       where: { id },

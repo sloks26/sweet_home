@@ -63,10 +63,7 @@ export const HeaderSearchBar = ({
   return (
     <>
       {/* Centro: Buscador Amplio y Centrado en Escritorio */}
-      <div
-        ref={searchRef}
-        className="hidden md:flex flex-1 max-w-lg mx-auto relative"
-      >
+      <div ref={searchRef} className="hidden md:flex flex-1 max-w-lg mx-auto relative">
         <div className="relative w-full">
           <input
             type="text"
@@ -100,9 +97,7 @@ export const HeaderSearchBar = ({
         {isSearchOpen && searchQuery.length >= 2 && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-night-950 border border-gold-DEFAULT/30 rounded-2xl shadow-2xl overflow-hidden z-50 divide-y divide-night-800 animate-fadeIn">
             {isSearching ? (
-              <div className="p-4 text-center text-xs text-text-muted">
-                Buscando en catálogo...
-              </div>
+              <div className="p-4 text-center text-xs text-text-muted">Buscando en catálogo...</div>
             ) : searchResults.length > 0 ? (
               <>
                 {searchResults.map((item) => (

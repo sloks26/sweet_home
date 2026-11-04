@@ -13,7 +13,10 @@ export const ApartadosTable = ({
   getWhatsAppLink
 }) => {
   return (
-    <div id="section-apartados" className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-amber-500/30 space-y-4 scroll-mt-24">
+    <div
+      id="section-apartados"
+      className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-amber-500/30 space-y-4 scroll-mt-24"
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-night-700">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400">
@@ -27,17 +30,13 @@ export const ApartadosTable = ({
               </span>
             </h4>
             <p className="text-xs text-text-secondary">
-              Saldo pendiente por cobrar: <strong className="text-amber-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
+              Saldo pendiente por cobrar:{' '}
+              <strong className="text-amber-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
             </p>
           </div>
         </div>
 
-        <Button
-          variant="primary"
-          size="sm"
-          icon={Plus}
-          onClick={onOpenCreate}
-        >
+        <Button variant="primary" size="sm" icon={Plus} onClick={onOpenCreate}>
           + Nuevo Apartado
         </Button>
       </div>
@@ -69,29 +68,41 @@ export const ApartadosTable = ({
                     </a>
                   </div>
                   {item.status === 'COMPLETED' ? (
-                    <Badge variant="success" size="sm">Liquidado</Badge>
+                    <Badge variant="success" size="sm">
+                      Liquidado
+                    </Badge>
                   ) : (
-                    <Badge variant="warning" size="sm">Pendiente</Badge>
+                    <Badge variant="warning" size="sm">
+                      Pendiente
+                    </Badge>
                   )}
                 </div>
 
                 <div className="text-xs text-text-secondary bg-night-900 p-2 rounded-lg border border-night-800">
-                  <span className="text-[10px] uppercase font-semibold text-text-muted block">Prendas / Artículos:</span>
+                  <span className="text-[10px] uppercase font-semibold text-text-muted block">
+                    Prendas / Artículos:
+                  </span>
                   <span className="font-medium text-text-primary">{item.productDetails}</span>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-xs py-1 border-t border-b border-night-800">
                   <div>
                     <span className="text-[10px] text-text-muted block">Total</span>
-                    <span className="font-bold text-text-primary">₡{(item.totalAmount || 0).toLocaleString('es-CR')}</span>
+                    <span className="font-bold text-text-primary">
+                      ₡{(item.totalAmount || 0).toLocaleString('es-CR')}
+                    </span>
                   </div>
                   <div>
                     <span className="text-[10px] text-text-muted block">Abonado</span>
-                    <span className="font-bold text-emerald-400">₡{(item.paidAmount || 0).toLocaleString('es-CR')}</span>
+                    <span className="font-bold text-emerald-400">
+                      ₡{(item.paidAmount || 0).toLocaleString('es-CR')}
+                    </span>
                   </div>
                   <div>
                     <span className="text-[10px] text-text-muted block">Saldo</span>
-                    <span className="font-bold text-amber-300">₡{(item.remainingAmount || 0).toLocaleString('es-CR')}</span>
+                    <span className="font-bold text-amber-300">
+                      ₡{(item.remainingAmount || 0).toLocaleString('es-CR')}
+                    </span>
                   </div>
                 </div>
 
@@ -116,7 +127,9 @@ export const ApartadosTable = ({
                       </a>
                     </div>
                   ) : (
-                    <div className="flex-1 text-xs text-emerald-400 font-medium">Cuenta cancelada</div>
+                    <div className="flex-1 text-xs text-emerald-400 font-medium">
+                      Cuenta cancelada
+                    </div>
                   )}
 
                   <button
@@ -161,7 +174,10 @@ export const ApartadosTable = ({
                         <span>{item.customerPhone}</span>
                       </a>
                     </td>
-                    <td className="py-3 text-text-secondary max-w-[180px] truncate" title={item.productDetails}>
+                    <td
+                      className="py-3 text-text-secondary max-w-[180px] truncate"
+                      title={item.productDetails}
+                    >
                       {item.productDetails}
                     </td>
                     <td className="py-3 font-bold text-text-primary">
@@ -175,9 +191,13 @@ export const ApartadosTable = ({
                     </td>
                     <td className="py-3">
                       {item.status === 'COMPLETED' ? (
-                        <Badge variant="success" size="sm">Liquidado</Badge>
+                        <Badge variant="success" size="sm">
+                          Liquidado
+                        </Badge>
                       ) : (
-                        <Badge variant="warning" size="sm">Pendiente</Badge>
+                        <Badge variant="warning" size="sm">
+                          Pendiente
+                        </Badge>
                       )}
                     </td>
                     <td className="py-3 text-right space-x-1.5 whitespace-nowrap">

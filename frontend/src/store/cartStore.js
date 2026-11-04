@@ -40,7 +40,10 @@ export const useCartStore = create(
           } else {
             const entries = Object.entries(variantObj).filter(([_, v]) => Boolean(v));
             if (entries.length > 0) {
-              variantKey = entries.sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => `${k}:${v}`).join('|');
+              variantKey = entries
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([k, v]) => `${k}:${v}`)
+                .join('|');
               variantLabel = entries.map(([k, v]) => `${k}: ${v}`).join(', ');
             }
           }
@@ -66,7 +69,9 @@ export const useCartStore = create(
                 slug: product.slug,
                 price: product.price,
                 compareAtPrice: product.compareAtPrice,
-                image: product.images?.[0]?.url || 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300&q=80',
+                image:
+                  product.images?.[0]?.url ||
+                  'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=300&q=80',
                 sku: product.sku || 'SH-CR',
                 variantName: variantLabel,
                 quantity
@@ -87,9 +92,7 @@ export const useCartStore = create(
           return;
         }
         set({
-          items: get().items.map((i) =>
-            i.key === itemKey ? { ...i, quantity } : i
-          )
+          items: get().items.map((i) => (i.key === itemKey ? { ...i, quantity } : i))
         });
       },
 

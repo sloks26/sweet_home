@@ -51,7 +51,8 @@ class ErrorBoundary extends React.Component {
               Sweet Home & Boutique CR
             </h2>
             <p className="text-xs text-[#C9B8E0]">
-              Estamos actualizando la tienda con mejoras recientes. Haz clic abajo para cargar la versión más reciente.
+              Estamos actualizando la tienda con mejoras recientes. Haz clic abajo para cargar la
+              versión más reciente.
             </p>
             <button
               onClick={() => {
@@ -75,5 +76,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

@@ -12,7 +12,8 @@ export const TestimonialsSection = ({ testimonials = [] }) => {
       clientLocation: 'Curridabat, San José',
       clientAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80',
       rating: 5,
-      comment: '¡Quedé enamorada del empaque! El difusor y las esencias llegaron al día siguiente por Correos de Costa Rica, todo envuelto con un aroma delicioso y una notita hermosa. 100% recomendados.'
+      comment:
+        '¡Quedé enamorada del empaque! El difusor y las esencias llegaron al día siguiente por Correos de Costa Rica, todo envuelto con un aroma delicioso y una notita hermosa. 100% recomendados.'
     },
     {
       id: 't-2',
@@ -20,7 +21,8 @@ export const TestimonialsSection = ({ testimonials = [] }) => {
       clientLocation: 'San Joaquín de Flores, Heredia',
       clientAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80',
       rating: 5,
-      comment: 'Compré el perfume Nuit Étoilée y un bolso para un regalo de cumpleaños. La atención por WhatsApp fue super personalizada y el pago por SINPE muy cómodo. La calidad superó mis expectativas.'
+      comment:
+        'Compré el perfume Nuit Étoilée y un bolso para un regalo de cumpleaños. La atención por WhatsApp fue super personalizada y el pago por SINPE muy cómodo. La calidad superó mis expectativas.'
     },
     {
       id: 't-3',
@@ -28,7 +30,8 @@ export const TestimonialsSection = ({ testimonials = [] }) => {
       clientLocation: 'Cartago Centro',
       clientAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&q=80',
       rating: 5,
-      comment: 'Excelente variedad para el hogar. Las toallas y los cojines le dieron un toque super elegante a mi sala. Se nota el amor y el buen gusto en cada detalle.'
+      comment:
+        'Excelente variedad para el hogar. Las toallas y los cojines le dieron un toque super elegante a mi sala. Se nota el amor y el buen gusto en cada detalle.'
     },
     {
       id: 't-4',
@@ -36,7 +39,8 @@ export const TestimonialsSection = ({ testimonials = [] }) => {
       clientLocation: 'Escazú, San José',
       clientAvatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&q=80',
       rating: 5,
-      comment: 'El vestido y los accesorios me llegaron perfectos en talla y tela. Además me encanta que sea un emprendimiento tico con un estándar de boutique tan alto.'
+      comment:
+        'El vestido y los accesorios me llegaron perfectos en talla y tela. Además me encanta que sea un emprendimiento tico con un estándar de boutique tan alto.'
     }
   ];
 
@@ -75,10 +79,12 @@ export const TestimonialsSection = ({ testimonials = [] }) => {
             <span>Experiencias Sweet Home</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1A0D26] tracking-tight">
-            Lo que dicen <span className="italic font-normal text-galaxy-DEFAULT">nuestras clientas</span>
+            Lo que dicen{' '}
+            <span className="italic font-normal text-galaxy-DEFAULT">nuestras clientas</span>
           </h2>
           <p className="text-xs sm:text-sm text-[#685B78]">
-            Familias en todo Costa Rica que confían en nosotros para iluminar sus momentos especiales.
+            Familias en todo Costa Rica que confían en nosotros para iluminar sus momentos
+            especiales.
           </p>
         </div>
 
@@ -103,7 +109,10 @@ export const TestimonialsSection = ({ testimonials = [] }) => {
             {/* Autora */}
             <div className="flex items-center gap-3.5 pt-4 border-t border-[#F2E8F0] w-full justify-center">
               <img
-                src={currentItem.clientAvatar || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80'}
+                src={
+                  currentItem.clientAvatar ||
+                  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80'
+                }
                 alt={currentItem.clientName}
                 className="w-12 h-12 rounded-full object-cover border-2 border-gold-DEFAULT/40 shadow-sm"
                 loading="lazy"

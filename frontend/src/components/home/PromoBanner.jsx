@@ -6,10 +6,12 @@ export const PromoBanner = ({ promoData = null }) => {
   const defaultPromo = {
     badge: 'Detalles que Enamoran',
     title: 'Sets de Regalo con Empaque Exclusivo y Dedicatoria',
-    subtitle: 'Cada paquete es una experiencia sensorial única: cajas rígidas perfumadas con nuestra fragancia insignia, lazos de satín y tarjetas caligrafiadas con tu mensaje personalizado para esa persona especial.',
+    subtitle:
+      'Cada paquete es una experiencia sensorial única: cajas rígidas perfumadas con nuestra fragancia insignia, lazos de satín y tarjetas caligrafiadas con tu mensaje personalizado para esa persona especial.',
     ctaText: 'Ver Sets de Regalo',
     ctaLink: '#novedades-regalos',
-    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=1200&q=80&auto=format&fit=crop'
+    image:
+      'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=1200&q=80&auto=format&fit=crop'
   };
 
   const data = promoData || defaultPromo;

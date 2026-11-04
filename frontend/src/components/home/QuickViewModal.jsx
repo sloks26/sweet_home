@@ -17,9 +17,10 @@ export const QuickViewModal = ({ product, isOpen, onClose }) => {
   if (!isOpen || !product) return null;
 
   const isFavorited = isInWishlist(product.id);
-  const images = product.images && product.images.length > 0
-    ? product.images.map((img) => img.url)
-    : ['https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&q=80'];
+  const images =
+    product.images && product.images.length > 0
+      ? product.images.map((img) => img.url)
+      : ['https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&q=80'];
 
   const variants = product.variants || [];
 
@@ -77,7 +78,11 @@ export const QuickViewModal = ({ product, isOpen, onClose }) => {
                         : 'border-night-600 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={url} alt={`Miniatura ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={url}
+                      alt={`Miniatura ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -91,12 +96,14 @@ export const QuickViewModal = ({ product, isOpen, onClose }) => {
                 <span className="text-xs font-semibold text-gold-bright uppercase tracking-wider">
                   {product.category?.name}
                 </span>
-                {product.isAdult && <Badge variant="adult" size="sm">🔞 +18</Badge>}
+                {product.isAdult && (
+                  <Badge variant="adult" size="sm">
+                    🔞 +18
+                  </Badge>
+                )}
               </div>
 
-              <h3 className="font-serif text-2xl font-bold text-text-primary">
-                {product.name}
-              </h3>
+              <h3 className="font-serif text-2xl font-bold text-text-primary">{product.name}</h3>
 
               <div className="flex items-center gap-2 text-xs text-text-muted">
                 <span>SKU: {product.sku}</span>

@@ -24,7 +24,10 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
       id: 'vouchers',
       title: 'Comprobantes por verificar',
       count: pendingVouchers,
-      description: pendingVouchers === 1 ? '1 comprobante recibido' : `${pendingVouchers} comprobantes por validar`,
+      description:
+        pendingVouchers === 1
+          ? '1 comprobante recibido'
+          : `${pendingVouchers} comprobantes por validar`,
       actionText: 'Validar SINPE',
       icon: FileCheck2,
       isUrgent: pendingVouchers > 0,
@@ -35,7 +38,8 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
       id: 'pending_payment',
       title: 'Pendientes de pago',
       count: pendingPayment,
-      description: pendingPayment === 1 ? '1 pedido en espera' : `${pendingPayment} pedidos sin pagar`,
+      description:
+        pendingPayment === 1 ? '1 pedido en espera' : `${pendingPayment} pedidos sin pagar`,
       actionText: 'Ver pedidos',
       icon: Clock,
       isUrgent: false,
@@ -46,7 +50,8 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
       id: 'to_ship',
       title: 'Pedidos por enviar',
       count: ordersToShip,
-      description: ordersToShip === 1 ? '1 paquete por despachar' : `${ordersToShip} paquetes listos`,
+      description:
+        ordersToShip === 1 ? '1 paquete por despachar' : `${ordersToShip} paquetes listos`,
       actionText: 'Ver despachos',
       icon: Truck,
       isUrgent: ordersToShip > 0,
@@ -68,7 +73,8 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
       id: 'reviews',
       title: 'Reseñas por aprobar',
       count: pendingReviews,
-      description: pendingReviews === 1 ? '1 reseña de clienta' : `${pendingReviews} opiniones nuevas`,
+      description:
+        pendingReviews === 1 ? '1 reseña de clienta' : `${pendingReviews} opiniones nuevas`,
       actionText: 'Moderar',
       icon: MessageSquareHeart,
       isUrgent: pendingReviews > 0,
@@ -99,7 +105,8 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
               )}
             </h2>
             <p className="text-xs text-text-secondary">
-              Toca cualquier tarjeta para ir directamente a la lista filtrada y gestionarla en un toque.
+              Toca cualquier tarjeta para ir directamente a la lista filtrada y gestionarla en un
+              toque.
             </p>
           </div>
         </div>
@@ -116,13 +123,20 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
               card: card.isUrgent
                 ? 'bg-amber-950/40 border-amber-500/50 hover:border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.15)]'
                 : 'bg-[#150B24] border-night-700/80 hover:border-gold-DEFAULT/40',
-              badge: card.isUrgent ? 'bg-amber-400 text-night-950' : 'bg-night-800 text-text-secondary',
-              iconBg: card.isUrgent ? 'bg-amber-500/20 text-amber-300' : 'bg-night-800 text-text-muted',
+              badge: card.isUrgent
+                ? 'bg-amber-400 text-night-950'
+                : 'bg-night-800 text-text-secondary',
+              iconBg: card.isUrgent
+                ? 'bg-amber-500/20 text-amber-300'
+                : 'bg-night-800 text-text-muted',
               accent: 'text-amber-300'
             },
             sky: {
               card: 'bg-[#150B24] border-night-700/80 hover:border-sky-500/50',
-              badge: card.count > 0 ? 'bg-sky-500/25 text-sky-200 border border-sky-500/40' : 'bg-night-800 text-text-muted',
+              badge:
+                card.count > 0
+                  ? 'bg-sky-500/25 text-sky-200 border border-sky-500/40'
+                  : 'bg-night-800 text-text-muted',
               iconBg: 'bg-sky-500/15 text-sky-400',
               accent: 'text-sky-300'
             },
@@ -130,7 +144,8 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
               card: card.isUrgent
                 ? 'bg-emerald-950/35 border-emerald-500/45 hover:border-emerald-400'
                 : 'bg-[#150B24] border-night-700/80 hover:border-emerald-500/40',
-              badge: card.count > 0 ? 'bg-emerald-500 text-night-950' : 'bg-night-800 text-text-muted',
+              badge:
+                card.count > 0 ? 'bg-emerald-500 text-night-950' : 'bg-night-800 text-text-muted',
               iconBg: 'bg-emerald-500/20 text-emerald-300',
               accent: 'text-emerald-300'
             },
@@ -161,7 +176,9 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
                 <div className={`p-2 rounded-xl shrink-0 ${themeStyles.iconBg}`}>
                   <Icon className="w-4 h-4" />
                 </div>
-                <span className={`text-lg sm:text-xl font-extrabold px-2.5 py-0.5 rounded-full ${themeStyles.badge}`}>
+                <span
+                  className={`text-lg sm:text-xl font-extrabold px-2.5 py-0.5 rounded-full ${themeStyles.badge}`}
+                >
                   {card.count}
                 </span>
               </div>

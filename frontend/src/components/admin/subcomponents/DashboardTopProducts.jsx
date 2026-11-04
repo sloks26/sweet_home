@@ -60,10 +60,10 @@ export const DashboardTopProducts = ({ products = [], onNavigate }) => {
                       index === 0
                         ? 'bg-amber-400 text-slate-950 ring-2 ring-amber-300/50'
                         : index === 1
-                        ? 'bg-stone-200 text-slate-950'
-                        : index === 2
-                        ? 'bg-amber-700 text-amber-50'
-                        : 'bg-night-800 text-text-muted border border-night-700'
+                          ? 'bg-stone-200 text-slate-950'
+                          : index === 2
+                            ? 'bg-amber-700 text-amber-50'
+                            : 'bg-night-800 text-text-muted border border-night-700'
                     }`}
                   >
                     {index + 1}
@@ -77,7 +77,8 @@ export const DashboardTopProducts = ({ products = [], onNavigate }) => {
                         alt={item.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                          e.currentTarget.src =
+                            'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
                         }}
                       />
                     ) : (

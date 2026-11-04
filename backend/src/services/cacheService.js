@@ -17,7 +17,7 @@ export const cacheService = {
     homeDataETag = null;
   },
 
-  clearPrefix(prefix) {
+  clearPrefix(_prefix) {
     this.invalidateHome();
   },
 

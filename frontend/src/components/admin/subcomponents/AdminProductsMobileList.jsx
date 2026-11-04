@@ -55,7 +55,8 @@ export const AdminProductsMobileList = ({
   return (
     <div className="lg:hidden space-y-3">
       {products.map((p) => {
-        const primaryImg = p.images?.[0]?.url || (typeof p.images?.[0] === 'string' ? p.images[0] : null);
+        const primaryImg =
+          p.images?.[0]?.url || (typeof p.images?.[0] === 'string' ? p.images[0] : null);
         const isOutOfStock = p.stock <= 0;
         const isLowStock = p.stock > 0 && p.stock <= 5;
 
@@ -74,14 +75,18 @@ export const AdminProductsMobileList = ({
                     className="w-full h-full object-cover"
                     loading="lazy"
                     onError={(e) => {
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
+                      e.currentTarget.src =
+                        'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
                     }}
                   />
                 ) : (
                   <Package className="w-6 h-6 text-text-muted" />
                 )}
                 {p.isFeatured && (
-                  <span className="absolute top-1 left-1 p-0.5 rounded bg-gold-DEFAULT text-night-950" title="Destacado">
+                  <span
+                    className="absolute top-1 left-1 p-0.5 rounded bg-gold-DEFAULT text-night-950"
+                    title="Destacado"
+                  >
                     <Sparkles className="w-2.5 h-2.5" />
                   </span>
                 )}
@@ -89,14 +94,14 @@ export const AdminProductsMobileList = ({
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-1">
-                  <h3 className="font-bold text-sm text-text-primary line-clamp-1">
-                    {p.name}
-                  </h3>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase shrink-0 ${
-                    p.isActive
-                      ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                      : 'bg-night-800 text-text-muted border border-night-700'
-                  }`}>
+                  <h3 className="font-bold text-sm text-text-primary line-clamp-1">{p.name}</h3>
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase shrink-0 ${
+                      p.isActive
+                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                        : 'bg-night-800 text-text-muted border border-night-700'
+                    }`}
+                  >
                     {p.isActive ? 'Activo' : 'Pausado'}
                   </span>
                 </div>
@@ -140,7 +145,9 @@ export const AdminProductsMobileList = ({
                     ? 'border-night-700 text-text-secondary hover:bg-night-800'
                     : 'border-emerald-500/40 text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20'
                 }`}
-                title={p.isActive ? 'Pausar producto en la tienda' : 'Activar producto en la tienda'}
+                title={
+                  p.isActive ? 'Pausar producto en la tienda' : 'Activar producto en la tienda'
+                }
               >
                 {p.isActive ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 <span>{p.isActive ? 'Pausar' : 'Activar'}</span>

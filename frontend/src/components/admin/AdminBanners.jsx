@@ -158,16 +158,12 @@ export const AdminBanners = () => {
             Banners y Hero Carrusel
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Administra las diapositivas principales de la tienda, textos, imágenes y orden de visualización.
+            Administra las diapositivas principales de la tienda, textos, imágenes y orden de
+            visualización.
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          size="md"
-          icon={Plus}
-          onClick={openCreateModal}
-        >
+        <Button variant="primary" size="md" icon={Plus} onClick={openCreateModal}>
           Agregar Diapositiva
         </Button>
       </div>
@@ -175,13 +171,13 @@ export const AdminBanners = () => {
       {/* Lista de Banners */}
       <div className="space-y-4">
         {loading ? (
-          <div className="p-8 text-center text-xs text-text-muted">
-            Cargando banners...
-          </div>
+          <div className="p-8 text-center text-xs text-text-muted">Cargando banners...</div>
         ) : banners.length === 0 ? (
           <div className="p-12 rounded-2xl bg-night-800/60 border border-gold-DEFAULT/20 text-center space-y-3">
             <ImageIcon className="w-10 h-10 text-gold-bright mx-auto opacity-50" />
-            <h4 className="font-serif text-lg font-bold text-text-primary">No hay banners creados</h4>
+            <h4 className="font-serif text-lg font-bold text-text-primary">
+              No hay banners creados
+            </h4>
             <Button variant="primary" size="sm" onClick={openCreateModal}>
               Crear el Primer Banner
             </Button>
@@ -220,7 +216,8 @@ export const AdminBanners = () => {
                   {banner.subtitle || 'Sin subtítulo'}
                 </p>
                 <div className="text-xs text-text-muted pt-1">
-                  Botón: <strong className="text-gold-light">{banner.ctaText}</strong> ({banner.ctaLink})
+                  Botón: <strong className="text-gold-light">{banner.ctaText}</strong> (
+                  {banner.ctaLink})
                 </div>
               </div>
 
@@ -351,7 +348,10 @@ export const AdminBanners = () => {
               onChange={(e) => setIsActive(e.target.checked)}
               className="w-4 h-4 rounded text-gold-DEFAULT focus:ring-gold-DEFAULT accent-gold-DEFAULT cursor-pointer"
             />
-            <label htmlFor="bannerActive" className="text-xs text-text-primary cursor-pointer select-none">
+            <label
+              htmlFor="bannerActive"
+              className="text-xs text-text-primary cursor-pointer select-none"
+            >
               Activar este banner en el carrusel de la tienda
             </label>
           </div>
@@ -365,7 +365,11 @@ export const AdminBanners = () => {
               <div className="relative h-44 rounded-2xl overflow-hidden bg-night-950 border border-gold-DEFAULT/30">
                 <img src={desktopImage} alt="Previa" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-r from-night-950/90 via-night-900/60 to-transparent flex flex-col justify-center p-5 space-y-1">
-                  {badgeText && <Badge variant="gold" size="sm">{badgeText}</Badge>}
+                  {badgeText && (
+                    <Badge variant="gold" size="sm">
+                      {badgeText}
+                    </Badge>
+                  )}
                   <h4 className="font-serif text-lg font-bold text-text-primary leading-tight">
                     {title || 'Título de muestra'}
                   </h4>
@@ -401,7 +405,9 @@ export const AdminBanners = () => {
       <PhotoEditorModal
         isOpen={isPhotoEditorOpen}
         onClose={() => setIsPhotoEditorOpen(false)}
-        imageSrc={desktopImage || 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1920&q=80'}
+        imageSrc={
+          desktopImage || 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1920&q=80'
+        }
         onSave={(newImg) => setDesktopImage(newImg.url)}
       />
     </div>

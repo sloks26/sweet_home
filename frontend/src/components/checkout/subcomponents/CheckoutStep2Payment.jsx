@@ -70,9 +70,7 @@ export const CheckoutStep2Payment = ({
               <Landmark className="w-4 h-4 text-gold-bright" />
               <span>Transferencia Bancaria</span>
             </span>
-            {paymentMethod === 'TRANSFER' && (
-              <CheckCircle2 className="w-4 h-4 text-gold-bright" />
-            )}
+            {paymentMethod === 'TRANSFER' && <CheckCircle2 className="w-4 h-4 text-gold-bright" />}
           </div>
           <p className="text-[11px] text-text-secondary">
             BAC Credomatic o Banco Popular (Colones)
@@ -101,14 +99,25 @@ export const CheckoutStep2Payment = ({
                 onClick={() => onCopy(sinpeClean, 'sinpe')}
                 className="px-3 py-1.5 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 text-gold-light text-xs font-semibold flex items-center gap-1.5 transition-colors"
               >
-                {copiedField === 'sinpe' ? <Check className="w-3.5 h-3.5 text-status-success" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedField === 'sinpe' ? (
+                  <Check className="w-3.5 h-3.5 text-status-success" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
                 <span>{copiedField === 'sinpe' ? '¡Copiado!' : 'Copiar'}</span>
               </button>
             </div>
 
             <div className="text-xs text-text-secondary space-y-1">
-              <div>Titular: <strong className="text-text-primary">{sinpeHolder}</strong></div>
-              <div>Monto Exacto: <strong className="text-gold-light font-bold">₡{orderTotal.toLocaleString('es-CR')}</strong></div>
+              <div>
+                Titular: <strong className="text-text-primary">{sinpeHolder}</strong>
+              </div>
+              <div>
+                Monto Exacto:{' '}
+                <strong className="text-gold-light font-bold">
+                  ₡{orderTotal.toLocaleString('es-CR')}
+                </strong>
+              </div>
             </div>
           </div>
         </div>
@@ -134,7 +143,11 @@ export const CheckoutStep2Payment = ({
                   onClick={() => onCopy(bacIban, 'bac')}
                   className="px-2.5 py-1 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 text-gold-light text-[11px] font-semibold flex items-center gap-1 transition-colors"
                 >
-                  {copiedField === 'bac' ? <Check className="w-3 h-3 text-status-success" /> : <Copy className="w-3 h-3" />}
+                  {copiedField === 'bac' ? (
+                    <Check className="w-3 h-3 text-status-success" />
+                  ) : (
+                    <Copy className="w-3 h-3" />
+                  )}
                   <span>{copiedField === 'bac' ? '¡Copiado!' : 'Copiar IBAN'}</span>
                 </button>
               </div>
@@ -155,7 +168,11 @@ export const CheckoutStep2Payment = ({
                   onClick={() => onCopy(popularIban, 'popular')}
                   className="px-2.5 py-1 rounded-lg bg-gold-DEFAULT/20 hover:bg-gold-DEFAULT/30 text-gold-light text-[11px] font-semibold flex items-center gap-1 transition-colors"
                 >
-                  {copiedField === 'popular' ? <Check className="w-3 h-3 text-status-success" /> : <Copy className="w-3 h-3" />}
+                  {copiedField === 'popular' ? (
+                    <Check className="w-3 h-3 text-status-success" />
+                  ) : (
+                    <Copy className="w-3 h-3" />
+                  )}
                   <span>{copiedField === 'popular' ? '¡Copiado!' : 'Copiar IBAN'}</span>
                 </button>
               </div>
@@ -165,8 +182,15 @@ export const CheckoutStep2Payment = ({
             </div>
 
             <div className="text-xs text-text-secondary space-y-1 pt-1">
-              <div>Titular de las cuentas: <strong className="text-text-primary">{bankHolder}</strong></div>
-              <div>Monto Exacto: <strong className="text-gold-light font-bold">₡{orderTotal.toLocaleString('es-CR')}</strong></div>
+              <div>
+                Titular de las cuentas: <strong className="text-text-primary">{bankHolder}</strong>
+              </div>
+              <div>
+                Monto Exacto:{' '}
+                <strong className="text-gold-light font-bold">
+                  ₡{orderTotal.toLocaleString('es-CR')}
+                </strong>
+              </div>
             </div>
           </div>
         </div>
@@ -174,13 +198,7 @@ export const CheckoutStep2Payment = ({
 
       {/* Botones de Navegación del Paso 2 */}
       <div className="flex items-center justify-between pt-2">
-        <Button
-          type="button"
-          variant="ghost"
-          size="md"
-          onClick={onBack}
-          disabled={isSubmitting}
-        >
+        <Button type="button" variant="ghost" size="md" onClick={onBack} disabled={isSubmitting}>
           Regresar a Datos
         </Button>
 

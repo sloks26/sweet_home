@@ -15,9 +15,15 @@ export const ProductGallery = ({
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageContainerRef = useRef(null);
 
-  const displayImages = images.length > 0
-    ? images
-    : [{ url: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80', alt: productName }];
+  const displayImages =
+    images.length > 0
+      ? images
+      : [
+          {
+            url: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80',
+            alt: productName
+          }
+        ];
 
   const currentImage = displayImages[selectedImageIndex] || displayImages[0];
 
@@ -71,8 +77,16 @@ export const ProductGallery = ({
               -{discountPercent}% OFF
             </Badge>
           )}
-          {isNew && <Badge variant="gold" size="sm">✨ Nuevo</Badge>}
-          {isAdult && <Badge variant="adult" size="sm">🔞 +18 Discreto</Badge>}
+          {isNew && (
+            <Badge variant="gold" size="sm">
+              ✨ Nuevo
+            </Badge>
+          )}
+          {isAdult && (
+            <Badge variant="adult" size="sm">
+              🔞 +18 Discreto
+            </Badge>
+          )}
         </div>
 
         {/* Indicador de ayuda para zoom en móvil/escritorio */}

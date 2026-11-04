@@ -112,7 +112,8 @@ export const AdminMedia = () => {
             Biblioteca de Medios & Editor
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Sube fotos, edítalas en el navegador con relaciones 1:1, 16:9 o 3:4 y optimízalas automáticamente a WebP con Sharp.
+            Sube fotos, edítalas en el navegador con relaciones 1:1, 16:9 o 3:4 y optimízalas
+            automáticamente a WebP con Sharp.
           </p>
         </div>
 
@@ -210,7 +211,11 @@ export const AdminMedia = () => {
                     className="p-2 rounded-lg bg-night-800 text-text-primary hover:text-gold-light transition-colors"
                     title="Copiar URL"
                   >
-                    {copiedUrl === item.url ? <Check className="w-4 h-4 text-status-success" /> : <Copy className="w-4 h-4" />}
+                    {copiedUrl === item.url ? (
+                      <Check className="w-4 h-4 text-status-success" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
                   </button>
                   <button
                     onClick={() => handleDeleteMedia(item.filename)}
@@ -223,7 +228,10 @@ export const AdminMedia = () => {
               </div>
 
               <div>
-                <span className="text-[10px] text-text-muted truncate block font-mono" title={item.filename}>
+                <span
+                  className="text-[10px] text-text-muted truncate block font-mono"
+                  title={item.filename}
+                >
                   {item.filename}
                 </span>
                 <span className="text-[10px] text-gold-light font-medium block">
