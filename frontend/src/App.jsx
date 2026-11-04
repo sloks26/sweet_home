@@ -184,7 +184,9 @@ export function App() {
 
   const handleOpenAdminPanel = () => {
     setIsAdminView(true);
-    window.location.hash = 'admin';
+    if (window.location.hash !== '#admin') {
+      window.location.hash = '#admin';
+    }
     fetchAdminStats();
   };
 
@@ -239,7 +241,7 @@ export function App() {
         if (authUser && (authUser.role === 'ADMIN' || authUser.role === 'STAFF')) {
           setIsAdminView(true);
           fetchAdminStats();
-        } else {
+        } else if (!authUser && !isVerifyingAdminAuth) {
           setIsLoginModalOpen(true);
         }
       } else if (hash.startsWith('#catalogo')) {
@@ -262,7 +264,7 @@ export function App() {
     window.addEventListener('hashchange', handleHashChange);
     handleHashChange();
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [authUser]);
+  }, [authUser, isVerifyingAdminAuth]);
 
   const handleLogout = async () => {
     try {
