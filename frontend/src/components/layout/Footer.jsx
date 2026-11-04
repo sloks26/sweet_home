@@ -36,17 +36,21 @@ export const Footer = ({
     facebook: { name: 'Sweet Home & Boutique CR', url: 'https://facebook.com/SweetHomeAndBoutiqueCR' }
   };
 
-  // Acceso discreto al panel administrativo: 5 toques en el texto de copyright
+  // Acceso discreto al panel administrativo: 5 o más toques en el texto de copyright
   const tapCountRef = useRef(0);
   const tapTimerRef = useRef(null);
 
-  const handleSecretAdminTrigger = () => {
+  const handleSecretAdminTrigger = (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     tapCountRef.current += 1;
 
+    // A partir del 5to toque (5, 6, 7, 8... toques rápidos), abre el login y se mantiene abierto
     if (tapCountRef.current >= 5) {
-      tapCountRef.current = 0;
-      if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
       if (onOpenAdminLogin) onOpenAdminLogin();
+      if (tapTimerRef.current) clearTimeout(tapTimerRef.current);
+      tapTimerRef.current = setTimeout(() => {
+        tapCountRef.current = 0;
+      }, 5000);
       return;
     }
 

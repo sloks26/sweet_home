@@ -5,18 +5,18 @@ import Button from '../ui/Button';
 export const OurStorySection = ({ storyData, onOpenFullStory, authUser }) => {
   const isAdmin = authUser && (authUser.role === 'ADMIN' || authUser.role === 'STAFF');
   const defaultStory = {
-    badge: 'El corazón de nuestra boutique',
-    title: 'Nuestra Historia',
-    subtitle: 'Un sueño costarricense que nació para iluminar hogares',
+    badge: 'Donde cada detalle ilumina tu hogar y tu estilo',
+    title: '¿Quiénes Somos?',
+    subtitle: 'Tu tienda de confianza en Costa Rica',
     founderName: 'Fundadora & Directora Creativa',
     founderRole: 'Sweet Home & Boutique CR',
     founderPhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80&auto=format&fit=crop',
     storyParagraphs: [
-      'Sweet Home & Boutique CR nació desde un anhelo profundo en el corazón: transformar espacios cotidianos en santuarios de calidez, belleza y armonía. Lo que empezó como una pequeña selección de detalles para seres queridos se convirtió, paso a paso y con inmenso amor, en una boutique donde cada artículo cuenta una historia.',
-      'Creemos que tu hogar es el reflejo de tu alma, y que tu estilo es la forma en que iluminas el mundo. Por eso, cada difusor, cada prenda, cada joya y cada fragancia es elegida personalmente, buscando la más alta calidad y ese toque distintivo que no se encuentra en las tiendas masivas.',
-      'Hoy, gracias a la confianza de tantas familias en todo el país, seguimos enviando amor en cada paquete, preparados a mano y sellados con la ilusión de llevar dicha y bienestar a tu puerta.'
+      'Somos tu tienda de confianza, donde encontrarás productos seleccionados con amor para el hogar, la belleza, tu estilo y tu bienestar íntimo.',
+      'Creemos que cada detalle cuenta y tiene el poder de transformar tu día a día. Nuestra misión es brindar productos de calidad que hagan tu vida más fácil, bonita y especial.',
+      'Inspiramos tu hogar, realzamos tu belleza y cuidamos tu bienestar con envíos seguros y entregas confiables a todo Costa Rica. Tu hogar, tu estilo, tu esencia.'
     ],
-    isProvisional: true
+    isProvisional: false
   };
 
   const data = storyData || defaultStory;

@@ -54,7 +54,10 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="admin-login-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 min-h-screen min-h-[100dvh] overflow-y-auto"
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 min-h-screen min-h-[100dvh] overflow-y-auto pointer-events-auto"
       style={{
         background: "url('/images/admin-login-bg.webp') center/cover no-repeat fixed"
       }}
