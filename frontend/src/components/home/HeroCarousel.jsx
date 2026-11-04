@@ -158,19 +158,26 @@ export const HeroCarousel = ({ banners = [], isMenuOpen = false, onSelectCategor
                   </div>
                 )}
 
-                <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.15] tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                  {slide.title.includes('ilumina') ? (
-                    <>
-                      Donde cada detalle <br />
-                      <span className="font-script text-gold-gradient text-5xl sm:text-7xl lg:text-8xl font-normal block sm:inline drop-shadow-[0_2px_12px_rgba(212,175,55,0.35)]">
-                        ilumina tu hogar
-                      </span>{' '}
-                      y tu estilo
-                    </>
-                  ) : (
-                    slide.title
-                  )}
-                </h1>
+                {isFirst ? (
+                  <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.15] tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                    {slide.title.includes('ilumina') ? (
+                      <>
+                        Donde cada detalle <br />
+                        <span className="font-script text-gold-gradient text-5xl sm:text-7xl lg:text-8xl font-normal block sm:inline drop-shadow-[0_2px_12px_rgba(212,175,55,0.35)]">
+                          ilumina tu hogar
+                        </span>{' '}
+                        y tu estilo
+                      </>
+                    ) : (
+                      slide.title
+                    )}
+                    <span className="sr-only"> - Sweet Home & Boutique CR | Tienda en Línea Costa Rica</span>
+                  </h1>
+                ) : (
+                  <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.15] tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                    {slide.title}
+                  </h2>
+                )}
 
                 {slide.subtitle && (
                   <p className="font-sans text-xs sm:text-base text-white/95 font-medium leading-relaxed max-w-lg drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">

@@ -88,12 +88,12 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
         {/* Encabezado */}
         <div className="text-center mb-7">
-          <h1
+          <h2
             id="admin-login-title"
             className="font-serif text-2xl sm:text-[26px] font-normal text-stone-800 tracking-tight"
           >
             Sweet Home & Boutique
-          </h1>
+          </h2>
           <p className="text-[#C5A059] text-[11px] font-bold tracking-[0.2em] uppercase mt-1.5">
             Acceso Administrativo
           </p>

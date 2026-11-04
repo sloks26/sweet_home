@@ -160,9 +160,9 @@ export const Footer = ({
 
           {/* Columna 2: Categorías Principales */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-serif text-lg font-bold text-text-primary tracking-wide">
+            <h3 className="font-serif text-lg font-bold text-text-primary tracking-wide">
               Categorías
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs">
               {categories.slice(0, 6).map((cat) => (
                 <li key={cat.id || cat.slug}>
@@ -184,9 +184,9 @@ export const Footer = ({
 
           {/* Columna 3: Información & Ayuda */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-serif text-lg font-bold text-text-primary tracking-wide">
+            <h3 className="font-serif text-lg font-bold text-text-primary tracking-wide">
               Servicio al Cliente
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs">
               <li>
                 <button
@@ -234,9 +234,9 @@ export const Footer = ({
 
           {/* Columna 4: Medios de Pago Oficiales (SINPE y Transferencia) */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="font-serif text-lg font-bold text-text-primary tracking-wide">
+            <h3 className="font-serif text-lg font-bold text-text-primary tracking-wide">
               Métodos de Pago
-            </h4>
+            </h3>
             <p className="text-[13px] text-text-secondary leading-relaxed">
               Comodidad y seguridad total en Costa Rica:
             </p>

@@ -109,9 +109,9 @@ export const TestimonialsSection = ({ testimonials = [] }) => {
                 loading="lazy"
               />
               <div className="text-left">
-                <h4 className="font-serif text-base font-bold text-[#1A0D26]">
+                <h3 className="font-serif text-base font-bold text-[#1A0D26]">
                   {currentItem.clientName}
-                </h4>
+                </h3>
                 <span className="text-xs text-galaxy-light font-medium block">
                   {currentItem.clientLocation}
                 </span>
