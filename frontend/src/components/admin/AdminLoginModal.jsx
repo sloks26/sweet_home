@@ -59,14 +59,14 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
         background: "url('/images/admin-login-bg.webp') center/cover no-repeat fixed"
       }}
     >
-      {/* Velo oscuro sutil para realzar el contraste estético */}
+      {/* Velo oscuro sutil para realzar el contraste estético (sin cerrar al tocar fuera) */}
       <div
-        className="fixed inset-0 bg-night-950/40 backdrop-blur-[2px] transition-opacity"
-        onClick={onClose}
+        className="fixed inset-0 bg-night-950/40 backdrop-blur-[2px] pointer-events-none"
       />
 
       {/* Tarjeta Limpia y Elegante estilo Bloomed Studio */}
       <div
+        onClick={(e) => e.stopPropagation()}
         className="relative z-10 w-full max-w-[420px] bg-white rounded-3xl shadow-2xl p-7 sm:p-10 border border-stone-200/80 animate-in fade-in zoom-in-95 duration-200"
         style={{
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)'
