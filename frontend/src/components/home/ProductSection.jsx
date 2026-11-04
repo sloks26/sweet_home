@@ -3,7 +3,12 @@ import { Sparkles, Flame, Award, ArrowRight, ChevronLeft, ChevronRight } from 'l
 import ProductCard from './ProductCard';
 import QuickViewModal from './QuickViewModal';
 
-export const ProductSection = ({ products = [], onSelectProduct, onNavigateCatalog }) => {
+export const ProductSection = ({
+  products = [],
+  onSelectProduct,
+  onNavigateCatalog,
+  storeSettings
+}) => {
   const [activeTab, setActiveTab] = useState('new'); // 'new', 'bestseller', 'offers'
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const scrollContainerRef = useRef(null);
@@ -150,6 +155,7 @@ export const ProductSection = ({ products = [], onSelectProduct, onNavigateCatal
           product={quickViewProduct}
           isOpen={!!quickViewProduct}
           onClose={() => setQuickViewProduct(null)}
+          storeSettings={storeSettings}
         />
       </div>
     </section>

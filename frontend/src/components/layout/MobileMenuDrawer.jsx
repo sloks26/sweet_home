@@ -17,6 +17,7 @@ import {
   Search
 } from 'lucide-react';
 import Logo from '../ui/Logo';
+import { getAdminGreeting } from '../../utils/adminGreeting';
 import Badge from '../ui/Badge';
 import { useAgeGateStore } from '../../store/ageGateStore';
 
@@ -233,7 +234,7 @@ export const MobileMenuDrawer = ({
                   <div className="pt-2 border-t border-night-700/60 space-y-2">
                     <div className="flex items-center gap-2 text-xs text-gold-light">
                       <User className="w-4 h-4 text-status-success" />
-                      <span className="font-semibold">{authUser.name}</span>
+                      <span className="font-semibold">{getAdminGreeting(authUser)}</span>
                     </div>
                     <button
                       onClick={() => {

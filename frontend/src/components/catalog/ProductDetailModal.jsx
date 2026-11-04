@@ -7,7 +7,6 @@ import {
   Check,
   AlertTriangle,
   Star,
-  MessageCircle,
   Truck,
   ShieldCheck,
   Sparkles
@@ -19,7 +18,7 @@ import ProductInfoTabs from './subcomponents/ProductInfoTabs';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 
-export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow }) => {
+export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow, storeSettings }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariants, setSelectedVariants] = useState({});
   const [addedToCartSuccess, setAddedToCartSuccess] = useState(false);
@@ -99,16 +98,23 @@ export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow }) => {
   };
 
   const handleWhatsAppConsult = () => {
+    const phone = (storeSettings?.whatsapp || '50664656625').replace(/\D/g, '');
+    const variantEntries = Object.entries(selectedVariants).filter(([_, v]) => Boolean(v));
     const variantText =
-      Object.entries(selectedVariants).length > 0
-        ? ` (${Object.entries(selectedVariants)
-            .map(([k, v]) => `${k}: ${v}`)
-            .join(', ')})`
+      variantEntries.length > 0
+        ? `\n✨ Variante: ${variantEntries.map(([k, v]) => `${k}: ${v}`).join(', ')}`
         : '';
+    const formattedPrice = `₡${Number(product.price || 0).toLocaleString('es-CR')}`;
+    const productUrl =
+      typeof window !== 'undefined'
+        ? `${window.location.origin}/#producto-${product.id}`
+        : '';
+
     const message = encodeURIComponent(
-      `Hola Sweet Home & Boutique CR! 💕 Me gustaría consultar sobre el producto: ${product.name}${variantText} por ₡${product.price.toLocaleString('es-CR')}. ¿Tienen disponibilidad?`
+      `¡Hola Sweet Home & Boutique CR! 💖\n\nMe gustaría consultar sobre este producto:\n🛍️ *${product.name}*${variantText}\n💰 Precio: ${formattedPrice}\n${productUrl ? `🔗 Ver en tienda: ${productUrl}\n` : ''}\n¿Tienen disponibilidad para envío o entrega? Muchas gracias ✨`
     );
-    window.open(`https://wa.me/50664656625?text=${message}`, '_blank');
+
+    window.open(`https://wa.me/${phone}?text=${message}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -339,10 +345,10 @@ export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow }) => {
 
                   <button
                     onClick={handleWhatsAppConsult}
-                    className="w-full py-2.5 px-4 rounded-xl bg-[#25D366]/15 border border-[#25D366]/40 text-[#25D366] font-semibold text-xs flex items-center justify-center gap-2 hover:bg-[#25D366]/25 transition-all shadow-sm cursor-pointer"
+                    className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#25D366]/20 via-[#128C7E]/25 to-[#25D366]/20 border border-[#25D366]/50 text-[#25D366] font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 hover:bg-[#25D366]/30 hover:border-[#25D366] hover:shadow-[0_0_15px_rgba(37,211,102,0.25)] transition-all cursor-pointer active:scale-[0.99]"
                   >
-                    <WhatsAppIcon className="w-4 h-4" />
-                    <span>Pedir o Consultar por WhatsApp</span>
+                    <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                    <span>Consultar a la Boutique por WhatsApp</span>
                   </button>
                 </div>
 

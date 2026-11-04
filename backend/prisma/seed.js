@@ -36,7 +36,7 @@ async function main() {
   // 2. Administradoras oficiales (Socias)
   const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com';
   const adminPass = process.env.INITIAL_ADMIN_PASSWORD || 'SweetHomeCR2026!#';
-  const adminName = process.env.INITIAL_ADMIN_NAME || 'Dueña y Administradora';
+  const adminName = process.env.INITIAL_ADMIN_NAME || 'Vanessa';
 
   const hashedPassword = await bcrypt.hash(adminPass, 12);
   const adminUser = await prisma.user.create({

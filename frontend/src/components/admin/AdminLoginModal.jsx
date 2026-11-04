@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { X, Eye, EyeOff } from 'lucide-react';
+import { X, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { getAdminGreeting } from '../../utils/adminGreeting';
 
 export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [successGreeting, setSuccessGreeting] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Cerrar al presionar Escape
@@ -38,13 +40,19 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
       if (!res.ok || data.error) {
         setLoginError(data.message || data.error || 'Credenciales inválidas');
+        setIsLoggingIn(false);
       } else {
-        onClose();
-        if (onLoginSuccess) onLoginSuccess(data.user);
+        const greeting = getAdminGreeting(data.user);
+        setSuccessGreeting(greeting);
+        setTimeout(() => {
+          onClose();
+          if (onLoginSuccess) onLoginSuccess(data.user);
+          setSuccessGreeting('');
+          setIsLoggingIn(false);
+        }, 650);
       }
     } catch (err) {
       setLoginError('Error de conexión con el servidor.');
-    } finally {
       setIsLoggingIn(false);
     }
   };
@@ -101,6 +109,14 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
         {loginError && (
           <div className="mb-5 p-3 rounded-xl bg-red-50 border border-red-200/80 text-red-600 text-xs text-center font-medium">
             {loginError}
+          </div>
+        )}
+
+        {/* Mensaje de Bienvenida Exitosa */}
+        {successGreeting && (
+          <div className="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-sm text-center font-bold flex items-center justify-center gap-2 animate-pulse shadow-sm">
+            <Sparkles className="w-4 h-4 text-emerald-600" />
+            <span>{successGreeting}</span>
           </div>
         )}
 

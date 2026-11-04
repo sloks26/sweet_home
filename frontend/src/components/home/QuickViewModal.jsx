@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Heart, ShoppingBag, ShieldCheck, Star } from 'lucide-react';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
+import WhatsAppIcon from '../ui/WhatsAppIcon';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 
-export const QuickViewModal = ({ product, isOpen, onClose }) => {
+export const QuickViewModal = ({ product, isOpen, onClose, storeSettings }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -27,6 +28,24 @@ export const QuickViewModal = ({ product, isOpen, onClose }) => {
   const handleAddToCart = () => {
     addItem(product, selectedVariant, quantity);
     onClose();
+  };
+
+  const handleWhatsAppConsult = () => {
+    const phone = (storeSettings?.whatsapp || '50664656625').replace(/\D/g, '');
+    const variantText = selectedVariant?.selectedOption
+      ? `\n✨ Variante: ${selectedVariant.selectedOption}`
+      : '';
+    const formattedPrice = `₡${Number(product.price || 0).toLocaleString('es-CR')}`;
+    const productUrl =
+      typeof window !== 'undefined'
+        ? `${window.location.origin}/#producto-${product.id}`
+        : '';
+
+    const message = encodeURIComponent(
+      `¡Hola Sweet Home & Boutique CR! 💖\n\nMe gustaría consultar sobre este producto:\n🛍️ *${product.name}*${variantText}\n💰 Precio: ${formattedPrice}\n${productUrl ? `🔗 Ver en tienda: ${productUrl}\n` : ''}\n¿Tienen disponibilidad para envío o entrega? Muchas gracias ✨`
+    );
+
+    window.open(`https://wa.me/${phone}?text=${message}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -179,6 +198,14 @@ export const QuickViewModal = ({ product, isOpen, onClose }) => {
                   <Heart className={`w-5 h-5 ${isFavorited ? 'fill-current' : ''}`} />
                 </button>
               </div>
+
+              <button
+                onClick={handleWhatsAppConsult}
+                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#25D366]/20 via-[#128C7E]/25 to-[#25D366]/20 border border-[#25D366]/50 text-[#25D366] font-semibold text-xs flex items-center justify-center gap-2 hover:bg-[#25D366]/30 hover:border-[#25D366] transition-all cursor-pointer active:scale-[0.99]"
+              >
+                <WhatsAppIcon className="w-4 h-4 shrink-0" />
+                <span>Consultar por WhatsApp</span>
+              </button>
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-text-muted">
                 <ShieldCheck className="w-3.5 h-3.5 text-gold-bright" />

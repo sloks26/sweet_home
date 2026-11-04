@@ -53,7 +53,11 @@ export const AdminView = ({
           onLogout={handleLogout}
         >
           {adminTab === 'dashboard' && (
-            <AdminDashboard stats={adminStats} onNavigate={handleAdminNavigation} />
+            <AdminDashboard
+              stats={adminStats}
+              onNavigate={handleAdminNavigation}
+              authUser={authUser}
+            />
           )}
           {adminTab === 'orders' && <AdminOrders initialStatusFilter={orderFilter} />}
           {adminTab === 'products' && <AdminProducts initialStockStatus={productStockFilter} />}

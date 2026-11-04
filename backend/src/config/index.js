@@ -18,7 +18,7 @@ export const config = {
   mongoUri: process.env.MONGODB_URI || '',
   uploadDir: path.resolve(__dirname, '../../uploads'),
   initialAdmin: {
-    name: process.env.INITIAL_ADMIN_NAME || 'Dueña y Administradora',
+    name: process.env.INITIAL_ADMIN_NAME || 'Vanessa',
     email: process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com',
     password: process.env.INITIAL_ADMIN_PASSWORD || 'SweetHomeCR2026!#'
   },

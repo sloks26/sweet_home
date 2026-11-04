@@ -13,7 +13,6 @@ import OurStorySection from './components/home/OurStorySection';
 import BenefitsSection from './components/home/BenefitsSection';
 import TestimonialsSection from './components/home/TestimonialsSection';
 import InstagramFeedSection from './components/home/InstagramFeedSection';
-import { Sliders } from 'lucide-react';
 const AdminLoginModal = lazy(() => import('./components/admin/AdminLoginModal'));
 const AdminView = lazy(() => import('./components/admin/AdminView'));
 const CatalogPage = lazy(() => import('./components/catalog/CatalogPage'));
@@ -364,6 +363,7 @@ export function App() {
               <ProductSection
                 products={products}
                 onSelectProduct={handleSelectProduct}
+                storeSettings={storeSettings}
                 onNavigateCatalog={() => {
                   setCurrentView('catalog');
                   setCatalogCategory(null);
@@ -425,6 +425,7 @@ export function App() {
             isOpen={isDetailModalOpen}
             onClose={() => setIsDetailModalOpen(false)}
             product={selectedDetailProduct}
+            storeSettings={storeSettings}
             onSelectRelated={(p) => setSelectedDetailProduct(p)}
             onBuyNow={() => setIsCheckoutOpen(true)}
           />

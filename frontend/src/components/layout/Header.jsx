@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Heart, ShoppingBag, User, Truck, Menu, Sliders, Search, X } from 'lucide-react';
+import { Heart, ShoppingBag, User, Truck, Menu, Search, X } from 'lucide-react';
 import Logo from '../ui/Logo';
 import MobileMenuDrawer from './MobileMenuDrawer';
 import HeaderPromoBar from './subcomponents/HeaderPromoBar';
 import HeaderSearchBar from './subcomponents/HeaderSearchBar';
 import HeaderCategoryBar from './subcomponents/HeaderCategoryBar';
+import { getAdminGreeting } from '../../utils/adminGreeting';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 
@@ -196,7 +197,7 @@ export const Header = ({
                 <button
                   onClick={onOpenAdminPanel}
                   className="p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
-                  title={`Sesión activa: ${authUser.name}`}
+                  title={getAdminGreeting(authUser)}
                 >
                   <User className="w-5 h-5 sm:w-4 sm:h-4 text-gold-bright" />
                 </button>

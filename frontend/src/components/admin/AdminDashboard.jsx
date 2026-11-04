@@ -9,10 +9,12 @@ import {
   ShoppingBag,
   FileSpreadsheet,
   Coins,
-  Receipt
+  Receipt,
+  Sparkles
 } from 'lucide-react';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
+import { getAdminGreeting } from '../../utils/adminGreeting';
 import AccountingKPIs from './subcomponents/AccountingKPIs';
 import AccountingChart from './subcomponents/AccountingChart';
 import AccountingClients from './subcomponents/AccountingClients';
@@ -24,7 +26,7 @@ import DashboardLowStockAlert from './subcomponents/DashboardLowStockAlert';
 import DashboardActionCenter from './subcomponents/DashboardActionCenter';
 import { exportAccountingToExcel } from './subcomponents/exportAccountingExcel';
 
-export const AdminDashboard = ({ stats, onNavigate }) => {
+export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
   const [accountingData, setAccountingData] = useState(null);
   const [loadingAccounting, setLoadingAccounting] = useState(true);
   const [activeClientsTab, setActiveClientsTab] = useState('apartados');
@@ -86,6 +88,10 @@ export const AdminDashboard = ({ stats, onNavigate }) => {
       {/* 1. TÍTULO DE BIENVENIDA Y ACCESOS RÁPIDOS (Jerarquía limpia: Un solo botón principal) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/30 text-gold-bright text-xs font-semibold mb-2 shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-gold-bright" />
+            <span>{getAdminGreeting(authUser)}</span>
+          </div>
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
             Panel de Control y Contabilidad
           </h1>
