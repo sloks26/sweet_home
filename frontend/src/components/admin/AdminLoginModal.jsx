@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { Lock, AlertTriangle } from 'lucide-react';
-import Modal from '../ui/Modal';
-import Input from '../ui/Input';
-import Button from '../ui/Button';
+import React, { useState, useEffect } from 'react';
+import { X, Eye, EyeOff } from 'lucide-react';
 
 export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
-  const [loginEmail, setLoginEmail] = useState('admin@sweethomeboutiquecr.com');
-  const [loginPassword, setLoginPassword] = useState('SweetHomeCR2026!#');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // Cerrar al presionar Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -21,12 +29,15 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: loginEmail, password: loginPassword })
+        body: JSON.stringify({
+          email: loginEmail.trim().toLowerCase(),
+          password: loginPassword
+        })
       });
       const data = await res.json();
 
       if (!res.ok || data.error) {
-        setLoginError(data.message || 'Error al iniciar sesión');
+        setLoginError(data.message || data.error || 'Credenciales inválidas');
       } else {
         onClose();
         if (onLoginSuccess) onLoginSuccess(data.user);
@@ -39,89 +50,122 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Acceso al Panel Administrativo"
-      subtitle="Autenticación segura para la administración de Sweet Home & Boutique CR"
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="admin-login-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 min-h-screen min-h-[100dvh] overflow-y-auto"
+      style={{
+        background: "url('/images/admin-login-bg.webp') center/cover no-repeat fixed"
+      }}
     >
-      <form onSubmit={handleLogin} className="space-y-4">
-        <div className="p-3.5 rounded-xl bg-night-900/90 border border-gold-DEFAULT/25 text-xs text-text-secondary space-y-2">
-          <span className="font-semibold text-gold-light block">Cuentas de Socias Administradoras:</span>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => setLoginEmail('admin@sweethomeboutiquecr.com')}
-              className={`p-2 rounded-lg border text-left transition-all cursor-pointer ${
-                loginEmail === 'admin@sweethomeboutiquecr.com'
-                  ? 'bg-gold-DEFAULT/15 border-gold-DEFAULT text-gold-light'
-                  : 'bg-night-800 border-night-700 text-text-secondary hover:text-text-primary'
-              }`}
-            >
-              <div className="font-semibold text-[11px] text-text-primary">Maureen Sánchez</div>
-              <div className="text-[10px] truncate">admin@sweethomeboutiquecr.com</div>
-            </button>
+      {/* Velo oscuro sutil para realzar el contraste estético */}
+      <div
+        className="fixed inset-0 bg-night-950/40 backdrop-blur-[2px] transition-opacity"
+        onClick={onClose}
+      />
 
-            <button
-              type="button"
-              onClick={() => setLoginEmail('jendry@sweethomeboutiquecr.com')}
-              className={`p-2 rounded-lg border text-left transition-all cursor-pointer ${
-                loginEmail === 'jendry@sweethomeboutiquecr.com'
-                  ? 'bg-gold-DEFAULT/15 border-gold-DEFAULT text-gold-light'
-                  : 'bg-night-800 border-night-700 text-text-secondary hover:text-text-primary'
-              }`}
-            >
-              <div className="font-semibold text-[11px] text-text-primary">Jendry Zúñiga</div>
-              <div className="text-[10px] truncate">jendry@sweethomeboutiquecr.com</div>
-            </button>
-          </div>
-          <div className="text-[11px] text-text-muted pt-1">Contraseña: <strong className="text-text-primary">SweetHomeCR2026!#</strong></div>
+      {/* Tarjeta Limpia y Elegante estilo Bloomed Studio */}
+      <div
+        className="relative z-10 w-full max-w-[420px] bg-white rounded-3xl shadow-2xl p-7 sm:p-10 border border-stone-200/80 animate-in fade-in zoom-in-95 duration-200"
+        style={{
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)'
+        }}
+      >
+        {/* Botón Cerrar */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-5 right-5 p-2 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer"
+          title="Cerrar y volver a la tienda"
+          aria-label="Cerrar"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {/* Encabezado */}
+        <div className="text-center mb-7">
+          <h1
+            id="admin-login-title"
+            className="font-serif text-2xl sm:text-[26px] font-normal text-stone-800 tracking-tight"
+          >
+            Sweet Home & Boutique
+          </h1>
+          <p className="text-[#C5A059] text-[11px] font-bold tracking-[0.2em] uppercase mt-1.5">
+            Acceso Administrativo
+          </p>
         </div>
 
-        <Input
-          label="Correo Electrónico"
-          type="email"
-          value={loginEmail}
-          onChange={(e) => setLoginEmail(e.target.value)}
-          required
-        />
-
-        <Input
-          label="Contraseña"
-          type="password"
-          value={loginPassword}
-          onChange={(e) => setLoginPassword(e.target.value)}
-          required
-        />
-
+        {/* Mensaje de Error */}
         {loginError && (
-          <div className="p-2.5 rounded-lg bg-status-error/15 border border-status-error/30 text-xs text-status-error flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 shrink-0" />
-            <span>{loginError}</span>
+          <div className="mb-5 p-3 rounded-xl bg-red-50 border border-red-200/80 text-red-600 text-xs text-center font-medium">
+            {loginError}
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-          >
-            Cancelar
-          </Button>
-          <Button
+        {/* Formulario */}
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="block mb-2 text-xs font-bold text-stone-700 uppercase tracking-wider">
+              Correo Electrónico
+            </label>
+            <input
+              type="email"
+              value={loginEmail}
+              onChange={(e) => setLoginEmail(e.target.value)}
+              autoComplete="email"
+              required
+              placeholder=""
+              className="w-full px-4 py-3.5 rounded-xl border border-stone-200 bg-white text-stone-900 text-sm focus:outline-none focus:border-[#C5A059] focus:ring-2 focus:ring-[#C5A059]/25 transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 text-xs font-bold text-stone-700 uppercase tracking-wider">
+              Contraseña
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+                placeholder=""
+                className="w-full px-4 py-3.5 pr-11 rounded-xl border border-stone-200 bg-white text-stone-900 text-sm focus:outline-none focus:border-[#C5A059] focus:ring-2 focus:ring-[#C5A059]/25 transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 p-1 cursor-pointer"
+                title={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          <button
             type="submit"
-            variant="primary"
-            size="sm"
-            icon={Lock}
-            isLoading={isLoggingIn}
+            disabled={isLoggingIn}
+            className="w-full mt-2 py-4 rounded-full bg-[#C5A059] hover:bg-[#B38F48] active:scale-[0.99] text-white font-semibold text-sm tracking-wider uppercase shadow-md shadow-[#C5A059]/30 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Ingresar
-          </Button>
-        </div>
-      </form>
-    </Modal>
+            {isLoggingIn ? 'Verificando...' : 'Ingresar al Panel'}
+          </button>
+
+          <div className="text-center pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-xs text-stone-500 hover:text-stone-800 transition-colors inline-flex items-center gap-1 cursor-pointer"
+            >
+              <span>← Volver a la tienda</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 

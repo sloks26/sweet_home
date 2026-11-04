@@ -3,6 +3,7 @@ import {
   Heart,
   ShoppingBag,
   User,
+  Truck,
   Menu,
   Sliders,
   Search,
@@ -219,7 +220,7 @@ export const Header = ({
                 title="Rastreo y Estado de Pedido"
                 aria-label="Rastreo de Pedido"
               >
-                <User className="w-5 h-5 sm:w-4 sm:h-4" />
+                <Truck className="w-5 h-5 sm:w-4 sm:h-4 text-gold-bright" />
               </button>
             )}
           </div>
