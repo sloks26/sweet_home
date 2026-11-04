@@ -169,12 +169,15 @@ export function App() {
             fetchAdminStats();
           }
         } else {
-          setAuthUser(null);
-          if (isAdminRoute) {
-            setIsAdminView(false);
-            setIsVerifyingAdminAuth(false);
-            setIsLoginModalOpen(true);
-          }
+          setIsVerifyingAdminAuth(false);
+          setAuthUser((prev) => {
+            if (prev) return prev;
+            if (isAdminRoute) {
+              setIsAdminView(false);
+              setIsLoginModalOpen(true);
+            }
+            return null;
+          });
         }
       })
       .catch(() => {
