@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Truck, ShieldCheck, HelpCircle, FileText, Lock, MessageCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { X, Truck, HelpCircle, FileText, Lock, MessageCircle } from 'lucide-react';
 
 export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) => {
   if (!isOpen) return null;
@@ -15,6 +15,15 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
   const freeThreshold = storeSettings?.freeShippingThreshold
     ? `₡${Number(storeSettings.freeShippingThreshold).toLocaleString('es-CR')}`
     : '₡35,000';
+  const correosCostText = storeSettings?.shippingCorreosCost
+    ? `₡${Number(storeSettings.shippingCorreosCost).toLocaleString('es-CR')}`
+    : '₡3,500';
+  const gamCostText = storeSettings?.shippingExpressGamCost
+    ? `₡${Number(storeSettings.shippingExpressGamCost).toLocaleString('es-CR')}`
+    : '₡2,500';
+  const gamDescText =
+    storeSettings?.shippingExpressGamDesc ||
+    'Cobertura en zonas centrales de San José, Heredia, Alajuela y Cartago.';
   const whatsappClean = (storeSettings?.whatsapp || '50664656625').replace(/\D/g, '');
   const pickupNote = storeSettings?.pickupNote || 'Previa confirmación de pago por WhatsApp';
 
@@ -36,7 +45,7 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
                 Correos de Costa Rica (Todo el País)
               </span>
               <p>
-                • Tarifa estándar: ₡3,500 colones para cualquier provincia.
+                • Tarifa estándar: {correosCostText} colones para cualquier provincia.
                 <br />• <strong className="text-status-success">¡Envío GRATIS!</strong> en todas las
                 compras de {freeThreshold} o más.
                 <br />
@@ -51,9 +60,9 @@ export const InfoModal = ({ isOpen, onClose, topic = 'envios', storeSettings }) 
                 Mensajería Express GAM
               </span>
               <p>
-                • Tarifa: ₡2,500 colones.
+                • Tarifa: {gamCostText} colones.
                 <br />
-                • Cobertura en zonas centrales de San José, Heredia, Alajuela y Cartago.
+                • {gamDescText}
                 <br />• Entrega rápida en 24 a 48 horas hábiles.
               </p>
             </div>

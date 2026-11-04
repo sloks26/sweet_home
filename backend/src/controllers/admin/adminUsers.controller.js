@@ -113,6 +113,13 @@ export async function toggleAdminUser(req, res) {
       return res.status(404).json({ error: true, message: 'Usuario no encontrado' });
     }
 
+    if (targetUser.email === 'admin@sweethomeboutiquecr.com') {
+      return res.status(403).json({
+        error: true,
+        message: 'La cuenta principal de la dueña Vanessa no puede ser desactivada.'
+      });
+    }
+
     const updated = await prisma.user.update({
       where: { id },
       data: { isActive: !targetUser.isActive },
@@ -149,6 +156,13 @@ export async function deleteAdminUser(req, res) {
     const targetUser = await prisma.user.findUnique({ where: { id } });
     if (!targetUser) {
       return res.status(404).json({ error: true, message: 'Usuario no encontrado' });
+    }
+
+    if (targetUser.email === 'admin@sweethomeboutiquecr.com') {
+      return res.status(403).json({
+        error: true,
+        message: 'La cuenta principal de la dueña Vanessa no puede ser eliminada.'
+      });
     }
 
     await prisma.user.delete({ where: { id } });

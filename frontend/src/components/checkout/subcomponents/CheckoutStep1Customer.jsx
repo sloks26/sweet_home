@@ -36,9 +36,23 @@ export const CheckoutStep1Customer = ({
   subtotal,
   shippingCost,
   orderTotal,
+  storeSettings,
   onSubmit,
   onClose
 }) => {
+  const freeThreshold = Number(storeSettings?.freeShippingThreshold ?? 35000);
+  const correosCost = Number(storeSettings?.shippingCorreosCost ?? 3500);
+  const correosDesc =
+    storeSettings?.shippingCorreosDesc ||
+    'Entrega a todo el país (2 a 4 días hábiles) con número de guía';
+  const gamCost = Number(storeSettings?.shippingExpressGamCost ?? 2500);
+  const gamDesc =
+    storeSettings?.shippingExpressGamDesc ||
+    'San José, Alajuela, Heredia y Cartago central (24 a 48 hrs)';
+  const pickupNote =
+    storeSettings?.pickupNote ||
+    'Coordina la recogida sin costo adicional en nuestro local';
+  const isFreeShipping = subtotal >= freeThreshold;
   return (
     <form onSubmit={onSubmit} className="space-y-6">
       {/* Información Personal */}
@@ -108,19 +122,19 @@ export const CheckoutStep1Customer = ({
               <div>
                 <div className="font-semibold text-xs text-text-primary flex items-center gap-2">
                   <span>Correos de Costa Rica</span>
-                  {subtotal >= 35000 && (
+                  {isFreeShipping && (
                     <span className="px-2 py-0.5 rounded-full bg-status-success/20 text-status-success text-[10px] font-bold">
                       ¡Envío Gratis!
                     </span>
                   )}
                 </div>
                 <p className="text-[11px] text-text-muted mt-0.5">
-                  Entrega a todo el país (2 a 4 días hábiles) con número de guía
+                  {correosDesc}
                 </p>
               </div>
             </div>
             <span className="text-xs font-bold text-gold-light">
-              {subtotal >= 35000 ? '₡0 (Gratis)' : '₡3,500'}
+              {isFreeShipping ? '₡0 (Gratis)' : `₡${correosCost.toLocaleString('es-CR')}`}
             </span>
           </label>
 
@@ -146,11 +160,13 @@ export const CheckoutStep1Customer = ({
                   Mensajería Express GAM
                 </div>
                 <p className="text-[11px] text-text-muted mt-0.5">
-                  San José, Alajuela, Heredia y Cartago central (24 a 48 hrs)
+                  {gamDesc}
                 </p>
               </div>
             </div>
-            <span className="text-xs font-bold text-gold-light">₡2,500</span>
+            <span className="text-xs font-bold text-gold-light">
+              ₡{gamCost.toLocaleString('es-CR')}
+            </span>
           </label>
 
           {/* Opción 3: Retiro en Tienda */}
@@ -175,7 +191,7 @@ export const CheckoutStep1Customer = ({
                   Retiro en Tienda Física
                 </div>
                 <p className="text-[11px] text-text-muted mt-0.5">
-                  Coordina la recogida sin costo adicional en nuestro local
+                  {pickupNote}
                 </p>
               </div>
             </div>

@@ -46,11 +46,15 @@ export const CheckoutModal = ({ isOpen, onClose, storeSettings }) => {
 
   if (!isOpen) return null;
 
+  const freeThreshold = Number(storeSettings?.freeShippingThreshold ?? 35000);
+  const correosCost = Number(storeSettings?.shippingCorreosCost ?? 3500);
+  const gamCost = Number(storeSettings?.shippingExpressGamCost ?? 2500);
+
   let shippingCost = 0;
   if (shippingMethod === 'CORREOS_CR') {
-    shippingCost = subtotal >= 35000 ? 0 : 3500;
+    shippingCost = subtotal >= freeThreshold ? 0 : correosCost;
   } else if (shippingMethod === 'EXPRESS_GAM') {
-    shippingCost = 2500;
+    shippingCost = gamCost;
   } else {
     shippingCost = 0;
   }
@@ -253,6 +257,7 @@ export const CheckoutModal = ({ isOpen, onClose, storeSettings }) => {
               subtotal={subtotal}
               shippingCost={shippingCost}
               orderTotal={orderTotal}
+              storeSettings={storeSettings}
               onSubmit={handleGoToPayment}
               onClose={onClose}
             />

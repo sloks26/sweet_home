@@ -1,28 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import {
   Settings,
-  Phone,
   MessageCircle,
   Smartphone,
-  Building,
-  CreditCard,
-  Mail,
-  MapPin,
-  Truck,
   Check,
-  Star,
   AlertTriangle,
   Info,
-  Share2,
-  ExternalLink
+  Share2
 } from 'lucide-react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import WhatsAppIcon from '../ui/WhatsAppIcon';
 import PaymentPreviewBox from './subcomponents/PaymentPreviewBox';
+import ShippingSettingsSection from './subcomponents/ShippingSettingsSection';
 
 export const AdminSettings = ({ onSaveSuccess }) => {
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -42,6 +34,10 @@ export const AdminSettings = ({ onSaveSuccess }) => {
   const [pickupNote, setPickupNote] = useState('Previa coordinación por WhatsApp');
   const [contactEmail, setContactEmail] = useState('info@sweethomeboutiquecr.com');
   const [freeShippingThreshold, setFreeShippingThreshold] = useState('35000');
+  const [shippingExpressGamCost, setShippingExpressGamCost] = useState('2500');
+  const [shippingExpressGamDesc, setShippingExpressGamDesc] = useState('San José, Alajuela, Heredia y Cartago central (24 a 48 hrs)');
+  const [shippingCorreosCost, setShippingCorreosCost] = useState('3500');
+  const [shippingCorreosDesc, setShippingCorreosDesc] = useState('Entrega a todo el país (2 a 4 días hábiles) con número de guía');
 
   // Redes Sociales
   const [instagramHandle, setInstagramHandle] = useState('@sweethomeandboutiquecr');
@@ -73,6 +69,10 @@ export const AdminSettings = ({ onSaveSuccess }) => {
           setFreeShippingThreshold(
             d.freeShippingThreshold ? d.freeShippingThreshold.toString() : '35000'
           );
+          setShippingExpressGamCost(d.shippingExpressGamCost !== undefined ? d.shippingExpressGamCost.toString() : '2500');
+          setShippingExpressGamDesc(d.shippingExpressGamDesc || 'San José, Alajuela, Heredia y Cartago central (24 a 48 hrs)');
+          setShippingCorreosCost(d.shippingCorreosCost !== undefined ? d.shippingCorreosCost.toString() : '3500');
+          setShippingCorreosDesc(d.shippingCorreosDesc || 'Entrega a todo el país (2 a 4 días hábiles) con número de guía');
 
           if (d.social) {
             if (d.social.instagram) {
@@ -94,8 +94,7 @@ export const AdminSettings = ({ onSaveSuccess }) => {
           }
         }
       })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+      .catch((err) => console.error(err));
   }, []);
 
   const handleSave = async (e) => {
@@ -118,6 +117,10 @@ export const AdminSettings = ({ onSaveSuccess }) => {
       pickupNote: pickupNote.trim(),
       contactEmail: contactEmail.trim(),
       freeShippingThreshold: parseFloat(freeShippingThreshold) || 35000,
+      shippingExpressGamCost: parseFloat(shippingExpressGamCost) || 2500,
+      shippingExpressGamDesc: shippingExpressGamDesc.trim(),
+      shippingCorreosCost: parseFloat(shippingCorreosCost) || 3500,
+      shippingCorreosDesc: shippingCorreosDesc.trim(),
       social: {
         instagram: {
           handle: instagramHandle.trim(),
@@ -411,36 +414,22 @@ export const AdminSettings = ({ onSaveSuccess }) => {
           </div>
         </div>
 
-        {/* Bloque 4: Políticas de Envío y Retiro */}
-        <div className="p-6 rounded-2xl bg-[#140A22] border border-gold-DEFAULT/25 space-y-4">
-          <h3 className="font-serif text-lg font-bold text-text-primary flex items-center gap-2 border-b border-night-700/60 pb-3">
-            <Truck className="w-5 h-5 text-gold-bright" />
-            <span>Políticas de Envío y Retiro</span>
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input
-              label="Monto Mínimo para Envío GRATIS (en Colones ₡)"
-              value={freeShippingThreshold}
-              onChange={(e) => {
-                setFreeShippingThreshold(e.target.value);
-                setIsDirty(true);
-              }}
-              placeholder="35000"
-              required
-            />
-            <Input
-              label="Nota para Retiro en Tienda"
-              value={pickupNote}
-              onChange={(e) => {
-                setPickupNote(e.target.value);
-                setIsDirty(true);
-              }}
-              placeholder="Ej: Previa coordinación por WhatsApp"
-              required
-            />
-          </div>
-        </div>
+        {/* Bloque 4: Políticas y Tarifas de Envío en Costa Rica */}
+        <ShippingSettingsSection
+          shippingExpressGamCost={shippingExpressGamCost}
+          setShippingExpressGamCost={setShippingExpressGamCost}
+          shippingExpressGamDesc={shippingExpressGamDesc}
+          setShippingExpressGamDesc={setShippingExpressGamDesc}
+          shippingCorreosCost={shippingCorreosCost}
+          setShippingCorreosCost={setShippingCorreosCost}
+          shippingCorreosDesc={shippingCorreosDesc}
+          setShippingCorreosDesc={setShippingCorreosDesc}
+          freeShippingThreshold={freeShippingThreshold}
+          setFreeShippingThreshold={setFreeShippingThreshold}
+          pickupNote={pickupNote}
+          setPickupNote={setPickupNote}
+          setIsDirty={setIsDirty}
+        />
 
         {/* Notificación de datos de ejemplo */}
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-3">

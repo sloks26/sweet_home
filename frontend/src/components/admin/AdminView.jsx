@@ -10,7 +10,6 @@ const AdminOurStory = lazy(() => import('./AdminOurStory'));
 const AdminProducts = lazy(() => import('./AdminProducts'));
 const AdminCategories = lazy(() => import('./AdminCategories'));
 const AdminSettings = lazy(() => import('./AdminSettings'));
-const AdminUsersSection = lazy(() => import('./subcomponents/AdminUsersSection'));
 
 export const AdminView = ({
   adminTab,
@@ -65,7 +64,6 @@ export const AdminView = ({
           {adminTab === 'banners' && <AdminBanners />}
           {adminTab === 'media' && <AdminMedia />}
           {adminTab === 'our-story' && <AdminOurStory />}
-          {adminTab === 'users' && <AdminUsersSection currentUserId={authUser?.id} />}
           {adminTab === 'settings' && (
             <AdminSettings
               onSaveSuccess={(payload) =>
