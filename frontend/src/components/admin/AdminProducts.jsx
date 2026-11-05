@@ -1,25 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Plus,
-  Search,
-  Edit2,
-  Trash2,
-  Image as ImageIcon,
-  AlertTriangle,
-  ArrowUpDown,
-  Filter,
-  Eye,
-  Sliders,
-  Sparkles,
-  PackageCheck,
-  PackageX,
-  RefreshCw
-} from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Plus, Search, RefreshCw } from 'lucide-react';
 import Button from '../ui/Button';
-import Input from '../ui/Input';
-import Badge from '../ui/Badge';
 import AdminProductModal from './subcomponents/AdminProductModal';
 import AdminProductsMobileList from './subcomponents/AdminProductsMobileList';
+import AdminProductsDesktopTable from './subcomponents/AdminProductsDesktopTable';
 
 export const AdminProducts = ({ initialStockStatus = '' }) => {
   const [products, setProducts] = useState([]);
@@ -29,16 +13,16 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
   // Filtros
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [prevStockStatusProp, setPrevStockStatusProp] = useState(initialStockStatus);
   const [stockStatus, setStockStatus] = useState(initialStockStatus);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  useEffect(() => {
-    if (initialStockStatus !== undefined) {
-      setStockStatus(initialStockStatus);
-    }
-  }, [initialStockStatus]);
+  if (initialStockStatus !== undefined && initialStockStatus !== prevStockStatusProp) {
+    setPrevStockStatusProp(initialStockStatus);
+    setStockStatus(initialStockStatus);
+  }
 
   // Modal Crear / Editar
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,19 +45,7 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
   const [isAdult, setIsAdult] = useState(false);
   const [images, setImages] = useState([]);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchProducts();
-    const timer = setInterval(() => {
-      fetchProducts(true);
-    }, 45000);
-    return () => clearInterval(timer);
-  }, [search, selectedCategory, stockStatus, currentPage]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/categories');
       const data = await res.json();
@@ -83,9 +55,9 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
     } catch (err) {
       console.error('Error al cargar categorías:', err);
     }
-  };
+  }, []);
 
-  const fetchProducts = async (silent = false) => {
+  const fetchProducts = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -108,7 +80,19 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, selectedCategory, stockStatus, currentPage]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    fetchProducts();
+    const timer = setInterval(() => {
+      fetchProducts(true);
+    }, 45000);
+    return () => clearInterval(timer);
+  }, [fetchProducts]);
 
   const openCreateModal = () => {
     setEditingProduct(null);
@@ -305,155 +289,17 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
       />
 
       {/* Tabla de Productos para Pantallas Grandes (Desktop >= 1024px) */}
-      <div className="hidden lg:block rounded-2xl border border-gold-DEFAULT/20 overflow-hidden bg-night-900 shadow-xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-night-950/80 border-b border-night-700 text-gold-light font-semibold">
-                <th className="py-3 px-4">Producto</th>
-                <th className="py-3 px-4">Categoría</th>
-                <th className="py-3 px-4">Precio (₡)</th>
-                <th className="py-3 px-4">Stock</th>
-                <th className="py-3 px-4">Estado</th>
-                <th className="py-3 px-4 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-night-800">
-              {loading ? (
-                <tr>
-                  <td colSpan="6" className="py-8 text-center text-text-muted">
-                    Cargando catálogo...
-                  </td>
-                </tr>
-              ) : products.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="py-8 text-center text-text-muted">
-                    No se encontraron productos con los filtros seleccionados.
-                  </td>
-                </tr>
-              ) : (
-                products.map((prod) => {
-                  const coverImage =
-                    prod.images?.[0]?.url ||
-                    'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
-                  return (
-                    <tr key={prod.id} className="hover:bg-night-800/40 transition-colors">
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={coverImage}
-                            alt={prod.name}
-                            className="w-10 h-10 rounded-lg object-cover border border-night-700 shrink-0"
-                            onError={(e) => {
-                              e.currentTarget.src =
-                                'https://images.unsplash.com/photo-1544816155-12df9643f363?w=150&q=80';
-                            }}
-                          />
-                          <div>
-                            <div className="font-semibold text-text-primary line-clamp-1">
-                              {prod.name}
-                            </div>
-                            <div className="text-[11px] text-text-muted font-mono">{prod.sku}</div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="py-3 px-4 text-text-secondary">
-                        <div>{prod.category?.name || 'Sin Categoría'}</div>
-                        {prod.subcategory && (
-                          <div className="text-[11px] text-gold-bright/80">
-                            {prod.subcategory.name}
-                          </div>
-                        )}
-                      </td>
-
-                      <td className="py-3 px-4 font-bold text-gold-light">
-                        ₡{prod.price?.toLocaleString('es-CR')}
-                        {prod.compareAtPrice && (
-                          <span className="text-[10px] text-text-muted line-through ml-1 font-normal">
-                            ₡{prod.compareAtPrice?.toLocaleString('es-CR')}
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="py-3 px-4">
-                        {prod.stock <= 5 ? (
-                          <span className="px-2 py-0.5 rounded-full bg-status-warning/15 text-amber-300 font-bold text-[10px] border border-status-warning/30">
-                            {prod.stock === 0 ? 'Agotado' : `Bajo: ${prod.stock}`}
-                          </span>
-                        ) : (
-                          <span className="text-text-primary font-medium">{prod.stock} u.</span>
-                        )}
-                      </td>
-
-                      <td className="py-3 px-4">
-                        <button
-                          onClick={() => handleToggleProduct(prod.id)}
-                          className="cursor-pointer"
-                          title="Clic para cambiar estado"
-                        >
-                          <Badge variant={prod.isActive ? 'success' : 'outline'} size="sm">
-                            {prod.isActive ? 'Activo' : 'Pausado'}
-                          </Badge>
-                        </button>
-                      </td>
-
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEditModal(prod)}
-                            className="p-2 rounded-xl bg-night-800 hover:bg-gold-DEFAULT hover:text-night-950 text-text-secondary transition-all border border-gold-DEFAULT/15 cursor-pointer"
-                            title="Editar Producto"
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteProduct(prod.id, prod.name)}
-                            className="p-2 rounded-xl bg-status-error/10 hover:bg-status-error text-status-error hover:text-white transition-all border border-status-error/20 cursor-pointer"
-                            title="Eliminar Producto"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Paginación */}
-        {totalPages > 1 && (
-          <div className="p-4 border-t border-night-700 flex items-center justify-between text-xs text-text-secondary">
-            <span>
-              Total: <strong>{totalCount}</strong> productos
-            </span>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                disabled={currentPage <= 1}
-                onClick={() => setCurrentPage((p) => p - 1)}
-              >
-                Anterior
-              </Button>
-              <span>
-                Página {currentPage} de {totalPages}
-              </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                disabled={currentPage >= totalPages}
-                onClick={() => setCurrentPage((p) => p + 1)}
-              >
-                Siguiente
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+      <AdminProductsDesktopTable
+        loading={loading}
+        products={products}
+        openEditModal={openEditModal}
+        handleDeleteProduct={handleDeleteProduct}
+        handleToggleProduct={handleToggleProduct}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+      />
 
       {/* Modal Crear / Editar */}
       <AdminProductModal

@@ -2,6 +2,7 @@ import React from 'react';
 import { MessageCircle, Send, Trash2, Truck, Plus } from 'lucide-react';
 import Badge from '../../ui/Badge';
 import Button from '../../ui/Button';
+import { formatColones } from '../../../utils/currency';
 
 export const ContraEntregaTable = ({
   contraEntrega = [],
@@ -31,7 +32,7 @@ export const ContraEntregaTable = ({
             </h4>
             <p className="text-xs text-text-secondary tabular-nums">
               Por cobrar contra entrega:{' '}
-              <strong className="text-sky-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
+              <strong className="text-sky-300">{formatColones(pendingSaldo)}</strong>
             </p>
           </div>
         </div>
@@ -94,7 +95,7 @@ export const ContraEntregaTable = ({
                 <div className="flex items-center justify-between text-xs py-1 border-t border-b border-night-800">
                   <span className="text-[11px] text-text-muted">Monto por Cobrar:</span>
                   <span className="text-sm font-extrabold text-sky-300">
-                    ₡{(item.totalAmount || 0).toLocaleString('es-CR')}
+                    {formatColones(item.totalAmount)}
                   </span>
                 </div>
 
@@ -171,7 +172,7 @@ export const ContraEntregaTable = ({
                       {item.productDetails}
                     </td>
                     <td className="py-3 font-bold text-sky-300">
-                      ₡{(item.totalAmount || 0).toLocaleString('es-CR')}
+                      {formatColones(item.totalAmount)}
                     </td>
                     <td className="py-3">
                       {item.status === 'COMPLETED' ? (

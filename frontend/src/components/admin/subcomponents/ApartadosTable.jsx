@@ -2,6 +2,7 @@ import React from 'react';
 import { MessageCircle, Send, Trash2, Clock, Plus } from 'lucide-react';
 import Badge from '../../ui/Badge';
 import Button from '../../ui/Button';
+import { formatColones } from '../../../utils/currency';
 
 export const ApartadosTable = ({
   apartados = [],
@@ -31,7 +32,7 @@ export const ApartadosTable = ({
             </h4>
             <p className="text-xs text-text-secondary tabular-nums">
               Saldo pendiente por cobrar:{' '}
-              <strong className="text-amber-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
+              <strong className="text-amber-300">{formatColones(pendingSaldo)}</strong>
             </p>
           </div>
         </div>
@@ -89,19 +90,19 @@ export const ApartadosTable = ({
                   <div>
                     <span className="text-[10px] text-text-muted block">Total</span>
                     <span className="font-bold text-text-primary">
-                      ₡{(item.totalAmount || 0).toLocaleString('es-CR')}
+                      {formatColones(item.totalAmount)}
                     </span>
                   </div>
                   <div>
                     <span className="text-[10px] text-text-muted block">Abonado</span>
                     <span className="font-bold text-emerald-400">
-                      ₡{(item.paidAmount || 0).toLocaleString('es-CR')}
+                      {formatColones(item.paidAmount)}
                     </span>
                   </div>
                   <div>
                     <span className="text-[10px] text-text-muted block">Saldo</span>
                     <span className="font-bold text-amber-300">
-                      ₡{(item.remainingAmount || 0).toLocaleString('es-CR')}
+                      {formatColones(item.remainingAmount)}
                     </span>
                   </div>
                 </div>
@@ -181,13 +182,13 @@ export const ApartadosTable = ({
                       {item.productDetails}
                     </td>
                     <td className="py-3 font-bold text-text-primary">
-                      ₡{(item.totalAmount || 0).toLocaleString('es-CR')}
+                      {formatColones(item.totalAmount)}
                     </td>
                     <td className="py-3 font-bold text-emerald-400">
-                      ₡{(item.paidAmount || 0).toLocaleString('es-CR')}
+                      {formatColones(item.paidAmount)}
                     </td>
                     <td className="py-3 font-bold text-amber-300">
-                      ₡{(item.remainingAmount || 0).toLocaleString('es-CR')}
+                      {formatColones(item.remainingAmount)}
                     </td>
                     <td className="py-3">
                       {item.status === 'COMPLETED' ? (
