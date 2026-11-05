@@ -294,15 +294,17 @@ sweet_home/
 - Eliminar archivos huérfanos confirmados (`Card.jsx`, `Select.jsx`, `tokens.js`).
 - Corregir el orden de declaración en `App.jsx` (`fetchAdminStats`) y comillas en JSX.
 
-### 2. FASE 3: Correcciones de Seguridad (CRÍTICO y ALTO)
-1. **Lógica de Precios del Servidor:** Reemplazar cálculo de precios del cliente en `order.controller.js` por consulta fidedigna en base de datos.
-2. **Protección de Comprobantes Bancarios:** Mover comprobantes a ruta privada y servirlos únicamente con autenticación de staff/admin.
-3. **Validación de Configuración y Claves:** Validar con Zod variables obligatorias (`JWT_SECRET`, `DATABASE_URL`) al arrancar el servidor; eliminar credenciales por defecto en `seed.js`.
-4. **CORS y Sesiones:** Restringir CORS al dominio real del cliente; implementar revocación de tokens JWT (`tokenVersion`).
-5. **Inventario Transaccional:** Validar stock disponible para impedir sobreventas.
-6. **Segregación de Roles:** Aplicar `requireAdmin` estricto en eliminación de pedidos, categorías y finanzas.
-7. **Rate Limiting:** Añadir limitadores a subida de archivos y creación de órdenes.
-8. **Pruebas de Verificación:** Scripts de prueba automatizados para verificar que peticiones no autorizadas o con manipulación de precios son bloqueadas (400, 401, 403).
+### 2. FASE 3: Correcciones de Seguridad (CRÍTICO y ALTO) — COMPLETADA Y DESPLEGADA
+1. **Lógica de Precios del Servidor (SEC-01 - Crítico):** Resuelto. Los precios se obtienen directamente de la base de datos oficial (`prisma.product`) en transacción atómica en `order.controller.js`. Todo precio o subtotal alterado desde el navegador es completamente ignorado.
+2. **Protección de Comprobantes Bancarios (SEC-02 - Crítico):** Resuelto. Los comprobantes SINPE y bancarios se almacenan en el directorio privado `backend/private/vouchers/` (no expuesto estáticamente) y se sirven únicamente mediante el endpoint protegido `GET /api/admin/orders/:id/voucher` bajo autenticación de staff/admin con cabeceras `no-store`.
+3. **Validación de Configuración y Claves (SEC-03 y SEC-04 - Crítico):** Resuelto. Validación estricta con Zod en `config/index.js` para `JWT_SECRET`, `PORT`, `NODE_ENV` y `DATABASE_URL`. Rechaza claves inseguras de fallback en producción y exige contraseñas seguras en `seed.js`.
+4. **CORS y Sesiones (SEC-06 y SEC-07 - Alto):** Resuelto. Se implementó lista blanca estricta de dominios permitidos en `app.js` (reemplazando `origin: true`). Se implementó revocación de tokens JWT en el servidor mediante `tokenVersion` en el modelo `User`, invalidando de inmediato cualquier sesión anterior al hacer logout.
+5. **Inventario Transaccional (SEC-09 - Alto):** Resuelto. Validación estricta de stock disponible en MongoDB antes de confirmar el pedido; rechaza con HTTP 400 cualquier solicitud que supere las existencias disponibles.
+6. **Segregación de Roles (SEC-10 - Alto):** Resuelto. Se separó `requireStaff` de `requireAdmin`. Operaciones destructivas (eliminación de pedidos, categorías, productos, medios) y módulos financieros (`/accounting`, `/expenses`, `/users`) ahora exigen rol `ADMIN`.
+7. **Rate Limiting y Prevención de Fugas (SEC-11 y PRF-01 - Alto/Medio):** Resuelto. Se añadieron limitadores por IP para creación de pedidos y subida de comprobantes, junto con purga automática periódica de memoria en `rateLimiter.js`.
+8. **Pruebas de Verificación Automatizadas:** Suite completa en `backend/test-phase3-security.mjs` con 15 pruebas pasando exitosamente (0 fallos).
+
+---
 
 ### 3. FASE 4: Eliminación de Duplicados y Reorganización Estructural
 - Extraer utilidades compartidas: `formatColones`, `formatCompactColones`, `formatDate`.
