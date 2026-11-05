@@ -1,17 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
   RotateCw,
   ZoomIn,
-  ZoomOut,
-  Sliders,
   Check,
-  Crop,
-  Sun,
-  Contrast,
-  Sparkles,
-  Download
+  Crop
 } from 'lucide-react';
 import Button from '../ui/Button';
 
@@ -27,27 +21,7 @@ export const PhotoEditorModal = ({ isOpen, onClose, imageSrc, onSave }) => {
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
 
-  // Cargar imagen en memoria
-  useEffect(() => {
-    if (!imageSrc || !isOpen) return;
-
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = imageSrc;
-    img.onload = () => {
-      imageRef.current = img;
-      renderCanvas();
-    };
-  }, [imageSrc, isOpen]);
-
-  // Re-renderizar canvas cuando cambien los filtros
-  useEffect(() => {
-    if (imageRef.current) {
-      renderCanvas();
-    }
-  }, [aspectRatio, zoom, rotation, brightness, contrast, saturation]);
-
-  const renderCanvas = () => {
+  const renderCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const img = imageRef.current;
     if (!canvas || !img) return;
@@ -97,7 +71,27 @@ export const PhotoEditorModal = ({ isOpen, onClose, imageSrc, onSave }) => {
 
     ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
     ctx.restore();
-  };
+  }, [aspectRatio, zoom, rotation, brightness, contrast, saturation]);
+
+  // Cargar imagen en memoria
+  useEffect(() => {
+    if (!imageSrc || !isOpen) return;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = imageSrc;
+    img.onload = () => {
+      imageRef.current = img;
+      renderCanvas();
+    };
+  }, [imageSrc, isOpen, renderCanvas]);
+
+  // Re-renderizar canvas cuando cambien los filtros
+  useEffect(() => {
+    if (imageRef.current) {
+      renderCanvas();
+    }
+  }, [renderCanvas]);
 
   const handleSave = () => {
     const canvas = canvasRef.current;
