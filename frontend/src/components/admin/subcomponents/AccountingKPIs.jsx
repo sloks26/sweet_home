@@ -56,7 +56,7 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
             <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
         </div>
-        <div className="relative text-lg sm:text-2xl font-extrabold bg-gradient-to-r from-amber-100 via-gold-bright to-gold-DEFAULT bg-clip-text text-transparent">
+        <div className="relative text-lg sm:text-2xl font-extrabold text-[#FFE08A] drop-shadow-[0_2px_8px_rgba(242,193,78,0.25)]">
           <AnimatedCounter targetValue={totalRevenue} />
         </div>
         <div className="relative pt-1.5 border-t border-white/[0.05] flex items-center justify-between text-[10px] sm:text-[11px] text-text-secondary">

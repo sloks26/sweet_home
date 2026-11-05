@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, FolderTree, Layers, Sparkles } from 'lucide-react';
 import Button from '../ui/Button';
 import AdminCategoryModal from './subcomponents/AdminCategoryModal';
 import AdminCategoryRow from './subcomponents/AdminCategoryRow';
@@ -124,22 +124,69 @@ export const AdminCategories = () => {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Encabezado */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl font-bold text-text-primary">
+    <div className="space-y-6">
+      {/* Encabezado Ejecutivo */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E1036] via-[#150A26] to-[#11071F] border border-white/[0.08] border-t-gold-DEFAULT/35 p-5 sm:p-7 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/35 text-gold-bright text-xs font-semibold mb-1">
+            <FolderTree className="w-3.5 h-3.5" />
+            <span>Estructura del Catálogo de la Tienda</span>
+          </div>
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
             Categorías y Subcategorías
           </h1>
-          <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Organiza los 10 departamentos de la boutique, reordena el menú principal y administra
-            subcategorías.
+          <p className="text-xs sm:text-sm text-text-secondary max-w-2xl">
+            Aquí administras los departamentos del menú principal de tu tienda y las subcategorías
+            internas donde se clasifican tus productos.
           </p>
         </div>
 
         <Button variant="primary" size="md" icon={Plus} onClick={openCreateModal}>
-          Nueva Categoría
+          + Nueva Categoría
         </Button>
+      </div>
+
+      {/* Guía Visual Rápida de 3 Pasos para que sea 100% intuitivo */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+        <div className="p-4 rounded-2xl bg-[#140A24]/90 border border-white/[0.07] border-l-2 border-l-gold-DEFAULT flex items-start gap-3">
+          <div className="p-2 rounded-xl bg-gold-DEFAULT/15 text-gold-bright shrink-0">
+            <FolderTree className="w-4 h-4" />
+          </div>
+          <div className="text-xs space-y-0.5">
+            <p className="font-bold text-text-primary">1. ¿Qué es una Categoría?</p>
+            <p className="text-text-secondary leading-relaxed">
+              Son los departamentos del menú principal de la web (ej. <em>Hogar, Moda, Perfumes</em>
+              ). Usa las flechas <strong>↑ ↓</strong> para elegir cuál sale de primero.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-[#140A24]/90 border border-white/[0.07] border-l-2 border-l-emerald-400 flex items-start gap-3">
+          <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-300 shrink-0">
+            <Layers className="w-4 h-4" />
+          </div>
+          <div className="text-xs space-y-0.5">
+            <p className="font-bold text-text-primary">2. ¿Qué son las Subcategorías?</p>
+            <p className="text-text-secondary leading-relaxed">
+              Son las divisiones dentro de cada categoría (ej. dentro de <em>Hogar</em> están{' '}
+              <em>Cocina, Sala, Dormitorio</em>) para que el cliente filtre rápido.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-[#140A24]/90 border border-white/[0.07] border-l-2 border-l-sky-400 flex items-start gap-3">
+          <div className="p-2 rounded-xl bg-sky-500/15 text-sky-300 shrink-0">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <div className="text-xs space-y-0.5">
+            <p className="font-bold text-text-primary">3. ¿Cómo agrego productos?</p>
+            <p className="text-text-secondary leading-relaxed">
+              Aquí creas los nombres de las secciones. Luego en la pestaña{' '}
+              <strong className="text-gold-light">Productos</strong> eliges en cuál Categoría y
+              Subcategoría va cada artículo.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Lista de Categorías con Reordenamiento y Subcategorías */}

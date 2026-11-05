@@ -5,10 +5,9 @@ import {
   Edit2,
   Trash2,
   Check,
-  FolderTree,
-  ChevronDown,
   Layers,
-  Plus
+  Plus,
+  Package
 } from 'lucide-react';
 import Button from '../../ui/Button';
 import Badge from '../../ui/Badge';
@@ -17,8 +16,6 @@ export const AdminCategoryRow = ({
   cat,
   index,
   totalCount,
-  isExpanded,
-  onToggleExpand,
   onMoveOrder,
   onEdit,
   onDelete,
@@ -33,161 +30,161 @@ export const AdminCategoryRow = ({
   const prodCount = cat._count?.products || 0;
 
   return (
-    <div className="rounded-2xl bg-[#140A22] border border-gold-DEFAULT/20 overflow-hidden transition-all shadow-sm">
+    <div className="rounded-2xl bg-gradient-to-b from-[#180C2C]/95 to-[#110720]/95 border border-white/[0.07] border-t-gold-DEFAULT/30 overflow-hidden transition-all shadow-[0_12px_30px_-10px_rgba(0,0,0,0.55)]">
       {/* Fila Principal de la Categoría */}
       <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3.5">
           {/* Controles de orden flechas */}
-          <div className="flex flex-col border border-night-700 rounded-xl overflow-hidden bg-night-900 shrink-0">
+          <div className="flex flex-col border border-white/[0.08] rounded-xl overflow-hidden bg-[#0B0414] shrink-0">
             <button
               disabled={index === 0}
               onClick={() => onMoveOrder(index, -1)}
-              className="p-1 text-text-muted hover:text-gold-light hover:bg-night-800 disabled:opacity-20"
-              title="Subir posición"
+              className="p-1.5 text-text-muted hover:text-gold-bright hover:bg-white/[0.05] disabled:opacity-20 cursor-pointer"
+              title="Subir posición en el menú de la tienda"
             >
               <ArrowUp className="w-3.5 h-3.5" />
             </button>
             <button
               disabled={index === totalCount - 1}
               onClick={() => onMoveOrder(index, 1)}
-              className="p-1 text-text-muted hover:text-gold-light hover:bg-night-800 disabled:opacity-20"
-              title="Bajar posición"
+              className="p-1.5 text-text-muted hover:text-gold-bright hover:bg-white/[0.05] disabled:opacity-20 cursor-pointer"
+              title="Bajar posición en el menú de la tienda"
             >
               <ArrowDown className="w-3.5 h-3.5" />
             </button>
           </div>
 
           {/* Número de orden */}
-          <span className="w-7 h-7 rounded-lg bg-night-700/80 text-gold-light font-bold text-xs flex items-center justify-center shrink-0">
-            #{index + 1}
-          </span>
+          <div className="px-2.5 py-1.5 rounded-xl bg-gold-DEFAULT/15 border border-gold-DEFAULT/30 text-gold-bright font-extrabold text-xs flex flex-col items-center justify-center shrink-0 tabular-nums">
+            <span className="text-[9px] uppercase tracking-wider text-gold-light/70 leading-none">
+              Posición
+            </span>
+            <span className="mt-0.5">#{index + 1}</span>
+          </div>
 
           {/* Info de la Categoría */}
           <div className="space-y-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="font-serif text-lg font-bold text-text-primary">{cat.name}</h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-text-primary">
+                {cat.name}
+              </h3>
               {cat.isAdult && (
                 <Badge variant="adult" size="sm">
                   🔞 +18
                 </Badge>
               )}
-              <span className="text-[11px] text-text-muted">({prodCount} productos)</span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-[11px] font-medium text-text-secondary tabular-nums">
+                <Package className="w-3 h-3 text-gold-bright" />
+                {prodCount} {prodCount === 1 ? 'producto' : 'productos'}
+              </span>
             </div>
-            <p className="text-xs text-text-secondary truncate max-w-md">
-              {cat.description || 'Sin descripción'}
+            <p className="text-xs text-text-secondary truncate max-w-xl">
+              {cat.description || 'Departamento visible en el menú principal de la tienda'}
             </p>
           </div>
         </div>
 
-        {/* Acciones */}
-        <div className="flex items-center gap-2.5 shrink-0 self-end md:self-auto">
-          {/* Botón para desplegar subcategorías */}
-          <button
-            onClick={onToggleExpand}
-            className="px-3 py-1.5 rounded-xl bg-night-700/70 hover:bg-night-600 text-xs text-text-secondary hover:text-gold-light flex items-center gap-1.5 transition-colors"
+        {/* Acciones de la Categoría Principal */}
+        <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={Edit2}
+            onClick={() => onEdit(cat)}
+            className="border-white/[0.1] hover:border-gold-DEFAULT/50"
           >
-            <Layers className="w-3.5 h-3.5 text-gold-bright" />
-            <span>Subcategorías ({subcats.length})</span>
-            <ChevronDown
-              className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                isExpanded ? 'rotate-180' : ''
-              }`}
-            />
-          </button>
-
-          <Button variant="secondary" size="sm" icon={Edit2} onClick={() => onEdit(cat)}>
-            Editar
+            Editar Nombre
           </Button>
 
           <button
             onClick={() => onDelete(cat.id, cat.name)}
-            className="p-2 rounded-xl border border-status-error/30 text-status-error hover:bg-status-error/20 transition-colors"
+            className="p-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
             title="Eliminar categoría"
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Subcategorías Desplegables */}
-      {isExpanded && (
-        <div className="bg-night-900/90 border-t border-night-700/60 p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="text-xs font-semibold text-gold-bright uppercase tracking-wider flex items-center gap-2">
-              <FolderTree className="w-4 h-4" />
-              <span>Subcategorías de {cat.name}</span>
-            </h4>
-
-            {/* Botón para abrir campo de agregar subcategoría */}
-            {addingSubcatFor !== cat.id && (
-              <button
-                onClick={() => setAddingSubcatFor(cat.id)}
-                className="text-xs text-gold-bright hover:text-gold-light flex items-center gap-1 font-semibold"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Agregar Subcategoría</span>
-              </button>
-            )}
+      {/* Subcategorías Siempre Visibles y Fáciles de Entender */}
+      <div className="bg-[#0B0414]/75 border-t border-white/[0.06] px-5 py-3.5 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-xs">
+            <Layers className="w-3.5 h-3.5 text-gold-bright" />
+            <span className="font-semibold text-gold-light">
+              Subcategorías dentro de {cat.name} ({subcats.length}):
+            </span>
           </div>
 
-          {/* Formulario rápido de agregar subcategoría */}
-          {addingSubcatFor === cat.id && (
-            <div className="flex items-center gap-2 p-3 rounded-2xl bg-night-800 border border-gold-DEFAULT/30">
-              <input
-                type="text"
-                value={newSubcatName}
-                onChange={(e) => setNewSubcatName(e.target.value)}
-                placeholder="Nombre de la nueva subcategoría..."
-                className="flex-1 bg-night-900 text-text-primary text-xs rounded-xl px-3 py-2 border border-night-600 focus:outline-none focus:border-gold-DEFAULT"
-                autoFocus
-              />
-              <Button
-                variant="primary"
-                size="sm"
-                icon={Check}
-                onClick={() => onAddSubcategory(cat.id)}
-              >
-                Guardar
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setAddingSubcatFor(null);
-                  setNewSubcatName('');
-                }}
-              >
-                Cancelar
-              </Button>
-            </div>
-          )}
-
-          {/* Chips / Lista de Subcategorías */}
-          {subcats.length === 0 ? (
-            <div className="text-xs text-text-muted italic">
-              No hay subcategorías en este departamento aún.
-            </div>
-          ) : (
-            <div className="flex flex-wrap gap-2.5">
-              {subcats.map((sub) => (
-                <div
-                  key={sub.id}
-                  className="px-3 py-1.5 rounded-xl bg-night-800 border border-night-700 flex items-center gap-2 text-xs"
-                >
-                  <span className="font-medium text-text-primary">{sub.name}</span>
-                  <button
-                    onClick={() => onDeleteSubcategory(sub.id, sub.name)}
-                    className="text-text-muted hover:text-status-error transition-colors"
-                    title="Eliminar subcategoría"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
+          {/* Botón directo para agregar subcategoría */}
+          {addingSubcatFor !== cat.id && (
+            <button
+              onClick={() => setAddingSubcatFor(cat.id)}
+              className="px-2.5 py-1 rounded-lg bg-gold-DEFAULT/15 border border-gold-DEFAULT/35 text-xs text-gold-bright hover:bg-gold-DEFAULT/25 flex items-center gap-1 font-semibold transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Agregar Subcategoría</span>
+            </button>
           )}
         </div>
-      )}
+
+        {/* Formulario rápido de agregar subcategoría */}
+        {addingSubcatFor === cat.id && (
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 p-3 rounded-xl bg-[#160B28] border border-gold-DEFAULT/40">
+            <input
+              type="text"
+              value={newSubcatName}
+              onChange={(e) => setNewSubcatName(e.target.value)}
+              placeholder={`Nueva subcategoría en ${cat.name} (ej. Cocina, Sala, Bolsos...)`}
+              className="flex-1 bg-[#090312] text-text-primary text-xs rounded-xl px-3 py-2 border border-white/[0.12] focus:outline-none focus:border-gold-DEFAULT"
+              autoFocus
+            />
+            <Button
+              variant="primary"
+              size="sm"
+              icon={Check}
+              onClick={() => onAddSubcategory(cat.id)}
+            >
+              Guardar
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setAddingSubcatFor(null);
+                setNewSubcatName('');
+              }}
+            >
+              Cancelar
+            </Button>
+          </div>
+        )}
+
+        {/* Chips / Etiquetas de Subcategorías siempre visibles */}
+        {subcats.length === 0 ? (
+          <div className="text-xs text-text-muted italic py-1">
+            Este departamento aún no tiene subcategorías. Haz clic en "+ Agregar Subcategoría".
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {subcats.map((sub) => (
+              <div
+                key={sub.id}
+                className="px-3 py-1.5 rounded-xl bg-[#170B2A] border border-white/[0.08] hover:border-gold-DEFAULT/35 flex items-center gap-2 text-xs transition-colors"
+              >
+                <span className="font-medium text-text-primary">{sub.name}</span>
+                <button
+                  onClick={() => onDeleteSubcategory(sub.id, sub.name)}
+                  className="text-text-muted hover:text-rose-400 transition-colors cursor-pointer"
+                  title={`Eliminar subcategoría ${sub.name}`}
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

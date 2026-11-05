@@ -13,6 +13,7 @@ export default {
           950: '#0B0414',
           900: '#12071F', // Principal
           800: '#1B0B30', // Secundario
+          750: '#230E3C', // Separadores sutiles
           700: '#2A1148', // Tarjetas y superficies
           600: '#3D1B63',
           500: '#522584',
@@ -33,10 +34,13 @@ export default {
           soft: '#FBCFE8',
         },
         // Dorado metálico
+        'gold-DEFAULT': '#F2C14E',
+        'gold-bright': '#F2C14E',
         gold: {
           dark: '#9A6F00',
           base: '#D4A017',
           DEFAULT: '#F2C14E',
+          bright: '#F2C14E',
           light: '#FFE08A',
           shimmer: '#FFF4D0',
         },
@@ -50,7 +54,7 @@ export default {
         // Estados
         status: {
           success: '#34D399',
-          error: '#F8F1FF',
+          error: '#FB7185',
           warning: '#FBBF24',
           info: '#60A5FA',
         },

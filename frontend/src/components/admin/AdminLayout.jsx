@@ -67,7 +67,8 @@ export const AdminLayout = ({
   const currentTabObj = menuItems.find((t) => t.id === activeTab) || menuItems[0];
   const isOwner = (authUser?.email || '').toLowerCase() === 'admin@sweethomeboutiquecr.com';
   const adminInitial = isOwner ? 'V' : (authUser?.name || 'J').charAt(0).toUpperCase();
-  const adminRoleLabel = isOwner ? 'Propietaria & Directora' : 'Administradora Boutique';
+  const adminDisplayName = isOwner ? 'Vanessa Sánchez' : authUser?.name || 'Jendry';
+  const adminRoleLabel = isOwner ? 'Directora Propietaria' : 'Administradora';
 
   return (
     <div className="min-h-screen bg-[#0B0414] text-text-primary flex flex-col lg:flex-row">
@@ -128,7 +129,7 @@ export const AdminLayout = ({
 
         {/* Footer del Sidebar Escritorio */}
         <div className="pt-4 border-t border-white/[0.07] space-y-2.5">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#1E1035]/90 to-[#120822]/90 border border-white/[0.08] border-t-gold-DEFAULT/30 shadow-inner flex items-center gap-3">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-[#1E1035]/90 to-[#120822]/90 border border-white/[0.08] border-t-gold-DEFAULT/30 shadow-inner flex items-center gap-2.5">
             <div className="relative shrink-0">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gold-light via-gold-DEFAULT to-gold-dark text-night-950 font-serif font-extrabold text-sm flex items-center justify-center shadow-gold-sm">
                 {adminInitial}
@@ -136,13 +137,13 @@ export const AdminLayout = ({
               <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#120822]" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] uppercase font-bold text-gold-bright/90 tracking-wider truncate">
+              <p className="text-[10px] uppercase font-bold text-gold-bright tracking-wide">
                 {adminRoleLabel}
               </p>
-              <p className="text-xs font-semibold text-text-primary truncate">
-                {getAdminGreeting(authUser)}
+              <p className="text-xs font-bold text-text-primary leading-snug">
+                {adminDisplayName}
               </p>
-              <p className="text-[10px] text-text-muted truncate">{authUser?.email}</p>
+              <p className="text-[10px] text-emerald-300/90 font-medium">Sesión activa • En línea</p>
             </div>
           </div>
 

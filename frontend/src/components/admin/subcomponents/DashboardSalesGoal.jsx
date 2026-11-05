@@ -89,14 +89,14 @@ export const DashboardSalesGoal = ({ currentSales = 0 }) => {
       {/* Montos y Porcentaje */}
       <div className="relative flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
         <div className="flex items-baseline gap-2.5">
-          <span className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-amber-100 via-gold-bright to-gold-DEFAULT bg-clip-text text-transparent tabular-nums">
+          <span className="text-2xl sm:text-3xl font-extrabold text-[#FFE08A] drop-shadow-[0_2px_10px_rgba(242,193,78,0.25)] tabular-nums">
             ₡{currentSales.toLocaleString('es-CR')}
           </span>
-          <span className="text-xs text-text-muted tabular-nums">
+          <span className="text-xs font-medium text-text-secondary tabular-nums">
             de ₡{goal.toLocaleString('es-CR')}
           </span>
         </div>
-        <div className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-xs font-bold text-emerald-300 inline-flex items-center gap-1.5 w-fit tabular-nums">
+        <div className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-300 inline-flex items-center gap-1.5 w-fit tabular-nums">
           <TrendingUp className="w-3.5 h-3.5" />
           <span>{percentage}% Alcanzado</span>
         </div>
