@@ -1,0 +1,866 @@
+import fs from 'node:fs';
+import { execSync } from 'node:child_process';
+import path from 'node:path';
+
+const htmlContent = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sweet Home & Boutique CR - Dossier Integral del Sistema</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+  @page {
+    size: 210mm 297mm;
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1E293B;
+    background-color: #FFFFFF;
+    font-size: 11px;
+    line-height: 1.42;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    max-height: 297mm;
+    position: relative;
+    padding: 14mm 16mm 14mm 16mm;
+    overflow: hidden;
+    page-break-after: always;
+    background: #FFFFFF;
+  }
+
+  .page:last-child {
+    page-break-after: avoid;
+  }
+
+  /* Header banner for interior pages */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #F1E5D1;
+    padding-bottom: 7px;
+    margin-bottom: 12px;
+  }
+  .page-header .brand-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1F0B38;
+    letter-spacing: 0.5px;
+  }
+  .page-header .doc-tag {
+    font-size: 8.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #9333EA;
+    background: #FAF5FF;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid #E9D5FF;
+    letter-spacing: 0.5px;
+  }
+
+  /* Footer for interior pages */
+  .page-footer {
+    position: absolute;
+    bottom: 11mm;
+    left: 16mm;
+    right: 16mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8px;
+    color: #64748B;
+    border-top: 1px solid #E2E8F0;
+    padding-top: 6px;
+  }
+
+  /* Typography */
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    color: #1F0B38;
+  }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1F0B38;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .section-subtitle {
+    font-size: 10px;
+    color: #64748B;
+    margin-bottom: 11px;
+  }
+
+  /* Badges & Tags */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 8.5px;
+    font-weight: 600;
+  }
+  .badge-gold {
+    background: #FEF9C3;
+    color: #854D0E;
+    border: 1px solid #FDE047;
+  }
+  .badge-purple {
+    background: #FAF5FF;
+    color: #6B21A8;
+    border: 1px solid #E9D5FF;
+  }
+  .badge-green {
+    background: #F0FDF4;
+    color: #166534;
+    border: 1px solid #BBF7D0;
+  }
+  .badge-blue {
+    background: #EFF6FF;
+    color: #1E40AF;
+    border: 1px solid #BFDBFE;
+  }
+
+  /* Grids & Cards */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 9px;
+  }
+
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 9px;
+    padding: 10px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  }
+  .card-highlight {
+    background: #FAF5FF;
+    border: 1px solid #D8B4FE;
+  }
+  .card-gold {
+    background: #FFFDF7;
+    border: 1px solid #F3E4BA;
+  }
+  .card-dark {
+    background: #18082C;
+    color: #F8FAFC;
+    border: 1px solid #331557;
+  }
+  .card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1F0B38;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-dark .card-title {
+    color: #F2C14E;
+  }
+
+  ul.check-list {
+    list-style: none;
+    margin-top: 3px;
+  }
+  ul.check-list li {
+    position: relative;
+    padding-left: 13px;
+    margin-bottom: 3.5px;
+    font-size: 10px;
+    color: #334155;
+    line-height: 1.38;
+  }
+  ul.check-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #10B981;
+    font-weight: 800;
+    font-size: 9.5px;
+  }
+  .card-dark ul.check-list li {
+    color: #E2E8F0;
+  }
+  .card-dark ul.check-list li::before {
+    color: #F2C14E;
+  }
+
+  /* Tables */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5px;
+    margin-top: 6px;
+  }
+  table.data-table th {
+    background: #F8FAFC;
+    color: #475569;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 8px;
+    letter-spacing: 0.5px;
+    padding: 5px 7px;
+    border-bottom: 1px solid #CBD5E1;
+    text-align: left;
+  }
+  table.data-table td {
+    padding: 5.5px 7px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #334155;
+    line-height: 1.3;
+  }
+  table.data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Cover Page Styles */
+  .page.cover {
+    padding: 12mm 14mm;
+    background: #0B0314;
+  }
+  .cover-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: radial-gradient(circle at top right, #3C1363 0%, #1A092B 55%, #0B0314 100%);
+    border-radius: 12px;
+    padding: 28px 24px;
+    color: #FFFFFF;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid rgba(242, 193, 78, 0.25);
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cover-logo-pill {
+    background: rgba(242, 193, 78, 0.12);
+    border: 1px solid rgba(242, 193, 78, 0.4);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #F2C14E;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .cover-hero {
+    margin-top: 15px;
+  }
+  .cover-hero h1 {
+    font-size: 30px;
+    line-height: 1.15;
+    color: #FFFFFF;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .cover-hero h1 span {
+    color: #F2C14E;
+  }
+  .cover-hero p.subtitle {
+    font-size: 12.5px;
+    color: #E2E8F0;
+    max-width: 95%;
+    line-height: 1.45;
+    font-weight: 300;
+  }
+  .cover-stats-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(242, 193, 78, 0.22);
+    border-radius: 9px;
+    padding: 13px 14px;
+    margin: 14px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    backdrop-filter: blur(10px);
+  }
+  .stat-item .num {
+    font-size: 17px;
+    font-weight: 800;
+    color: #F2C14E;
+    font-family: 'Playfair Display', serif;
+  }
+  .stat-item .lbl {
+    font-size: 8.5px;
+    color: #CBD5E1;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .cover-meta {
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 11px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #94A3B8;
+  }
+  .cover-meta strong {
+    color: #FFFFFF;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== PÁGINA 1: PORTADA EJECUTIVA ==================== -->
+<div class="page cover">
+  <div class="cover-container">
+    <div class="cover-top">
+      <div class="cover-logo-pill">★ Sweet Home & Boutique CR • Dossier Oficial</div>
+      <div style="font-size: 9px; color: #E2E8F0; opacity: 0.9;">Noviembre 2026 | Documento Privado</div>
+    </div>
+
+    <div class="cover-hero">
+      <div style="text-transform: uppercase; font-size: 9.5px; letter-spacing: 2px; color: #F2C14E; font-weight: 700; margin-bottom: 6px;">
+        Arquitectura & Capacidades de Plataforma
+      </div>
+      <h1>SWEET HOME & <span>BOUTIQUE CR</span></h1>
+      <p class="subtitle">
+        Memoria técnica e informe descriptivo de la plataforma integral de comercio electrónico de alta gama, catálogo boutique interactivo, pasarelas de pago nacionales y sistema ERP/CRM administrativo en la nube.
+      </p>
+    </div>
+
+    <div class="cover-stats-box">
+      <div class="stat-item">
+        <div class="num">100%</div>
+        <div class="lbl">Tienda & Catálogo</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">100%</div>
+        <div class="lbl">ERP & Contabilidad</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">Cloud VPS</div>
+        <div class="lbl">Activo 24/7 DigitalOcean</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">95%</div>
+        <div class="lbl">Listo p/ Dominio Final</div>
+      </div>
+    </div>
+
+    <div style="background: rgba(0,0,0,0.35); border-radius: 8px; padding: 11px 13px; border-left: 3px solid #F2C14E; margin-bottom: 8px;">
+      <div style="font-size: 10px; font-weight: 700; color: #F2C14E; margin-bottom: 3px;">Propósito de este Documento:</div>
+      <div style="font-size: 9px; color: #E2E8F0; line-height: 1.42;">
+        Presentar a la propietaria <strong>Vanessa</strong> y a la socia administradora <strong>Jendry</strong> el inventario completo de funcionalidades operativas, herramientas comerciales, módulo contable y el plan inmediato para vincular el nombre de dominio personalizado y realizar el lanzamiento oficial.
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div><strong>Propietaria:</strong> Vanessa & Sweet Home & Boutique CR</div>
+      <div><strong>Servidor Activo:</strong> 174.138.62.86:8081</div>
+      <div><strong>Seguridad:</strong> JWT / Bcrypt / MongoDB Cloud</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PÁGINA 2: TIENDA ONLINE / EXPERIENCIA CLIENTE ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand-title">SWEET HOME & BOUTIQUE CR</div>
+    <div class="doc-tag">Módulo 1: Experiencia de Compra Online</div>
+  </div>
+
+  <div class="section-title">Tienda Online de Lujo (Front-Store)</div>
+  <div class="section-subtitle">Diseñada para proyectar exclusividad, elegancia, alta tasa de conversión y total adaptación a celulares y computadoras.</div>
+
+  <div class="grid-2">
+    <!-- Card 1 -->
+    <div class="card card-gold">
+      <div class="card-title">✨ Catálogo Boutique & Navegación Inteligente</div>
+      <ul class="check-list">
+        <li><strong>Filtros por Categoría & Subcategoría:</strong> Ropa femenina, Vestidos de fiesta, Calzado, Joyería, Accesorios, Artículos para el Hogar y Licores Finos.</li>
+        <li><strong>Búsqueda Predictiva en Tiempo Real:</strong> Localiza productos al instante por nombre, palabras clave o detalles.</li>
+        <li><strong>Filtrado Dinámico:</strong> Selección por rango de precio (₡), disponibilidad y talla.</li>
+        <li><strong>Diseño Responsive Luxury:</strong> Carga rápida en menos de 1 segundo, tipografía estilizada y paleta en púrpura imperial y dorado boutique.</li>
+      </ul>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card card-highlight">
+      <div class="card-title">🔞 Verificación de Edad (+18 Age Gate)</div>
+      <ul class="check-list">
+        <li><strong>Cumplimiento Regulatorio:</strong> Pantalla modal obligatoria al ingresar a la sección de licores conforme al Ministerio de Salud y legislación costarricense.</li>
+        <li><strong>Filtro de Seguridad:</strong> Restringe la visualización y compra a menores de edad con registro temporal de consentimiento en el navegador.</li>
+        <li><strong>Experiencia Amigable:</strong> No interrumpe la navegación en vestidos, ropa o calzado.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top: 9px;"></div>
+
+  <div class="grid-2">
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-title">👗 Ficha de Producto de Alta Conversión</div>
+      <ul class="check-list">
+        <li><strong>Galería Fotográfica HD:</strong> Visualización de múltiples fotografías con selector interactivo y efecto zoom.</li>
+        <li><strong>Selector de Tallas & Variantes:</strong> Indicadores claros de disponibilidad para cada tamaño o color.</li>
+        <li><strong>Control de Stock en Tiempo Real:</strong> Alerta automática cuando quedan pocas unidades disponibles (ej. "¡Solo 2 disponibles!").</li>
+        <li><strong>Pestañas Informativas:</strong> Descripción detallada del producto, instrucciones de cuidado textil y especificaciones.</li>
+      </ul>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card card-highlight">
+      <div class="card-title">💬 Asesoría Inmediata por WhatsApp (1-Clic)</div>
+      <ul class="check-list">
+        <li><strong>Botón Directo en Cada Producto:</strong> Las clientas pueden hacer consultas específicas con un solo toque desde su celular o PC.</li>
+        <li><strong>Mensaje Pre-redactado Inteligente:</strong> El chat se abre automáticamente con el nombre de la prenda, código de referencia, precio en colones y el enlace directo al producto.</li>
+        <li><strong>Cierre de Venta Humano:</strong> Permite brindar una atención personalizada que incrementa la confianza y la fidelidad del cliente boutique.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top: 9px;"></div>
+
+  <div class="card">
+    <div class="card-title">🛍️ Carrito Deslizante & Lista de Favoritos (Wishlist)</div>
+    <div class="grid-2" style="gap: 14px; margin-top: 3px;">
+      <div>
+        <p style="font-size: 9.5px; color: #475569; margin-bottom: 3px;"><strong>Carrito Lateral Instantáneo:</strong></p>
+        <ul class="check-list">
+          <li>Se despliega suavemente sin recargar la página.</li>
+          <li>Permite ajustar cantidades, seleccionar tallas y eliminar prendas.</li>
+          <li>Calcula subtotales automáticamente en moneda nacional (₡).</li>
+          <li>Persiste los artículos guardados aunque el cliente cierre su navegador.</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size: 9.5px; color: #475569; margin-bottom: 3px;"><strong>Lista de Favoritos (Wishlist):</strong></p>
+        <ul class="check-list">
+          <li>Los clientes guardan sus artículos preferidos con un icono de corazón.</li>
+          <li>Permite revisar luego las prendas deseadas antes de comprar.</li>
+          <li>Traspaso directo desde la lista de deseos hacia el carrito en 1 clic.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div>Sweet Home & Boutique CR • Informe de Plataforma Tecnológica</div>
+    <div>Página 2 de 6</div>
+  </div>
+</div>
+
+<!-- ==================== PÁGINA 3: CHECKOUT, ENVÍOS Y PAGOS ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand-title">SWEET HOME & BOUTIQUE CR</div>
+    <div class="doc-tag">Módulo 2: Checkout, Envíos y Pagos</div>
+  </div>
+
+  <div class="section-title">Checkout Optimizado & Logística Nacional</div>
+  <div class="section-subtitle">Un flujo de compra en 3 pasos diseñado para Costa Rica, con tarifas de envío dinámicas y soporte nativo SINPE Móvil.</div>
+
+  <div class="card card-dark" style="margin-bottom: 10px;">
+    <div class="card-title">🚚 Gestión de Costos de Envío 100% Personalizable por la Clienta</div>
+    <p style="font-size: 9.5px; color: #E2E8F0; margin-bottom: 5px;">
+      Vanessa puede actualizar en cualquier momento desde el panel de ajustes los costos de envío para adaptarse a sus convenios con mensajerías o Correos de Costa Rica:
+    </p>
+    <div class="grid-3" style="gap: 7px;">
+      <div style="background: rgba(255,255,255,0.06); padding: 7px; border-radius: 6px; border: 1px solid rgba(242,193,78,0.2);">
+        <div style="color: #F2C14E; font-weight: 700; font-size: 10px;">GAM / Urbano</div>
+        <div style="color: #E2E8F0; font-size: 9px;">Tarifa para San José, Heredia, Cartago y Alajuela. Editable libremente en Ajustes.</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); padding: 7px; border-radius: 6px; border: 1px solid rgba(242,193,78,0.2);">
+        <div style="color: #F2C14E; font-weight: 700; font-size: 10px;">Resto del País</div>
+        <div style="color: #E2E8F0; font-size: 9px;">Tarifa para Puntarenas, Guanacaste, Limón y zonas rurales por encomienda o Correos.</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); padding: 7px; border-radius: 6px; border: 1px solid rgba(242,193,78,0.2);">
+        <div style="color: #F2C14E; font-weight: 700; font-size: 10px;">Retiro en Tienda</div>
+        <div style="color: #E2E8F0; font-size: 9px;">₡0 (Gratis) para clientes que pasan a retirar directamente a la boutique física.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="gap: 9px; margin-bottom: 10px;">
+    <!-- Paso 1 -->
+    <div class="card">
+      <div style="background: #1F0B38; color: #F2C14E; width: 19px; height: 19px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 9.5px; margin-bottom: 4px;">1</div>
+      <div class="card-title">Datos & Ubicación</div>
+      <p style="font-size: 9px; color: #64748B; margin-bottom: 3px;">Recolección estructurada para entrega sin errores:</p>
+      <ul class="check-list" style="font-size: 9px;">
+        <li>Nombre y Teléfono.</li>
+        <li>Cédula / Identificación.</li>
+        <li>Provincia, Cantón y Distrito.</li>
+        <li>Dirección exacta y señas.</li>
+        <li>Cálculo inmediato de tarifa de envío según provincia seleccionada.</li>
+      </ul>
+    </div>
+
+    <!-- Paso 2 -->
+    <div class="card card-highlight">
+      <div style="background: #7E22CE; color: #FFFFFF; width: 19px; height: 19px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 9.5px; margin-bottom: 4px;">2</div>
+      <div class="card-title">Método de Pago</div>
+      <p style="font-size: 9px; color: #64748B; margin-bottom: 3px;">Pagos adaptados al mercado costarricense:</p>
+      <ul class="check-list" style="font-size: 9px;">
+        <li><strong>SINPE Móvil:</strong> Teléfono oficial visible con botón de copiado en 1 toque.</li>
+        <li><strong>Transferencia Bancaria:</strong> IBAN de cuentas oficiales BN / BAC.</li>
+        <li><strong>Carga de Comprobante:</strong> El cliente sube su captura bancaria directamente.</li>
+        <li><strong>Pago Contra Entrega:</strong> Para entregas presenciales acordadas.</li>
+      </ul>
+    </div>
+
+    <!-- Paso 3 -->
+    <div class="card">
+      <div style="background: #059669; color: #FFFFFF; width: 19px; height: 19px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 9.5px; margin-bottom: 4px;">3</div>
+      <div class="card-title">Confirmación</div>
+      <p style="font-size: 9px; color: #64748B; margin-bottom: 3px;">Cierre formal del pedido oficial:</p>
+      <ul class="check-list" style="font-size: 9px;">
+        <li>Número de Orden único generado (ej: <code>SH-2026-84920</code>).</li>
+        <li>Desglose completo: Subtotal + Envío + Total en Colones.</li>
+        <li>Botón de confirmación automática por WhatsApp con el pedido listo.</li>
+        <li>Registro inmediato en el panel del administrador.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-gold">
+    <div class="card-title">🔍 Módulo Público de Rastreo de Pedidos</div>
+    <div class="grid-2" style="gap: 11px; margin-top: 3px;">
+      <div>
+        <p style="font-size: 9.5px; color: #475569;">
+          Cualquier cliente puede ingresar su código de orden (desde el icono de camión en el encabezado) y conocer el estado de su envío sin necesidad de llamar a la tienda:
+        </p>
+        <div style="margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px;">
+          <span class="badge badge-purple">1. Pendiente de Pago</span>
+          <span class="badge badge-blue">2. Comprobante Recibido</span>
+          <span class="badge badge-green">3. Pago Confirmado</span>
+          <span class="badge badge-purple">4. En Preparación</span>
+          <span class="badge badge-blue">5. En Camino con Mensajero</span>
+          <span class="badge badge-green">6. Entregado</span>
+        </div>
+      </div>
+      <div>
+        <p style="font-size: 9.5px; color: #475569;">
+          <strong>Privacidad Protegida:</strong> Los datos personales sensibles del cliente (cédula y dirección exacta) se muestran de manera protegida para salvaguardar su identidad frente a terceros.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div>Sweet Home & Boutique CR • Informe de Plataforma Tecnológica</div>
+    <div>Página 3 de 6</div>
+  </div>
+</div>
+
+<!-- ==================== PÁGINA 4: PANEL ADMINISTRATIVO & CRM ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand-title">SWEET HOME & BOUTIQUE CR</div>
+    <div class="doc-tag">Módulo 3: Panel Administrativo & CRM</div>
+  </div>
+
+  <div class="section-title">Centro de Control Administrativo (ERP / CRM)</div>
+  <div class="section-subtitle">Diseñado exclusivamente para Vanessa y Jendry para gestionar pedidos, finanzas, inventario y catálogo con máxima elegancia.</div>
+
+  <div class="card card-dark" style="margin-bottom: 9px;">
+    <div class="grid-2" style="align-items: center;">
+      <div>
+        <div style="color: #F2C14E; font-size: 11.5px; font-weight: 700; margin-bottom: 3px;">👑 Acceso Discreto & Roles Diferenciados</div>
+        <p style="font-size: 9.5px; color: #E2E8F0; line-height: 1.42;">
+          El login está protegido y oculto (5 toques en el pie de página). Al ingresar, el sistema reconoce quién entra y muestra una bienvenida personalizada:
+        </p>
+      </div>
+      <div style="background: rgba(255,255,255,0.06); padding: 7px 11px; border-radius: 7px; border: 1px solid rgba(242,193,78,0.3);">
+        <div style="font-size: 9.5px; color: #F2C14E; font-weight: 700;">• Bienvenida de nuevo, Vanessa</div>
+        <div style="font-size: 8px; color: #CBD5E1; margin-bottom: 3px;">Titular y dueña absoluta. Cuenta blindada permanentemente (no puede ser eliminada).</div>
+        <div style="font-size: 9.5px; color: #CBD5E1; font-weight: 700;">• Bienvenida, Jendry</div>
+        <div style="font-size: 8px; color: #94A3B8;">Socia administradora con acceso al catálogo y operaciones.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="gap: 9px; margin-bottom: 9px;">
+    <!-- Dashboard Financiero -->
+    <div class="card card-highlight">
+      <div class="card-title">📊 Dashboard Ejecutivo & Métricas en Vivo</div>
+      <ul class="check-list">
+        <li><strong>KPIs Financieros:</strong> Ventas de hoy, ingresos de la semana, ingresos del mes e ingresos netos descontando egresos.</li>
+        <li><strong>Gráfica de Flujo de Caja Interactiva:</strong> Comparativa visual de barras (Ingresos vs. Egresos) con margen neto por mes y por día.</li>
+        <li><strong>Tarjetas de Información Limpias:</strong> Tooltips completos al pasar el mouse sin encimarse ni cortarse.</li>
+        <li><strong>Meta de Ventas del Mes:</strong> Barra de progreso porcentual dinámica para monitorear el cumplimiento de objetivos del negocio.</li>
+      </ul>
+    </div>
+
+    <!-- Pedidos y Clientes -->
+    <div class="card">
+      <div class="card-title">📦 Gestión Integral de Pedidos & Pagos</div>
+      <ul class="check-list">
+        <li><strong>Visor de Comprobantes SINPE:</strong> Inspección en pantalla grande de la captura de pago subida por el cliente para aprobación inmediata.</li>
+        <li><strong>Control de Estados en 1 Clic:</strong> De "Comprobante Recibido" a "Pago Confirmado", "En Camino" o "Entregado".</li>
+        <li><strong>Módulo de Apartados:</strong> Tabla especializada para controlar clientes con productos apartados, saldo pendiente y fechas límite.</li>
+        <li><strong>Módulo de Contra Entrega:</strong> Registro de pedidos para cobro presencial en destino por mensajero.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2" style="gap: 9px;">
+    <!-- Gestión de Inventario -->
+    <div class="card">
+      <div class="card-title">👗 Control de Catálogo & Editor de Fotos</div>
+      <ul class="check-list">
+        <li><strong>Creación Rápida de Productos:</strong> Carga de título, precio de venta, costo base (para calcular ganancia neta), categoría y tallas.</li>
+        <li><strong>Editor & Recortador Integrado:</strong> Recorta y encuadra fotos de vestidos y ropa directo en el navegador antes de publicarlas.</li>
+        <li><strong>Alertas de Stock Bajo:</strong> Avisos destacados en amarillo y rojo cuando un producto se agota o le quedan 2 unidades.</li>
+        <li><strong>Activación / Ocultación:</strong> Posibilidad de ocultar productos temporalmente sin borrarlos.</li>
+      </ul>
+    </div>
+
+    <!-- Categorías y Gastos -->
+    <div class="card card-gold">
+      <div class="card-title">🏷️ Categorías Intuitivas & Control de Gastos</div>
+      <ul class="check-list">
+        <li><strong>Guía Visual de Categorías en 3 Pasos:</strong> Explicación clara de cómo se estructuran las categorías principales y subcategorías.</li>
+        <li><strong>Chips de Subcategorías Permanentes:</strong> Etiquetas visibles directamente para agregar o quitar subcategorías con facilidad.</li>
+        <li><strong>Registro de Egresos / Gastos Operativos:</strong> Anotación de compras a proveedores, costos de empaques, envíos y publicidad para cálculo contable real.</li>
+        <li><strong>Resumen de Clientes:</strong> Historial de compras por cliente para identificar a las clientas más leales de la boutique.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div>Sweet Home & Boutique CR • Informe de Plataforma Tecnológica</div>
+    <div>Página 4 de 6</div>
+  </div>
+</div>
+
+<!-- ==================== PÁGINA 5: AJUSTES, CONTENIDO Y MARCA ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand-title">SWEET HOME & BOUTIQUE CR</div>
+    <div class="doc-tag">Módulo 4: Ajustes, Contenido y Banners</div>
+  </div>
+
+  <div class="section-title">Personalización de Marca y Ajustes del Negocio</div>
+  <div class="section-subtitle">Todo el contenido de la tienda puede ser modificado por Vanessa y Jendry sin necesidad de programar.</div>
+
+  <div class="grid-2" style="gap: 10px; margin-bottom: 11px;">
+    <!-- Ajustes de Tienda -->
+    <div class="card card-highlight">
+      <div class="card-title">⚙️ Ajustes de Negocio y Cuentas Bancarias</div>
+      <p style="font-size: 9.5px; color: #475569; margin-bottom: 5px;">Vanessa puede modificar los datos clave en cualquier momento:</p>
+      <ul class="check-list">
+        <li><strong>Teléfono de SINPE Móvil Oficial:</strong> Número al que las clientas deben enviar el pago.</li>
+        <li><strong>Nombre del Titular de la Cuenta:</strong> Nombre registrado para el SINPE.</li>
+        <li><strong>Cuentas Bancarias IBAN:</strong> Números de cuenta y nombres de bancos visibles en el checkout.</li>
+        <li><strong>Teléfono de WhatsApp & Soporte:</strong> Número que recibe las consultas directas de los productos.</li>
+        <li><strong>Correo y Horarios de Atención:</strong> Información que aparece en el pie de página de la tienda.</li>
+      </ul>
+    </div>
+
+    <!-- Editor de Tarifas de Envío -->
+    <div class="card card-gold">
+      <div class="card-title">📦 Gestor de Costos de Encomiendas y Envíos</div>
+      <p style="font-size: 9.5px; color: #475569; margin-bottom: 5px;">Control total sobre los montos de mensajería:</p>
+      <ul class="check-list">
+        <li><strong>Edición de Precios en Colones:</strong> Ajustar la tarifa urbana (GAM), nacional o zonas especiales según cambien las tarifas de mensajería o Correos.</li>
+        <li><strong>Activación / Desactivación:</strong> Habilitar o suspender opciones como "Retiro en Boutique" o "Envío Express".</li>
+        <li><strong>Aplicación Inmediata:</strong> En cuanto se guarda un nuevo monto en Ajustes, el checkout de la tienda se actualiza automáticamente.</li>
+        <li><strong>Transparencia para la Clienta:</strong> El costo se desglosa claramente antes de que la persona realice el pago.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid-2" style="gap: 10px; margin-bottom: 11px;">
+    <!-- Banners y Campañas -->
+    <div class="card">
+      <div class="card-title">🖼️ Gestor de Banners y Carrusel Principal</div>
+      <ul class="check-list">
+        <li><strong>Campañas de Temporada:</strong> Subida de imágenes para el carrusel de inicio (Día de la Madre, Navidad, Liquidaciones, Nueva Colección).</li>
+        <li><strong>Textos & Botones Promocionales:</strong> Títulos, subtítulos y llamados a la acción ("Comprar Ahora", "Ver Colección").</li>
+        <li><strong>Enlace Directo a Categorías:</strong> Cada banner puede dirigir a una sección específica con un clic.</li>
+        <li><strong>Orden y Prioridad:</strong> Organizar qué banner aparece primero en la página principal.</li>
+      </ul>
+    </div>
+
+    <!-- Nuestra Historia -->
+    <div class="card">
+      <div class="card-title">📖 Editor Editorial "Nuestra Historia"</div>
+      <ul class="check-list">
+        <li><strong>Identidad de Marca:</strong> Espacio para comunicar la misión, visión y los valores familiares de Sweet Home & Boutique CR.</li>
+        <li><strong>Fotografía de Fundadoras:</strong> Posibilidad de actualizar la imagen principal de la sección institucional.</li>
+        <li><strong>Cercanía con la Comunidad:</strong> Fomenta la lealtad y el prestigio de la boutique frente a competidores.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-dark">
+    <div class="card-title">🛡️ Seguridad y Blindaje Administrativo</div>
+    <div class="grid-2" style="gap: 11px; margin-top: 3px;">
+      <div>
+        <p style="font-size: 9.5px; color: #E2E8F0;">
+          <strong>Protección de Propiedad:</strong> La cuenta de Vanessa (<code>admin@sweethomeboutiquecr.com</code>) está blindada tanto en el código visual como en la base de datos MongoDB del servidor. Es imposible que sea desactivada, borrada o que pierda sus privilegios de dueña.
+        </p>
+      </div>
+      <div>
+        <p style="font-size: 9.5px; color: #E2E8F0;">
+          <strong>Sesiones Cifradas:</strong> Todo acceso al panel administrativo utiliza tokens criptográficos JWT de alta seguridad y contraseñas hasheadas con algoritmo Bcrypt de grado bancario.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div>Sweet Home & Boutique CR • Informe de Plataforma Tecnológica</div>
+    <div>Página 5 de 6</div>
+  </div>
+</div>
+
+<!-- ==================== PÁGINA 6: INFRAESTRUCTURA Y LANZAMIENTO ==================== -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand-title">SWEET HOME & BOUTIQUE CR</div>
+    <div class="doc-tag">Módulo 5: Infraestructura & Plan de Lanzamiento</div>
+  </div>
+
+  <div class="section-title">Infraestructura y Pasos para el Lanzamiento</div>
+  <div class="section-subtitle">El sistema se encuentra en su fase final de pruebas operativas. A continuación se detalla lo que falta para el estreno público.</div>
+
+  <!-- Ficha Técnica -->
+  <div class="card card-highlight" style="margin-bottom: 11px;">
+    <div class="card-title">🖥️ Ficha Técnica de la Plataforma en Producción</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Componente</th>
+          <th>Tecnología Seleccionada</th>
+          <th>Estado Actual</th>
+          <th>Beneficio para la Boutique</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Servidor VPS en la Nube</strong></td>
+          <td>DigitalOcean Linux Ubuntu 24.04 (IP: 174.138.62.86)</td>
+          <td><span class="badge badge-green">Activo 24/7</span></td>
+          <td>Servidor privado dedicado de alta velocidad con 99.9% de disponibilidad.</td>
+        </tr>
+        <tr>
+          <td><strong>Motor de Procesos</strong></td>
+          <td>PM2 Enterprise (sweet-home-8081)</td>
+          <td><span class="badge badge-green">Online</span></td>
+          <td>Reinicio automático ante cualquier eventualidad sin interrumpir el servicio.</td>
+        </tr>
+        <tr>
+          <td><strong>Base de Datos</strong></td>
+          <td>MongoDB Atlas Cloud + Prisma ORM</td>
+          <td><span class="badge badge-green">Conectado</span></td>
+          <td>Almacenamiento escalable de productos, pedidos, clientes y transacciones contables.</td>
+        </tr>
+        <tr>
+          <td><strong>Frontend de Tienda</strong></td>
+          <td>React 18 + Vite + Tailwind CSS + Framer Motion</td>
+          <td><span class="badge badge-green">Compilado</span></td>
+          <td>Experiencia ultra fluida tipo aplicación móvil, sin tiempos de espera.</td>
+        </tr>
+        <tr>
+          <td><strong>Motor de Imágenes</strong></td>
+          <td>Sharp WebP Optimizer</td>
+          <td><span class="badge badge-green">Operativo</span></td>
+          <td>Comprime y optimiza fotos para que carguen velozmente en redes celulares.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Hoja de Ruta -->
+  <div class="section-title" style="font-size: 14.5px; margin-top: 8px;">🚀 Hoja de Ruta: Lo que falta para salir a producción oficial</div>
+  <p style="font-size: 9.5px; color: #64748B; margin-bottom: 8px;">
+    El sistema ya funciona al 100% de manera operativa y visual en el servidor. Los pasos requeridos para abrirlo a todo el público son:
+  </p>
+
+  <div class="grid-2" style="gap: 9px; margin-bottom: 11px;">
+    <div class="card card-gold">
+      <div style="font-size: 10.5px; font-weight: 700; color: #92400E; margin-bottom: 3px;">1. Adquisición del Dominio Propio</div>
+      <p style="font-size: 9.5px; color: #475569; line-height: 1.38;">
+        Comprar el dominio oficial de la boutique (por ejemplo: <code>sweethomeboutiquecr.com</code> o <code>sweethomecr.com</code> en GoDaddy, Namecheap o NIC Costa Rica).
+      </p>
+    </div>
+
+    <div class="card card-gold">
+      <div style="font-size: 10.5px; font-weight: 700; color: #92400E; margin-bottom: 3px;">2. Apuntamiento DNS al VPS</div>
+      <p style="font-size: 9.5px; color: #475569; line-height: 1.38;">
+        Configurar en el registrador de dominios un registro tipo <code>A</code> apuntando hacia la IP pública de nuestro servidor VPS: <strong>174.138.62.86</strong>.
+      </p>
+    </div>
+
+    <div class="card card-highlight">
+      <div style="font-size: 10.5px; font-weight: 700; color: #6B21A8; margin-bottom: 3px;">3. Certificado de Seguridad SSL (HTTPS)</div>
+      <p style="font-size: 9.5px; color: #475569; line-height: 1.38;">
+        Instalaremos el certificado SSL gratuito y renovable (Let's Encrypt / Certbot) para que aparezca el <strong>candado de seguridad verde</strong> en todos los navegadores.
+      </p>
+    </div>
+
+    <div class="card card-highlight">
+      <div style="font-size: 10.5px; font-weight: 700; color: #6B21A8; margin-bottom: 3px;">4. Auditoría de Seguridad Backend (Fase 3)</div>
+      <p style="font-size: 9.5px; color: #475569; line-height: 1.38;">
+        Blindaje del cálculo de precios directamente en el servidor y almacenamiento privado de los comprobantes bancarios subidos por las clientas.
+      </p>
+    </div>
+  </div>
+
+  <div class="card card-dark" style="text-align: center; padding: 12px;">
+    <div style="color: #F2C14E; font-size: 12.5px; font-weight: 700; font-family: 'Playfair Display', serif; margin-bottom: 3px;">
+      ¡Plataforma Lista para Transformar las Ventas de Sweet Home & Boutique CR!
+    </div>
+    <div style="font-size: 9px; color: #E2E8F0; max-width: 90%; margin: 0 auto; line-height: 1.35;">
+      Una solución integral, moderna y segura, concebida para brindar una experiencia de compra exclusiva y facilitar la administración diaria del negocio.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div>Sweet Home & Boutique CR • Informe de Plataforma Tecnológica</div>
+    <div>Página 6 de 6</div>
+  </div>
+</div>
+
+</body>
+</html>`;
+
+const htmlPath = path.resolve('/home/jose/sweet_home/scratch/dossier_sistema.html');
+const pdfPath = path.resolve('/home/jose/sweet_home/Sweet_Home_Boutique_CR_Dossier_Sistema.pdf');
+
+fs.writeFileSync(htmlPath, htmlContent, 'utf-8');
+console.log('HTML generado en:', htmlPath);
+
+// Chromium print-to-pdf without default browser headers and footers
+const cmd = `/snap/bin/chromium --headless=new --disable-gpu --no-sandbox --no-pdf-header-footer --print-to-pdf="${pdfPath}" --run-all-compositor-stages-before-draw "${htmlPath}"`;
+execSync(cmd, { stdio: 'inherit' });
+
+const stats = fs.statSync(pdfPath);
+console.log(`PDF generado exitosamente en: ${pdfPath} (${stats.size} bytes)`);
