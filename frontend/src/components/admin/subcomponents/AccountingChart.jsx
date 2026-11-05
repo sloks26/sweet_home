@@ -208,8 +208,8 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
       <div className="w-full overflow-x-auto pt-2 pb-1">
         <div className="min-w-[540px] sm:min-w-full rounded-2xl bg-[#090312] border border-white/[0.08] p-4 sm:p-6">
           <div className="flex items-stretch gap-3">
-            {/* Eje Y Izquierdo (Escala en Colones) */}
-            <div className="flex flex-col justify-between text-right pr-2 pt-10 pb-14 text-[10px] font-semibold text-text-muted tabular-nums select-none w-12 shrink-0">
+            {/* Eje Y Izquierdo (Escala en Colones alineada con las 5 líneas de la cuadrícula) */}
+            <div className="flex flex-col justify-between text-right pr-2 pt-28 pb-14 text-[10px] font-semibold text-text-muted tabular-nums select-none w-12 shrink-0">
               {yAxisTicks.map((val, i) => (
                 <span key={i} className="leading-none">
                   {formatCompactAmount(val)}
@@ -219,10 +219,10 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
 
             {/* Área Principal del Gráfico */}
             <div className="flex-1 flex flex-col">
-              {/* Zona de Barras con Cuadrícula Financiera */}
-              <div className="h-56 sm:h-64 flex items-end justify-between gap-2 sm:gap-4 px-2 pt-10 border-b border-l border-white/[0.15] relative">
+              {/* Zona de Barras con 112px (pt-28) de espacio superior libre para el Tooltip sin recortes */}
+              <div className="h-[296px] flex items-end justify-between gap-2 sm:gap-4 px-2 pt-28 border-b border-l border-white/[0.15] relative">
                 {/* 4 Líneas guía horizontales */}
-                <div className="pointer-events-none absolute inset-x-0 top-10 bottom-0 flex flex-col justify-between">
+                <div className="pointer-events-none absolute inset-x-0 top-28 bottom-0 flex flex-col justify-between">
                   <div className="border-b border-dashed border-white/[0.07] w-full" />
                   <div className="border-b border-dashed border-white/[0.07] w-full" />
                   <div className="border-b border-dashed border-white/[0.07] w-full" />
@@ -236,8 +236,8 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
                     const exp = item.expense || 0;
                     const net = inc - exp;
 
-                    const incomeHeight = inc > 0 ? Math.max(14, Math.round((inc / maxVal) * 175)) : 3;
-                    const expenseHeight = exp > 0 ? Math.max(14, Math.round((exp / maxVal) * 175)) : 3;
+                    const incomeHeight = inc > 0 ? Math.max(14, Math.round((inc / maxVal) * 145)) : 3;
+                    const expenseHeight = exp > 0 ? Math.max(14, Math.round((exp / maxVal) * 145)) : 3;
 
                     const barWidthClass =
                       viewMode === 'comparative'
@@ -250,14 +250,14 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
                         className="flex-1 flex flex-col items-center justify-end h-full group relative z-10 cursor-pointer"
                       >
                         {/* Fondo de columna sutil al hacer hover */}
-                        <div className="pointer-events-none absolute inset-x-1 top-2 bottom-0 rounded-xl bg-white/[0.0] group-hover:bg-white/[0.03] transition-colors" />
+                        <div className="pointer-events-none absolute inset-x-1 top-1 bottom-0 rounded-xl bg-white/[0.0] group-hover:bg-white/[0.03] transition-colors" />
 
-                        {/* Tooltip Flotante 100% SÓLIDO Y OPACO arriba de la columna (Nunca tapa las barras) */}
+                        {/* Tooltip Flotante 100% DENTRO del área superior reservada (Cero recortes y nunca tapa las barras) */}
                         <div
-                          style={{ backgroundColor: '#090312' }}
-                          className="pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-150 absolute -top-3 -translate-y-full left-1/2 -translate-x-1/2 z-40 px-3.5 py-2.5 rounded-xl border border-gold-DEFAULT shadow-[0_14px_35px_rgba(0,0,0,0.95)] text-[11px] whitespace-nowrap tabular-nums"
+                          style={{ backgroundColor: '#0D051A' }}
+                          className="pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-150 absolute top-1.5 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-xl border border-gold-DEFAULT shadow-[0_12px_30px_rgba(0,0,0,0.95)] text-[11px] whitespace-nowrap tabular-nums"
                         >
-                          <p className="font-bold text-[#FFE08A] border-b border-white/10 pb-1 mb-1 text-xs">
+                          <p className="font-bold text-[#FFE08A] border-b border-white/10 pb-0.5 mb-1 text-xs text-center">
                             {item.label || item.month}
                           </p>
                           {(viewMode === 'comparative' || viewMode === 'income') && (
@@ -274,7 +274,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
                           )}
                           {viewMode === 'comparative' && (
                             <p
-                              className={`pt-1 mt-1 border-t border-white/10 flex items-center justify-between gap-3 font-extrabold ${
+                              className={`pt-0.5 mt-0.5 border-t border-white/10 flex items-center justify-between gap-3 font-extrabold ${
                                 net >= 0 ? 'text-[#FFE08A]' : 'text-rose-400'
                               }`}
                             >
