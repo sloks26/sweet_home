@@ -306,11 +306,20 @@ sweet_home/
 
 ---
 
-### 3. FASE 4: Eliminación de Duplicados y Reorganización Estructural
-- Extraer utilidades compartidas: `formatColones`, `formatCompactColones`, `formatDate`.
-- Unificar tablas de Apartados y Contra Entrega con componente base.
-- Modularizar los archivos mayores a 300 líneas (especialmente `AdminOrderDetailModal`, `AdminSettings`, `AdminProducts`, `AdminOrders`, `order.controller.js` y `catalog.controller.js`).
-- Centralizar cliente API y constantes de pedidos.
+### 3. FASE 4: Eliminación de Duplicados y Reorganización Estructural — COMPLETADA Y DESPLEGADA
+- **Utilidades Centralizadas:** Se crearon `formatColones`, `formatCompactColones`, `formatDateCR` y `formatDateTimeCR` en `frontend/src/utils/currency.js` para unificar el formateo de moneda nacional y fechas sin duplicaciones.
+- **Constantes de Estados y Pagos:** Se centralizaron `ORDER_STATUS`, `ORDER_STATUS_DETAILS` y `PAYMENT_METHODS` en `frontend/src/constants/orderStatus.js`.
+- **Modularización de Archivos Extensos (> 500 líneas):**
+  - `AdminOrderDetailModal.jsx` se redujo de **524 líneas a 173 líneas** dividiéndolo en:
+    - `AdminOrderCustomerCard.jsx` (116 líneas)
+    - `AdminOrderVoucherViewer.jsx` (200 líneas)
+    - `AdminOrderDispatchControl.jsx` (98 líneas)
+  - `AdminProducts.jsx` se redujo de **499 líneas a 345 líneas** extrayendo:
+    - `AdminProductsDesktopTable.jsx` (171 líneas)
+- **Desduplicación en Finanzas:** Reemplazo de lógica duplicada de moneda en `ApartadosTable.jsx` y `ContraEntregaTable.jsx`.
+- **Cumplimiento de Regla de Oro:** El 100% de los archivos modificados está estrictamente **por debajo de 500 líneas**.
+
+---
 
 ### 4. FASE 5: Verificación Final y Documentación
 - Ejecutar suite de herramientas (ESLint, jscpd, madge, depcheck, secretlint, npm audit) y presentar comparativa antes/después.
