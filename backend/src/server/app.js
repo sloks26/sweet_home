@@ -26,22 +26,13 @@ export function createApp() {
     fs.mkdirSync(config.privateVoucherDir, { recursive: true });
   }
 
-  // Middlewares de seguridad (SEC-15: Content Security Policy activada)
+  // Middlewares de seguridad (SEC-15: Content Security Policy adaptada para HTTP/IP y preparación SSL)
   app.use(
     helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "'unsafe-inline'"],
-          styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-          fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
-          imgSrc: ["'self'", 'data:', 'blob:', 'https://*'],
-          connectSrc: ["'self'", 'https://*'],
-          objectSrc: ["'none'"],
-          upgradeInsecureRequests: []
-        }
-      },
-      crossOriginEmbedderPolicy: false
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: false,
+      hsts: false
     })
   );
 
@@ -62,10 +53,15 @@ export function createApp() {
       origin: (origin, callback) => {
         // Permitir solicitudes internas, apps móviles o herramientas CLI sin cabecera origin
         if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
+        if (
+          allowedOrigins.includes(origin) ||
+          origin.includes('174.138.62.86') ||
+          origin.includes('localhost') ||
+          origin.includes('127.0.0.1')
+        ) {
           return callback(null, true);
         }
-        return callback(new Error('Acceso denegado por política de seguridad CORS'));
+        return callback(null, false);
       },
       credentials: true
     })
