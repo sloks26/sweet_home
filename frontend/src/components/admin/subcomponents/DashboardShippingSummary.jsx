@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Truck, Mail, Store, Copy, Check, ArrowUpRight } from 'lucide-react';
+import { Truck, Mail, Store, Copy, Check } from 'lucide-react';
 import Button from '../../ui/Button';
 import { copyToClipboard } from '../../../utils/clipboard';
 
@@ -50,11 +50,11 @@ export const DashboardShippingSummary = ({ orders = [], onNavigate }) => {
   };
 
   return (
-    <div className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-gold-DEFAULT/25 space-y-4">
+    <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#180C2C]/95 to-[#110720]/95 border border-white/[0.07] border-t-sky-400/35 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.55)] space-y-4 h-full">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-sky-500/15 text-sky-400">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 shadow-sm">
             <Truck className="w-5 h-5" />
           </div>
           <div>
@@ -73,39 +73,39 @@ export const DashboardShippingSummary = ({ orders = [], onNavigate }) => {
           size="sm"
           icon={copied ? Check : Copy}
           onClick={handleCopyShippingList}
-          className="border-sky-500/40 text-sky-300 hover:bg-sky-500/15"
+          className="bg-sky-500/10 border-sky-400/35 text-sky-300 hover:bg-sky-500/20 shrink-0"
         >
           {copied ? '¡Copiado para WhatsApp!' : 'Copiar Lista Envíos'}
         </Button>
       </div>
 
       {/* 3 Contadores rápidos */}
-      <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="p-3 rounded-xl bg-night-950 border border-night-800">
+      <div className="grid grid-cols-3 gap-2.5 text-center tabular-nums">
+        <div className="p-3.5 rounded-xl bg-[#0D0518]/80 border border-white/[0.06] border-t-amber-400/25">
           <Mail className="w-4 h-4 mx-auto text-amber-300 mb-1" />
-          <span className="text-lg font-bold text-white block">{correosOrders.length}</span>
+          <span className="text-lg font-extrabold text-white block">{correosOrders.length}</span>
           <span className="text-[10px] text-text-muted block">Correos CR</span>
         </div>
-        <div className="p-3 rounded-xl bg-night-950 border border-night-800">
+        <div className="p-3.5 rounded-xl bg-[#0D0518]/80 border border-white/[0.06] border-t-sky-400/25">
           <Truck className="w-4 h-4 mx-auto text-sky-400 mb-1" />
-          <span className="text-lg font-bold text-white block">{expressOrders.length}</span>
+          <span className="text-lg font-extrabold text-white block">{expressOrders.length}</span>
           <span className="text-[10px] text-text-muted block">Mensajería GAM</span>
         </div>
-        <div className="p-3 rounded-xl bg-night-950 border border-night-800">
+        <div className="p-3.5 rounded-xl bg-[#0D0518]/80 border border-white/[0.06] border-t-emerald-400/25">
           <Store className="w-4 h-4 mx-auto text-emerald-400 mb-1" />
-          <span className="text-lg font-bold text-white block">{pickupOrders.length}</span>
+          <span className="text-lg font-extrabold text-white block">{pickupOrders.length}</span>
           <span className="text-[10px] text-text-muted block">Retiro Tienda</span>
         </div>
       </div>
 
       {/* Lista reciente de paquetes */}
       {orders.length > 0 && (
-        <div className="space-y-2 pt-2 border-t border-night-800">
+        <div className="space-y-2 pt-2 border-t border-white/[0.06]">
           {orders.slice(0, 4).map((ord) => (
             <div
               key={ord.id}
               onClick={() => onNavigate && onNavigate('orders')}
-              className="p-2.5 rounded-xl bg-night-950/60 border border-night-800 hover:border-sky-500/40 transition-colors flex items-center justify-between gap-2 text-xs cursor-pointer group"
+              className="p-2.5 rounded-xl bg-[#0D0518]/70 border border-white/[0.06] hover:border-sky-400/40 transition-colors flex items-center justify-between gap-2 text-xs cursor-pointer group"
             >
               <div className="min-w-0">
                 <span className="font-semibold text-sky-300 block group-hover:underline">
@@ -115,7 +115,7 @@ export const DashboardShippingSummary = ({ orders = [], onNavigate }) => {
                   {ord.shippingMethod} • Tel: {ord.customerPhone}
                 </span>
               </div>
-              <span className="font-bold text-white shrink-0">
+              <span className="font-bold text-white shrink-0 tabular-nums">
                 ₡{(ord.total || 0).toLocaleString('es-CR')}
               </span>
             </div>

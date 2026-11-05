@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TrendingDown, Plus, Trash2, Tag, Calendar } from 'lucide-react';
+import { TrendingDown, Plus, Trash2 } from 'lucide-react';
 import Button from '../../ui/Button';
 import Input from '../../ui/Input';
 import Modal from '../../ui/Modal';
@@ -75,18 +75,20 @@ export const AccountingExpenses = ({ expenses = [], onRefresh }) => {
   };
 
   return (
-    <div className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-rose-500/25 space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <TrendingDown className="w-5 h-5 text-rose-400" />
+    <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#180C2C]/95 to-[#110720]/95 border border-white/[0.07] border-t-rose-400/35 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.55)] space-y-5 h-full">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
+        <div className="flex items-start gap-3">
+          <div className="p-2.5 rounded-xl bg-rose-500/15 border border-rose-400/30 text-rose-300 shrink-0 shadow-sm mt-0.5">
+            <TrendingDown className="w-5 h-5" />
+          </div>
+          <div>
             <h3 className="font-serif text-lg sm:text-xl font-bold text-text-primary">
               Registro de Egresos y Gastos (₡)
             </h3>
+            <p className="text-xs text-text-secondary mt-0.5">
+              Lleva el control de todos los costos de la boutique para calcular tu ganancia real.
+            </p>
           </div>
-          <p className="text-xs text-text-secondary mt-0.5">
-            Lleva el control de todos los costos de la boutique para calcular tu ganancia real.
-          </p>
         </div>
 
         <Button variant="primary" size="sm" icon={Plus} onClick={openModal}>
@@ -96,24 +98,24 @@ export const AccountingExpenses = ({ expenses = [], onRefresh }) => {
 
       <div className="overflow-x-auto">
         {expenses.length === 0 ? (
-          <div className="p-8 text-center text-xs text-text-muted">
+          <div className="p-8 text-center text-xs text-text-muted bg-[#0C0517]/60 rounded-xl border border-white/[0.05]">
             No tienes gastos registrados. Registra insumos, bolsas, envíos o compras de mercadería.
           </div>
         ) : (
           <table className="w-full text-left text-xs min-w-[550px]">
             <thead>
-              <tr className="border-b border-night-700 text-text-muted">
-                <th className="pb-3 font-medium">Fecha</th>
-                <th className="pb-3 font-medium">Concepto</th>
-                <th className="pb-3 font-medium">Categoría</th>
-                <th className="pb-3 font-medium">Monto (₡)</th>
-                <th className="pb-3 font-medium text-right">Acción</th>
+              <tr className="border-b border-white/[0.07] text-[10px] uppercase tracking-wider text-rose-200/70">
+                <th className="pb-3 font-semibold">Fecha</th>
+                <th className="pb-3 font-semibold">Concepto</th>
+                <th className="pb-3 font-semibold">Categoría</th>
+                <th className="pb-3 font-semibold">Monto (₡)</th>
+                <th className="pb-3 font-semibold text-right">Acción</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-night-800">
+            <tbody className="divide-y divide-white/[0.05]">
               {expenses.map((exp) => (
-                <tr key={exp.id} className="hover:bg-[#1E1033] transition-colors">
-                  <td className="py-3 text-text-muted whitespace-nowrap">
+                <tr key={exp.id} className="hover:bg-white/[0.04] transition-colors">
+                  <td className="py-3 text-text-muted whitespace-nowrap tabular-nums">
                     {exp.date ? new Date(exp.date).toLocaleDateString('es-CR') : 'Hoy'}
                   </td>
                   <td
@@ -124,18 +126,18 @@ export const AccountingExpenses = ({ expenses = [], onRefresh }) => {
                     {exp.notes && <div className="text-[10px] text-text-muted">{exp.notes}</div>}
                   </td>
                   <td className="py-3 text-text-secondary">
-                    <span className="px-2 py-0.5 rounded-md bg-night-900 border border-night-700 text-[10px] font-medium">
+                    <span className="px-2 py-0.5 rounded-md bg-[#0B0414] border border-white/[0.08] text-[10px] font-medium">
                       {categoryLabels[exp.category] || exp.category}
                     </span>
                   </td>
-                  <td className="py-3 font-bold text-rose-300">
+                  <td className="py-3 font-bold text-rose-300 tabular-nums">
                     ₡{(exp.amount || 0).toLocaleString('es-CR')}
                   </td>
                   <td className="py-3 text-right">
                     <button
                       type="button"
                       onClick={() => handleDeleteExpense(exp.id, exp.concept)}
-                      className="p-1 rounded text-text-muted hover:text-rose-400 transition-colors"
+                      className="p-1.5 rounded-lg text-text-muted hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
                       title="Eliminar gasto"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

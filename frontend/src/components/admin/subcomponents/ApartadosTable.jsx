@@ -15,21 +15,21 @@ export const ApartadosTable = ({
   return (
     <div
       id="section-apartados"
-      className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-amber-500/30 space-y-4 scroll-mt-24"
+      className="p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#180C2C]/95 to-[#110720]/95 border border-white/[0.07] border-t-amber-400/40 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.55)] space-y-4 scroll-mt-24"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-night-700">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-white/[0.06]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-300 shadow-sm">
             <Clock className="w-5 h-5" />
           </div>
           <div>
             <h4 className="font-serif text-base sm:text-lg font-bold text-text-primary flex items-center gap-2">
               <span>Clientes a Pagos / Apartados</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 font-bold tabular-nums">
                 {apartados.length}
               </span>
             </h4>
-            <p className="text-xs text-text-secondary">
+            <p className="text-xs text-text-secondary tabular-nums">
               Saldo pendiente por cobrar:{' '}
               <strong className="text-amber-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
             </p>
@@ -42,7 +42,7 @@ export const ApartadosTable = ({
       </div>
 
       {apartados.length === 0 ? (
-        <div className="p-6 text-center text-xs text-text-muted bg-night-950/50 rounded-xl border border-dashed border-night-700">
+        <div className="p-6 text-center text-xs text-text-muted bg-[#0C0517]/60 rounded-xl border border-dashed border-white/[0.08]">
           No tienes clientes con apartados activos. Agrega uno con "+ Nuevo Apartado".
         </div>
       ) : (

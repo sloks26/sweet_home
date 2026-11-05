@@ -87,26 +87,25 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
     <section className="space-y-3.5">
       {/* Encabezado del bloque de atención */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gold-DEFAULT/15 border border-gold-DEFAULT/30 flex items-center justify-center text-gold-bright">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gold-DEFAULT/25 to-gold-DEFAULT/5 border border-gold-DEFAULT/35 flex items-center justify-center text-gold-bright shadow-sm">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-text-primary flex items-center gap-2">
+            <h2 className="font-serif text-lg sm:text-xl font-bold text-text-primary flex items-center gap-2.5">
               <span>Lo que necesita tu atención hoy</span>
               {totalUrgent > 0 ? (
-                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-400 text-night-950">
-                  {totalUrgent}
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-gradient-to-r from-amber-300 to-amber-500 text-night-950 shadow-sm">
+                  {totalUrgent} pendientes
                 </span>
               ) : (
-                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> Al día
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" /> Todo al día
                 </span>
               )}
             </h2>
             <p className="text-xs text-text-secondary">
-              Toca cualquier tarjeta para ir directamente a la lista filtrada y gestionarla en un
-              toque.
+              Acceso rápido inteligente: toca cualquier tarjeta para filtrar y atender al instante.
             </p>
           </div>
         </div>
@@ -116,52 +115,69 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         {actionCards.map((card) => {
           const Icon = card.icon;
+          const hasItems = card.count > 0;
 
-          // Temas de color con alto contraste AA
+          // Temas de color con alto contraste AA y diferenciación de urgencia
           const themeStyles = {
             amber: {
-              card: card.isUrgent
-                ? 'bg-amber-950/40 border-amber-500/50 hover:border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.15)]'
-                : 'bg-[#150B24] border-night-700/80 hover:border-gold-DEFAULT/40',
-              badge: card.isUrgent
-                ? 'bg-amber-400 text-night-950'
-                : 'bg-night-800 text-text-secondary',
-              iconBg: card.isUrgent
-                ? 'bg-amber-500/20 text-amber-300'
-                : 'bg-night-800 text-text-muted',
-              accent: 'text-amber-300'
+              card: hasItems
+                ? 'bg-gradient-to-b from-amber-950/50 to-[#140A24] border-white/[0.08] border-t-amber-400/60 hover:border-amber-400 shadow-[0_10px_25px_-8px_rgba(245,158,11,0.2)]'
+                : 'bg-[#120820]/80 border-white/[0.06] hover:border-gold-DEFAULT/35 opacity-85 hover:opacity-100',
+              badge: hasItems
+                ? 'bg-gradient-to-r from-amber-300 to-amber-500 text-night-950 shadow-sm'
+                : 'bg-white/[0.05] text-text-muted border border-white/[0.06]',
+              iconBg: hasItems
+                ? 'bg-amber-500/20 border border-amber-400/30 text-amber-300'
+                : 'bg-white/[0.04] text-text-muted',
+              accent: hasItems ? 'text-amber-300' : 'text-text-secondary'
             },
             sky: {
-              card: 'bg-[#150B24] border-night-700/80 hover:border-sky-500/50',
-              badge:
-                card.count > 0
-                  ? 'bg-sky-500/25 text-sky-200 border border-sky-500/40'
-                  : 'bg-night-800 text-text-muted',
-              iconBg: 'bg-sky-500/15 text-sky-400',
-              accent: 'text-sky-300'
+              card: hasItems
+                ? 'bg-gradient-to-b from-sky-950/45 to-[#140A24] border-white/[0.08] border-t-sky-400/60 hover:border-sky-400 shadow-[0_10px_25px_-8px_rgba(56,189,248,0.18)]'
+                : 'bg-[#120820]/80 border-white/[0.06] hover:border-sky-500/35 opacity-85 hover:opacity-100',
+              badge: hasItems
+                ? 'bg-sky-500/25 text-sky-200 border border-sky-400/40 shadow-sm'
+                : 'bg-white/[0.05] text-text-muted border border-white/[0.06]',
+              iconBg: hasItems
+                ? 'bg-sky-500/20 border border-sky-400/30 text-sky-300'
+                : 'bg-white/[0.04] text-text-muted',
+              accent: hasItems ? 'text-sky-300' : 'text-text-secondary'
             },
             emerald: {
-              card: card.isUrgent
-                ? 'bg-emerald-950/35 border-emerald-500/45 hover:border-emerald-400'
-                : 'bg-[#150B24] border-night-700/80 hover:border-emerald-500/40',
-              badge:
-                card.count > 0 ? 'bg-emerald-500 text-night-950' : 'bg-night-800 text-text-muted',
-              iconBg: 'bg-emerald-500/20 text-emerald-300',
-              accent: 'text-emerald-300'
+              card: hasItems
+                ? 'bg-gradient-to-b from-emerald-950/45 to-[#140A24] border-white/[0.08] border-t-emerald-400/60 hover:border-emerald-400 shadow-[0_10px_25px_-8px_rgba(16,185,129,0.2)]'
+                : 'bg-[#120820]/80 border-white/[0.06] hover:border-emerald-500/35 opacity-85 hover:opacity-100',
+              badge: hasItems
+                ? 'bg-emerald-400 text-night-950 shadow-sm'
+                : 'bg-white/[0.05] text-text-muted border border-white/[0.06]',
+              iconBg: hasItems
+                ? 'bg-emerald-500/20 border border-emerald-400/30 text-emerald-300'
+                : 'bg-white/[0.04] text-text-muted',
+              accent: hasItems ? 'text-emerald-300' : 'text-text-secondary'
             },
             rose: {
-              card: card.isUrgent
-                ? 'bg-rose-950/35 border-rose-500/45 hover:border-rose-400'
-                : 'bg-[#150B24] border-night-700/80 hover:border-rose-500/40',
-              badge: card.count > 0 ? 'bg-rose-500 text-white' : 'bg-night-800 text-text-muted',
-              iconBg: 'bg-rose-500/20 text-rose-300',
-              accent: 'text-rose-300'
+              card: hasItems
+                ? 'bg-gradient-to-b from-rose-950/45 to-[#140A24] border-white/[0.08] border-t-rose-400/60 hover:border-rose-400 shadow-[0_10px_25px_-8px_rgba(244,63,94,0.2)]'
+                : 'bg-[#120820]/80 border-white/[0.06] hover:border-rose-500/35 opacity-85 hover:opacity-100',
+              badge: hasItems
+                ? 'bg-rose-500 text-white shadow-sm'
+                : 'bg-white/[0.05] text-text-muted border border-white/[0.06]',
+              iconBg: hasItems
+                ? 'bg-rose-500/20 border border-rose-400/30 text-rose-300'
+                : 'bg-white/[0.04] text-text-muted',
+              accent: hasItems ? 'text-rose-300' : 'text-text-secondary'
             },
             purple: {
-              card: 'bg-[#150B24] border-night-700/80 hover:border-purple-400/50',
-              badge: card.count > 0 ? 'bg-purple-500 text-white' : 'bg-night-800 text-text-muted',
-              iconBg: 'bg-purple-500/15 text-purple-300',
-              accent: 'text-purple-300'
+              card: hasItems
+                ? 'bg-gradient-to-b from-purple-950/45 to-[#140A24] border-white/[0.08] border-t-purple-400/60 hover:border-purple-400'
+                : 'bg-[#120820]/80 border-white/[0.06] hover:border-purple-400/35 opacity-85 hover:opacity-100',
+              badge: hasItems
+                ? 'bg-purple-500 text-white shadow-sm'
+                : 'bg-white/[0.05] text-text-muted border border-white/[0.06]',
+              iconBg: hasItems
+                ? 'bg-purple-500/20 border border-purple-400/30 text-purple-300'
+                : 'bg-white/[0.04] text-text-muted',
+              accent: hasItems ? 'text-purple-300' : 'text-text-secondary'
             }
           }[card.colorTheme];
 
@@ -169,7 +185,7 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
             <button
               key={card.id}
               onClick={card.onClick}
-              className={`p-3.5 sm:p-4 rounded-2xl border text-left flex flex-col justify-between transition-all duration-200 group cursor-pointer relative overflow-hidden min-h-[125px] sm:min-h-[135px] active:scale-[0.98] ${themeStyles.card}`}
+              className={`p-3.5 sm:p-4 rounded-2xl border text-left flex flex-col justify-between transition-all duration-200 group cursor-pointer relative overflow-hidden min-h-[122px] sm:min-h-[130px] active:scale-[0.98] ${themeStyles.card}`}
             >
               {/* Parte Superior: Ícono + Contador */}
               <div className="flex items-center justify-between w-full">
@@ -177,7 +193,7 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
                   <Icon className="w-4 h-4" />
                 </div>
                 <span
-                  className={`text-lg sm:text-xl font-extrabold px-2.5 py-0.5 rounded-full ${themeStyles.badge}`}
+                  className={`text-base sm:text-lg font-extrabold px-2.5 py-0.5 rounded-full tabular-nums ${themeStyles.badge}`}
                 >
                   {card.count}
                 </span>
@@ -194,7 +210,7 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
               </div>
 
               {/* Llamado a la acción rápido */}
-              <div className="mt-2 pt-2 border-t border-night-750 flex items-center justify-between text-[11px] font-semibold">
+              <div className="mt-2 pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-semibold">
                 <span className={themeStyles.accent}>{card.actionText}</span>
                 <ArrowRight className="w-3 h-3 text-text-muted group-hover:translate-x-1 group-hover:text-gold-light transition-all" />
               </div>

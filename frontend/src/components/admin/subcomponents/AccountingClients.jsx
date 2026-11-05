@@ -162,26 +162,26 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
   return (
     <div className="space-y-6">
       {/* BARRA SUPERIOR DE CONTROL */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[#140A22] border border-gold-DEFAULT/25 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#180C2C] via-[#130922] to-[#180C2C] border border-white/[0.07] border-t-gold-DEFAULT/35 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.55)] flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <h3 className="font-serif text-lg sm:text-xl font-bold text-text-primary">
-            Control de Clientes: A Pagos y Contra Entrega
+            Cartera de Clientes CRM: A Pagos y Contra Entrega
           </h3>
           <p className="text-xs text-text-secondary mt-0.5">
-            Ambas listas visibles simultáneamente en pantalla para gestionar apartados y entregas
-            sin perder ningún cliente.
+            Ambas listas visibles simultáneamente en pantalla para gestionar apartados, abonos y
+            entregas con recordatorio directo a WhatsApp.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Selector de Vista: Ver Ambos | Solo Apartados | Solo Contra Entrega */}
-          <div className="flex rounded-xl bg-night-950 p-1 border border-night-700 text-xs">
+          <div className="flex rounded-xl bg-[#0A0412] p-1 border border-white/[0.07] text-xs shadow-inner">
             <button
               type="button"
               onClick={() => setFilterMode('both')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 filterMode === 'both'
-                  ? 'bg-amber-400 text-slate-950 font-bold shadow-sm'
+                  ? 'bg-gradient-to-r from-amber-300 to-amber-500 text-slate-950 font-bold shadow-sm'
                   : 'text-text-secondary hover:text-white'
               }`}
             >
@@ -190,7 +190,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
             <button
               type="button"
               onClick={() => setFilterMode('apartados')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 filterMode === 'apartados'
                   ? 'bg-amber-500 text-night-950 font-bold shadow-sm'
                   : 'text-text-secondary hover:text-white'
@@ -201,7 +201,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
             <button
               type="button"
               onClick={() => setFilterMode('contra_entrega')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 filterMode === 'contra_entrega'
                   ? 'bg-sky-500 text-white font-bold shadow-sm'
                   : 'text-text-secondary hover:text-white'
@@ -226,7 +226,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
               size="sm"
               icon={Plus}
               onClick={() => openCreateModal('CONTRA_ENTREGA')}
-              className="border-sky-500/40 text-sky-300 hover:bg-sky-500/15"
+              className="bg-sky-500/10 border-sky-400/40 text-sky-300 hover:bg-sky-500/20"
             >
               + Contra Entrega
             </Button>

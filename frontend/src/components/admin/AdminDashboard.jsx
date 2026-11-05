@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   Package,
-  Plus,
-  Image,
-  BookOpen,
   ArrowUpRight,
   Activity,
   ShoppingBag,
   FileSpreadsheet,
-  Coins,
-  Receipt,
-  Sparkles
+  Sparkles,
+  Calendar
 } from 'lucide-react';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
@@ -28,7 +24,6 @@ import { exportAccountingToExcel } from './subcomponents/exportAccountingExcel';
 
 export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
   const [accountingData, setAccountingData] = useState(null);
-  const [loadingAccounting, setLoadingAccounting] = useState(true);
   const [activeClientsTab, setActiveClientsTab] = useState('apartados');
 
   const fetchAccounting = async () => {
@@ -40,8 +35,6 @@ export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
       }
     } catch (err) {
       console.error('Error cargando contabilidad:', err);
-    } finally {
-      setLoadingAccounting(false);
     }
   };
 
@@ -83,52 +76,71 @@ export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
     });
   };
 
+  const formattedToday = new Date().toLocaleDateString('es-CR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
   return (
     <div className="space-y-8">
-      {/* 1. TÍTULO DE BIENVENIDA Y ACCESOS RÁPIDOS (Jerarquía limpia: Un solo botón principal) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/30 text-gold-bright text-xs font-semibold mb-2 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-gold-bright" />
-            <span>{getAdminGreeting(authUser)}</span>
-          </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
-            Panel de Control y Contabilidad
-          </h1>
-          <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Resumen en vivo de ingresos en colones (₡), egresos, clientes a pagos, contra entrega y
-            comprobantes SINPE.
-          </p>
-        </div>
+      {/* 1. CABECERA EJECUTIVA PREMIUM (Cristal Obsidiana + Luz Imperial Dorada) */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E1036] via-[#150A26] to-[#11071F] border border-white/[0.08] border-t-gold-DEFAULT/35 p-5 sm:p-7 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)]">
+        <div className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gold-DEFAULT/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-emerald-500/5 blur-3xl" />
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            icon={FileSpreadsheet}
-            onClick={handleExportExcel}
-            className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/15"
-          >
-            Exportar Contabilidad
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            icon={ShoppingBag}
-            onClick={() => onNavigate('orders')}
-            className="border-gold-DEFAULT/40 text-gold-light hover:bg-[#1C0F30]"
-          >
-            Ver Pedidos
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            icon={Package}
-            onClick={() => onNavigate('products')}
-            className="border-night-700 text-text-secondary hover:text-text-primary hover:bg-[#1C0F30]"
-          >
-            Productos
-          </Button>
+        <div className="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-5">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2.5 mb-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-gold-DEFAULT/20 to-gold-DEFAULT/5 border border-gold-DEFAULT/35 text-gold-bright text-xs font-semibold shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-gold-bright" />
+                <span>{getAdminGreeting(authUser)}</span>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-text-muted capitalize">
+                <Calendar className="w-3.5 h-3.5 text-gold-light/70" />
+                <span>{formattedToday}</span>
+              </span>
+            </div>
+
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary tracking-tight">
+              Panel de Control & Contabilidad CRM
+            </h1>
+            <p className="text-xs sm:text-sm text-text-secondary max-w-2xl">
+              Monitoreo financiero en vivo en colones (₡), control de cartera de clientes a pagos,
+              despachos contra entrega y validación de comprobantes SINPE.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              icon={FileSpreadsheet}
+              onClick={handleExportExcel}
+              className="bg-emerald-500/10 border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-400 shadow-sm whitespace-nowrap"
+            >
+              Exportar Contabilidad
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              icon={ShoppingBag}
+              onClick={() => onNavigate('orders')}
+              className="bg-gold-DEFAULT/10 border-gold-DEFAULT/35 text-gold-light hover:bg-gold-DEFAULT/20 hover:border-gold-bright whitespace-nowrap"
+            >
+              Ver Pedidos
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              icon={Package}
+              onClick={() => onNavigate('products')}
+              className="bg-white/[0.03] border-white/[0.1] text-text-secondary hover:text-text-primary hover:bg-white/[0.08] whitespace-nowrap"
+            >
+              Productos
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -186,13 +198,18 @@ export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
 
       {/* 9. SECCIÓN DOBLE: ÚLTIMOS PEDIDOS Y BITÁCORA DE AUDITORÍA */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7 p-6 rounded-2xl bg-[#140A22] border border-gold-DEFAULT/20 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-serif text-xl font-bold text-text-primary">Últimos Pedidos</h3>
+        <div className="lg:col-span-7 p-6 rounded-2xl bg-gradient-to-b from-[#180C2C]/95 to-[#110720]/95 border border-white/[0.07] border-t-gold-DEFAULT/30 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.55)] space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+            <div>
+              <h3 className="font-serif text-xl font-bold text-text-primary">Últimos Pedidos</h3>
+              <p className="text-[11px] text-text-secondary">
+                Movimientos más recientes recibidos en la tienda en línea.
+              </p>
+            </div>
             <button
               type="button"
               onClick={() => onNavigate('orders')}
-              className="text-xs text-gold-bright hover:underline font-medium flex items-center gap-1"
+              className="px-3 py-1.5 rounded-xl bg-gold-DEFAULT/10 border border-gold-DEFAULT/30 text-xs text-gold-bright hover:bg-gold-DEFAULT/20 font-semibold flex items-center gap-1 transition-all cursor-pointer"
             >
               <span>Ver todos</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -201,36 +218,36 @@ export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
 
           <div className="overflow-x-auto">
             {recentOrders.length === 0 ? (
-              <div className="p-6 text-center text-xs text-text-muted">
+              <div className="p-6 text-center text-xs text-text-muted bg-[#0C0517]/60 rounded-xl border border-white/[0.05]">
                 Aún no hay pedidos registrados. Los nuevos pedidos aparecerán aquí automáticamente.
               </div>
             ) : (
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-night-700 text-text-muted">
-                    <th className="pb-3 font-medium">Pedido</th>
-                    <th className="pb-3 font-medium">Cliente</th>
-                    <th className="pb-3 font-medium">Método</th>
-                    <th className="pb-3 font-medium">Monto</th>
-                    <th className="pb-3 font-medium">Estado</th>
+                  <tr className="border-b border-white/[0.07] text-[10px] uppercase tracking-wider text-gold-light/70">
+                    <th className="pb-3 font-semibold">Pedido</th>
+                    <th className="pb-3 font-semibold">Cliente</th>
+                    <th className="pb-3 font-semibold">Método</th>
+                    <th className="pb-3 font-semibold">Monto</th>
+                    <th className="pb-3 font-semibold">Estado</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-night-800">
+                <tbody className="divide-y divide-white/[0.05]">
                   {recentOrders.map((ord) => (
                     <tr
                       key={ord.id}
                       onClick={() => onNavigate('orders')}
-                      className="hover:bg-[#1F1035] transition-colors cursor-pointer"
+                      className="hover:bg-white/[0.04] transition-colors cursor-pointer"
                     >
-                      <td className="py-3 font-semibold text-gold-light">{ord.orderNumber}</td>
-                      <td className="py-3 text-text-secondary">{ord.customerName}</td>
-                      <td className="py-3 text-gold-light/90">
+                      <td className="py-3.5 font-semibold text-gold-bright">{ord.orderNumber}</td>
+                      <td className="py-3.5 text-text-primary font-medium">{ord.customerName}</td>
+                      <td className="py-3.5 text-text-secondary">
                         {ord.paymentMethod === 'SINPE_MOVIL' ? 'SINPE Móvil' : 'Transferencia'}
                       </td>
-                      <td className="py-3 font-bold text-text-primary">
+                      <td className="py-3.5 font-bold text-text-primary tabular-nums">
                         ₡{(ord.total || 0).toLocaleString('es-CR')}
                       </td>
-                      <td className="py-3">
+                      <td className="py-3.5">
                         {ord.status === 'VOUCHER_RECEIVED' ? (
                           <Badge variant="warning" size="sm">
                             Validar
@@ -258,36 +275,43 @@ export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
         </div>
 
         {/* Bitácora de Auditoría */}
-        <div className="lg:col-span-5 p-6 rounded-2xl bg-[#140A22] border border-gold-DEFAULT/20 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-serif text-xl font-bold text-text-primary flex items-center gap-2">
-              <Activity className="w-5 h-5 text-gold-bright" />
+        <div className="lg:col-span-5 p-6 rounded-2xl bg-gradient-to-b from-[#180C2C]/95 to-[#110720]/95 border border-white/[0.07] border-t-gold-DEFAULT/30 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.55)] space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+            <h3 className="font-serif text-xl font-bold text-text-primary flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-gold-DEFAULT/15 border border-gold-DEFAULT/30 text-gold-bright">
+                <Activity className="w-4 h-4" />
+              </div>
               <span>Bitácora de Actividad</span>
             </h3>
-            <span className="text-[11px] text-text-muted">Seguridad activa</span>
+            <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-[10px] font-semibold text-emerald-300">
+              Seguridad activa
+            </span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {recentLogs.length === 0 ? (
-              <div className="p-4 text-center text-xs text-text-muted">
+              <div className="p-6 text-center text-xs text-text-muted bg-[#0C0517]/60 rounded-xl border border-white/[0.05]">
                 Sin registros recientes.
               </div>
             ) : (
               recentLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="p-3 rounded-xl bg-night-950/70 border border-night-800 text-xs space-y-1"
+                  className="p-3 rounded-xl bg-[#0D0518]/80 border border-white/[0.06] hover:border-gold-DEFAULT/25 transition-colors text-xs space-y-1"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gold-light">{log.action}</span>
-                    <span className="text-[10px] text-text-muted">
+                    <span className="font-semibold text-gold-light flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-bright" />
+                      {log.action}
+                    </span>
+                    <span className="text-[10px] text-text-muted tabular-nums">
                       {new Date(log.createdAt).toLocaleTimeString('es-CR', {
                         hour: '2-digit',
                         minute: '2-digit'
                       })}
                     </span>
                   </div>
-                  <div className="text-[11px] text-text-secondary truncate">
+                  <div className="text-[11px] text-text-secondary truncate pl-3">
                     Por: {log.user?.name || 'Sistema'} • Módulo: {log.module}
                   </div>
                 </div>

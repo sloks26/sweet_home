@@ -15,21 +15,21 @@ export const ContraEntregaTable = ({
   return (
     <div
       id="section-contra-entrega"
-      className="p-5 sm:p-6 rounded-2xl bg-[#140A22] border border-sky-500/30 space-y-4 scroll-mt-24"
+      className="p-5 sm:p-6 rounded-2xl bg-gradient-to-b from-[#180C2C]/95 to-[#110720]/95 border border-white/[0.07] border-t-sky-400/40 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.55)] space-y-4 scroll-mt-24"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-night-700">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-sky-500/15 text-sky-400">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-white/[0.06]">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 shadow-sm">
             <Truck className="w-5 h-5" />
           </div>
           <div>
             <h4 className="font-serif text-base sm:text-lg font-bold text-text-primary flex items-center gap-2">
               <span>Pedidos Contra Entrega</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/20 border border-sky-400/30 text-sky-300 font-bold tabular-nums">
                 {contraEntrega.length}
               </span>
             </h4>
-            <p className="text-xs text-text-secondary">
+            <p className="text-xs text-text-secondary tabular-nums">
               Por cobrar contra entrega:{' '}
               <strong className="text-sky-300">₡{pendingSaldo.toLocaleString('es-CR')}</strong>
             </p>
@@ -41,14 +41,14 @@ export const ContraEntregaTable = ({
           size="sm"
           icon={Plus}
           onClick={onOpenCreate}
-          className="border-sky-500/40 text-sky-300 hover:bg-sky-500/15"
+          className="bg-sky-500/10 border-sky-400/40 text-sky-300 hover:bg-sky-500/20"
         >
           + Nuevo Contra Entrega
         </Button>
       </div>
 
       {contraEntrega.length === 0 ? (
-        <div className="p-6 text-center text-xs text-text-muted bg-night-950/50 rounded-xl border border-dashed border-night-700">
+        <div className="p-6 text-center text-xs text-text-muted bg-[#0C0517]/60 rounded-xl border border-dashed border-white/[0.08]">
           No hay pedidos contra entrega registrados. Agrega uno con "+ Nuevo Contra Entrega".
         </div>
       ) : (
