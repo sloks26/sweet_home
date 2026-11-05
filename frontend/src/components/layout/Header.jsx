@@ -191,9 +191,19 @@ export const Header = ({
               </div>
             </button>
 
-            {/* Mi Cuenta / Seguimiento */}
-            {authUser ? (
-              <div className="flex items-center gap-1">
+            {/* Rastreo y Envíos (Camioncito de Envíos siempre presente) */}
+            <button
+              onClick={onOpenTracking}
+              className="p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
+              title="Rastreo y Estado de Pedido"
+              aria-label="Rastreo de Pedido"
+            >
+              <Truck className="w-5 h-5 sm:w-4 sm:h-4 text-gold-bright" />
+            </button>
+
+            {/* Acceso de Administración (Solo visible cuando Vanessa/Staff ha iniciado sesión) */}
+            {authUser && (
+              <div className="flex items-center gap-1 pl-1 border-l border-gold-DEFAULT/20">
                 <button
                   onClick={onOpenAdminPanel}
                   className="p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
@@ -204,20 +214,11 @@ export const Header = ({
                 <button
                   onClick={onLogout}
                   className="p-1.5 rounded-xl text-text-muted hover:text-status-error hover:bg-status-error/10 transition-colors"
-                  title="Cerrar sesión"
+                  title="Cerrar sesión de administración"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
-            ) : (
-              <button
-                onClick={onOpenTracking}
-                className="p-2 rounded-xl text-text-secondary hover:text-gold-light hover:bg-night-800 transition-colors"
-                title="Rastreo y Estado de Pedido"
-                aria-label="Rastreo de Pedido"
-              >
-                <Truck className="w-5 h-5 sm:w-4 sm:h-4 text-gold-bright" />
-              </button>
             )}
           </div>
         </div>
