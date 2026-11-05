@@ -28,6 +28,7 @@ import {
 import {
   getAdminOrders,
   getAdminOrderById,
+  getAdminOrderVoucher,
   updateAdminOrderStatus,
   deleteAdminOrder
 } from './adminOrders.controller.js';
@@ -86,6 +87,7 @@ export const adminController = {
   // Orders
   getAdminOrders,
   getAdminOrderById,
+  getAdminOrderVoucher,
   updateAdminOrderStatus,
   deleteAdminOrder,
 

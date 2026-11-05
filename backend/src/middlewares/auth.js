@@ -32,11 +32,18 @@ export async function authenticate(req, res, next) {
         role: true,
         avatar: true,
         isActive: true,
-        lockedUntil: true
+        lockedUntil: true,
+        tokenVersion: true
       }
     });
 
     if (!user || !user.isActive) {
+      req.user = null;
+      return next();
+    }
+
+    // Invalidar token si la versión no coincide (cierre de sesión en servidor SEC-07)
+    if (decoded.tokenVersion !== undefined && user.tokenVersion !== decoded.tokenVersion) {
       req.user = null;
       return next();
     }

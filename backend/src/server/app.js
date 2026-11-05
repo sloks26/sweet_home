@@ -18,22 +18,55 @@ export function createApp() {
   // Compresión gzip / deflate para todas las respuestas HTTP
   app.use(compression());
 
-  // Asegurar directorio de subidas
+  // Asegurar directorios de almacenamiento
   if (!fs.existsSync(config.uploadDir)) {
     fs.mkdirSync(config.uploadDir, { recursive: true });
   }
+  if (!fs.existsSync(config.privateVoucherDir)) {
+    fs.mkdirSync(config.privateVoucherDir, { recursive: true });
+  }
 
-  // Middlewares de seguridad
+  // Middlewares de seguridad (SEC-15: Content Security Policy activada)
   app.use(
     helmet({
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'"],
+          styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+          fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+          imgSrc: ["'self'", 'data:', 'blob:', 'https://*'],
+          connectSrc: ["'self'", 'https://*'],
+          objectSrc: ["'none'"],
+          upgradeInsecureRequests: []
+        }
+      },
       crossOriginEmbedderPolicy: false
     })
   );
 
+  // Lista blanca estricta de CORS (SEC-06)
+  const allowedOrigins = [
+    config.clientUrl,
+    'http://localhost:8081',
+    'http://localhost:5173',
+    'http://127.0.0.1:8081',
+    'http://127.0.0.1:5173',
+    'http://174.138.62.86:8081',
+    'https://sweethomeboutiquecr.com',
+    'https://www.sweethomeboutiquecr.com'
+  ].filter(Boolean);
+
   app.use(
     cors({
-      origin: true,
+      origin: (origin, callback) => {
+        // Permitir solicitudes internas, apps móviles o herramientas CLI sin cabecera origin
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(new Error('Acceso denegado por política de seguridad CORS'));
+      },
       credentials: true
     })
   );
@@ -42,7 +75,8 @@ export function createApp() {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // Servir archivos multimedia locales subidos con caché de 30 días
+  // Servir archivos multimedia locales públicos (productos y banners)
+  // NOTA: Los comprobantes bancarios están en privateVoucherDir y NO se sirven estáticamente (SEC-02)
   app.use(
     '/uploads',
     express.static(config.uploadDir, {

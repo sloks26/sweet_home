@@ -47,6 +47,7 @@ model User {
   phone               String?
   avatar              String?
   isActive            Boolean    @default(true)
+  tokenVersion        Int        @default(1)
   failedAttempts      Int        @default(0)
   lockedUntil         DateTime?
   lastLoginAt         DateTime?
@@ -213,7 +214,8 @@ model Order {
   discountTotal       Float         @default(0)
   taxTotal            Float         @default(0) // 13% IVA
   total               Float
-  voucherUrl          String?       // Captura del comprobante
+  voucherUrl          String?       // URL de acceso protegido al comprobante
+  voucherPath         String?       // Ruta interna protegida en disco
   voucherNotes        String?       // Referencia o nota del cliente
   rejectionReason     String?       // Motivo si el comprobante fue rechazado
   trackingNumber      String?       // Número de guía para rastreo

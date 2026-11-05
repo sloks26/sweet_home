@@ -120,9 +120,14 @@ export const authController = {
         }
       });
 
-      // Generar JWT
+      // Generar JWT con tokenVersion para revocación en servidor (SEC-07)
       const token = jwt.sign(
-        { userId: user.id, role: user.role, email: user.email },
+        {
+          userId: user.id,
+          role: user.role,
+          email: user.email,
+          tokenVersion: user.tokenVersion || 1
+        },
         config.jwtSecret,
         { expiresIn: config.jwtExpiresIn }
       );
@@ -170,6 +175,16 @@ export const authController = {
    */
   async logout(req, res) {
     if (req.user) {
+      try {
+        // Invalidar el token en el servidor incrementando tokenVersion (SEC-07)
+        await prisma.user.update({
+          where: { id: req.user.id },
+          data: { tokenVersion: (req.user.tokenVersion || 1) + 1 }
+        });
+      } catch (err) {
+        console.error('Error al revocar token en BD:', err);
+      }
+
       await logAudit({
         userId: req.user.id,
         action: 'LOGOUT',

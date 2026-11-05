@@ -1,4 +1,7 @@
+import path from 'path';
+import fs from 'fs';
 import prisma from '../../config/prisma.js';
+import { config } from '../../config/index.js';
 import { logAudit } from '../../services/audit.js';
 
 export async function getAdminOrders(req, res) {
@@ -136,5 +139,49 @@ export async function deleteAdminOrder(req, res) {
   } catch (err) {
     console.error('Error al eliminar pedido en admin:', err);
     return res.status(500).json({ error: true, message: 'Error al eliminar pedido' });
+  }
+}
+
+/**
+ * Servir comprobante bancario protegido con autenticación de staff/admin (SEC-02)
+ */
+export async function getAdminOrderVoucher(req, res) {
+  try {
+    const { id } = req.params;
+    const order = await prisma.order.findUnique({
+      where: { id },
+      select: { id: true, voucherPath: true, voucherUrl: true, orderNumber: true }
+    });
+
+    if (!order) {
+      return res.status(404).json({ error: true, message: 'Pedido no encontrado' });
+    }
+
+    let targetPath = order.voucherPath;
+    if (!targetPath && order.voucherUrl) {
+      const fileName = path.basename(order.voucherUrl);
+      const possiblePrivate = path.join(config.privateVoucherDir, fileName);
+      const possiblePublic = path.join(config.uploadDir, fileName);
+      if (fs.existsSync(possiblePrivate)) {
+        targetPath = possiblePrivate;
+      } else if (fs.existsSync(possiblePublic)) {
+        targetPath = possiblePublic;
+      }
+    }
+
+    if (!targetPath || !fs.existsSync(targetPath)) {
+      return res.status(404).json({
+        error: true,
+        message: 'No se encontró el archivo del comprobante para este pedido'
+      });
+    }
+
+    res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    return res.sendFile(targetPath);
+  } catch (err) {
+    console.error('Error al servir comprobante protegido:', err);
+    return res.status(500).json({ error: true, message: 'Error al obtener comprobante' });
   }
 }

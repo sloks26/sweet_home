@@ -34,6 +34,11 @@ async function main() {
   await prisma.user.deleteMany();
 
   // 2. Administradoras oficiales (Socias)
+  const isProd = process.env.NODE_ENV === 'production';
+  if (isProd && (!process.env.INITIAL_ADMIN_PASSWORD || !process.env.JENDRY_ADMIN_PASSWORD)) {
+    throw new Error('❌ En producción es obligatorio definir INITIAL_ADMIN_PASSWORD y JENDRY_ADMIN_PASSWORD en .env');
+  }
+
   const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com';
   const adminPass = process.env.INITIAL_ADMIN_PASSWORD || 'SweetHomeCR2026!#';
   const adminName = process.env.INITIAL_ADMIN_NAME || 'Vanessa';

@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
+import { z } from 'zod';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,14 +11,53 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 dotenv.config(); // fallback local
 
+// Esquema de validación estricto de variables de entorno (SEC-03)
+const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  PORT: z.string().default('8081'),
+  CLIENT_URL: z.string().default('http://localhost:8081'),
+  JWT_SECRET: z
+    .string()
+    .min(16, 'JWT_SECRET debe tener al menos 16 caracteres de entropía')
+    .refine(
+      (secret) =>
+        process.env.NODE_ENV !== 'production' ||
+        secret !== 'fallback_secret_change_in_production_key',
+      {
+        message: 'JWT_SECRET no puede usar la clave de fallback en producción'
+      }
+    ),
+  JWT_EXPIRES_IN: z.string().default('7d'),
+  DATABASE_URL: z.string().optional(),
+  MONGODB_URI: z.string().optional()
+});
+
+const parsedEnv = envSchema.safeParse(process.env);
+if (!parsedEnv.success) {
+  console.error('❌ Error crítico en variables de entorno:', parsedEnv.error.format());
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Configuración de entorno inválida en producción. Revisa el archivo .env');
+  }
+}
+
+const envData = parsedEnv.success ? parsedEnv.data : process.env;
+
+const uploadDir = path.resolve(__dirname, '../../uploads');
+const privateVoucherDir = path.resolve(__dirname, '../../private/vouchers');
+
+// Asegurar existencia de directorios de almacenamiento
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+if (!fs.existsSync(privateVoucherDir)) fs.mkdirSync(privateVoucherDir, { recursive: true });
+
 export const config = {
-  env: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT || '8081', 10),
-  clientUrl: process.env.CLIENT_URL || 'http://localhost:8081',
-  jwtSecret: process.env.JWT_SECRET || 'fallback_secret_change_in_production_key',
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
-  mongoUri: process.env.MONGODB_URI || '',
-  uploadDir: path.resolve(__dirname, '../../uploads'),
+  env: envData.NODE_ENV || 'development',
+  port: parseInt(envData.PORT || '8081', 10),
+  clientUrl: envData.CLIENT_URL || 'http://localhost:8081',
+  jwtSecret: envData.JWT_SECRET,
+  jwtExpiresIn: envData.JWT_EXPIRES_IN || '7d',
+  mongoUri: process.env.MONGODB_URI || process.env.DATABASE_URL || '',
+  uploadDir,
+  privateVoucherDir,
   initialAdmin: {
     name: process.env.INITIAL_ADMIN_NAME || 'Vanessa',
     email: process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com',

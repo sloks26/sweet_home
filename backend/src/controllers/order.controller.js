@@ -1,14 +1,17 @@
 import { z } from 'zod';
+import sharp from 'sharp';
+import crypto from 'crypto';
+import path from 'path';
+import fs from 'fs';
 import prisma from '../config/prisma.js';
 import { config } from '../config/index.js';
-import { processAndSaveImage } from '../services/imageService.js';
 
 const orderItemSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().optional(),
   sku: z.string().optional(),
-  price: z.number().positive(),
-  quantity: z.number().int().positive(),
+  price: z.number().optional(),
+  quantity: z.number().int().positive('La cantidad debe ser mayor a 0'),
   image: z.string().optional(),
   variantName: z.string().optional()
 });
@@ -34,6 +37,8 @@ const createOrderSchema = z.object({
 export const orderController = {
   /**
    * Crear un nuevo pedido de la tienda pública (SINPE Móvil o Transferencia)
+   * SEC-01: Cálculo infalsificable de precios en el servidor
+   * SEC-09: Validación transaccional de stock para prevenir sobreventa
    */
   async createOrder(req, res) {
     try {
@@ -57,29 +62,7 @@ export const orderController = {
         items
       } = parsed.data;
 
-      // 1. Calcular subtotal de artículos
-      const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-      // 2. Calcular costo de envío según política de Costa Rica
-      // Envío gratis a partir de ₡35,000 en Correos de Costa Rica o Retiro en Tienda
-      let shippingCost = 0;
-      let shippingMethodLabel = 'Retiro en Tienda';
-
-      if (shippingMethod === 'CORREOS_CR') {
-        shippingMethodLabel = 'Correos de Costa Rica';
-        shippingCost = subtotal >= 35000 ? 0 : 3500;
-      } else if (shippingMethod === 'EXPRESS_GAM') {
-        shippingMethodLabel = 'Mensajería Express GAM';
-        shippingCost = 2500;
-      } else {
-        shippingMethodLabel = 'Retiro en Tienda Física';
-        shippingCost = 0;
-      }
-
-      const total = subtotal + shippingCost;
-
-      // 3. Generar número de orden aleatorio no consecutivo (ej. SH-2026-74912)
-      // Garantiza privacidad para que nadie pueda adivinar pedidos consecutivos
+      // Generar número de orden aleatorio no consecutivo (ej. SH-2026-74912)
       const todayYear = new Date().getFullYear();
       let orderNumber = '';
       let isUnique = false;
@@ -98,42 +81,101 @@ export const orderController = {
         orderNumber = `SH-${todayYear}-${Date.now().toString().slice(-5)}`;
       }
 
-      // 4. Formatear dirección para almacenamiento
+      // Formatear dirección para almacenamiento
       const addressString = shippingAddress
         ? `${shippingAddress.province}, ${shippingAddress.canton}, ${shippingAddress.district}. ${shippingAddress.details}`
         : 'Retiro en Tienda Física (Sweet Home CR)';
 
-      // 5. Crear pedido y líneas de pedido dentro de una transacción Prisma
+      // Transacción atómica: validación de productos en BD, stock y persistencia de orden
       const order = await prisma.$transaction(async (tx) => {
+        const productIds = items.map((it) => it.id);
+        const dbProducts = await tx.product.findMany({
+          where: { id: { in: productIds } },
+          include: { images: true }
+        });
+
+        const productMap = new Map(dbProducts.map((p) => [p.id, p]));
         const orderItemsData = [];
+        let calculatedSubtotal = 0;
 
-        // Reducir stock de los productos si está registrado y validar existencia en BD
         for (const it of items) {
-          const product = await tx.product.findUnique({
-            where: { id: it.id },
-            select: { id: true, stock: true }
-          });
-
-          if (product && product.stock > 0) {
-            await tx.product.update({
-              where: { id: it.id },
-              data: {
-                stock: Math.max(0, product.stock - it.quantity)
-              }
-            });
+          const product = productMap.get(it.id);
+          if (!product || !product.isActive) {
+            throw new Error(`El producto solicitado ya no está disponible o no existe`);
           }
 
+          // Validación estricta de stock (SEC-09)
+          if (product.stock < it.quantity) {
+            throw new Error(
+              `Stock insuficiente para "${product.name}". Disponibles: ${product.stock}, solicitados: ${it.quantity}`
+            );
+          }
+
+          // Precios oficiales infalsificables desde la base de datos (SEC-01)
+          const officialPrice = product.price;
+          const itemSubtotal = officialPrice * it.quantity;
+          calculatedSubtotal += itemSubtotal;
+
+          // Descontar inventario de forma segura
+          await tx.product.update({
+            where: { id: product.id },
+            data: {
+              stock: product.stock - it.quantity
+            }
+          });
+
+          const coverImage =
+            product.images?.find((img) => img.isCover)?.url ||
+            product.images?.[0]?.url ||
+            it.image ||
+            null;
+
           orderItemsData.push({
-            productId: product ? product.id : null,
-            productName: it.name,
-            productSku: it.sku || 'SKU-SH',
-            productImage: it.image || null,
+            productId: product.id,
+            productName: product.name,
+            productSku: product.sku || 'SKU-SH',
+            productImage: coverImage,
             variantName: it.variantName || null,
-            price: it.price,
+            price: officialPrice,
             quantity: it.quantity,
-            subtotal: it.price * it.quantity
+            subtotal: itemSubtotal
           });
         }
+
+        // Obtener tarifas oficiales de StoreSettings si existen
+        const settingsDoc = await tx.siteContent.findUnique({
+          where: { key: 'store_settings' }
+        });
+        let shippingRates = { gamCost: 2500, ruralCost: 3500, freeShippingThreshold: 35000 };
+        if (settingsDoc?.value) {
+          try {
+            const parsedSettings = JSON.parse(settingsDoc.value);
+            if (parsedSettings.shippingRates) {
+              shippingRates = { ...shippingRates, ...parsedSettings.shippingRates };
+            }
+          } catch (_) {
+            /* usar tarifas por defecto si falla el parseo */
+          }
+        }
+
+        let shippingCost = 0;
+        let shippingMethodLabel = 'Retiro en Tienda Física';
+
+        if (shippingMethod === 'CORREOS_CR') {
+          shippingMethodLabel = 'Correos de Costa Rica';
+          shippingCost =
+            calculatedSubtotal >= (shippingRates.freeShippingThreshold || 35000)
+              ? 0
+              : shippingRates.ruralCost || 3500;
+        } else if (shippingMethod === 'EXPRESS_GAM') {
+          shippingMethodLabel = 'Mensajería Express GAM';
+          shippingCost = shippingRates.gamCost || 2500;
+        } else {
+          shippingMethodLabel = 'Retiro en Tienda Física';
+          shippingCost = 0;
+        }
+
+        const total = calculatedSubtotal + shippingCost;
 
         // Crear la orden
         return await tx.order.create({
@@ -146,7 +188,7 @@ export const orderController = {
             customerPhone,
             shippingAddress: addressString,
             shippingMethod: shippingMethodLabel,
-            subtotal,
+            subtotal: calculatedSubtotal,
             shippingCost,
             total,
             notes: notes || null,
@@ -185,15 +227,16 @@ export const orderController = {
       });
     } catch (err) {
       console.error('Error al procesar el pedido:', err);
-      return res.status(500).json({
+      return res.status(400).json({
         error: true,
-        message: 'Error al generar el pedido. Por favor intenta de nuevo.'
+        message: err.message || 'Error al generar el pedido. Por favor intenta de nuevo.'
       });
     }
   },
 
   /**
    * Consulta pública de seguimiento de pedido por su número (ej: SH-2026-1001)
+   * SEC-08: Enmascaramiento de datos personales para mitigar IDOR
    */
   async getOrderByNumber(req, res) {
     try {
@@ -212,15 +255,33 @@ export const orderController = {
         });
       }
 
+      // Enmascaramiento de privacidad (SEC-08)
+      const maskedCustomerName = order.customerName
+        ? order.customerName
+            .split(' ')
+            .map((w) => w.charAt(0) + '*'.repeat(Math.max(1, w.length - 1)))
+            .join(' ')
+        : 'Cliente';
+
+      let maskedAddress = 'Entrega a domicilio (detalles enmascarados)';
+      if (order.shippingAddress) {
+        const parts = order.shippingAddress.split(',');
+        if (parts.length >= 2) {
+          maskedAddress = `${parts[0].trim()}, ${parts[1].trim()}... (enmascarado)`;
+        } else {
+          maskedAddress = `${order.shippingAddress.slice(0, 16)}... (enmascarado)`;
+        }
+      }
+
       return res.json({
         success: true,
         data: {
           orderNumber: order.orderNumber,
           status: order.status,
           createdAt: order.createdAt,
-          customerName: order.customerName,
+          customerName: maskedCustomerName,
           shippingMethod: order.shippingMethod,
-          shippingAddress: order.shippingAddress,
+          shippingAddress: maskedAddress,
           trackingNumber: order.trackingNumber,
           total: order.total,
           paymentMethod: order.paymentMethod,
@@ -242,6 +303,8 @@ export const orderController = {
 
   /**
    * Subir comprobante de pago de SINPE Móvil o Transferencia para un pedido
+   * SEC-02: Almacenamiento en directorio privado y URL protegida
+   * SEC-14: Validación de imagen con Sharp
    */
   async uploadVoucher(req, res) {
     try {
@@ -255,23 +318,48 @@ export const orderController = {
       });
 
       if (!order) {
+        if (req.file?.path && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
         return res.status(404).json({ error: true, message: 'Pedido no encontrado' });
       }
 
-      let voucherUrl = order.voucherUrl;
-
-      if (req.file) {
-        const processed = await processAndSaveImage(req.file.path);
-        voucherUrl = processed.url;
+      if (!req.file) {
+        return res.status(400).json({ error: true, message: 'No se recibió ningún comprobante' });
       }
+
+      // Validar tipo real de imagen con Sharp (SEC-14)
+      const metadata = await sharp(req.file.path).metadata();
+      if (!metadata.format) {
+        if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+        return res.status(400).json({
+          error: true,
+          message: 'El archivo enviado no es una imagen válida (debe ser JPG, PNG o WebP)'
+        });
+      }
+
+      // Guardar en directorio PRIVADO no expuesto estáticamente (SEC-02)
+      const fileHash = crypto.randomBytes(8).toString('hex');
+      const filename = `voucher_${Date.now()}_${fileHash}.webp`;
+      const privateFilePath = path.join(config.privateVoucherDir, filename);
+
+      await sharp(req.file.path)
+        .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 85 })
+        .toFile(privateFilePath);
+
+      // Limpiar archivo temporal
+      if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+
+      // Endpoint protegido exclusivo para administradores
+      const protectedVoucherUrl = `/api/admin/orders/${order.id}/voucher`;
 
       const updated = await prisma.order.update({
         where: { id: order.id },
         data: {
-          voucherUrl,
+          voucherUrl: protectedVoucherUrl,
+          voucherPath: privateFilePath,
           voucherNotes: voucherNotes || order.voucherNotes,
           voucherReceivedAt: new Date(),
-          status: 'VOUCHER_RECEIVED' // Pasa a cola de verificación manual de la dueña
+          status: 'VOUCHER_RECEIVED'
         }
       });
 
@@ -280,13 +368,19 @@ export const orderController = {
         message: '¡Comprobante recibido con éxito! La dueña verificará tu pago a la brevedad.',
         data: {
           orderNumber: updated.orderNumber,
-          status: updated.status,
-          voucherUrl: updated.voucherUrl
+          status: updated.status
         }
       });
     } catch (err) {
+      if (req.file?.path && fs.existsSync(req.file.path)) {
+        try {
+          fs.unlinkSync(req.file.path);
+        } catch (_) {
+          /* ignorar fallo al eliminar temporal si ya no existe */
+        }
+      }
       console.error('Error al subir comprobante:', err);
-      return res.status(500).json({ error: true, message: 'Error al subir comprobante' });
+      return res.status(500).json({ error: true, message: 'Error al procesar el comprobante' });
     }
   }
 };

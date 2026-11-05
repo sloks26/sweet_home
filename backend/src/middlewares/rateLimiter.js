@@ -1,17 +1,31 @@
 const ipAttempts = new Map();
 
+// Purgado periódico cada 5 minutos para prevenir fuga de memoria (PRF-01)
+const cleanupInterval = setInterval(() => {
+  const now = Date.now();
+  for (const [ip, record] of ipAttempts.entries()) {
+    if (now > record.resetTime) {
+      ipAttempts.delete(ip);
+    }
+  }
+}, 5 * 60 * 1000);
+
+if (cleanupInterval.unref) {
+  cleanupInterval.unref();
+}
+
 /**
- * Limitador de intentos por IP para proteger endpoints críticos contra fuerza bruta
+ * Limitador genérico de intentos por IP para proteger endpoints críticos contra abuso
  * @param {Object} options
- * @param {number} options.maxAttempts - Intentos máximos en la ventana
+ * @param {number} options.maxAttempts - Intentos máximos permitidos en la ventana
  * @param {number} options.windowMs - Duración de la ventana en milisegundos
- * @param {string} options.message - Mensaje al exceder
+ * @param {string} options.message - Mensaje retornado al exceder
  */
 export function rateLimiter({
   maxAttempts = 10,
   windowMs = 15 * 60 * 1000,
   message = 'Demasiados intentos. Intenta de nuevo más tarde.'
-}) {
+} = {}) {
   return (req, res, next) => {
     const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
     const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp.split(',')[0].trim();
@@ -37,3 +51,24 @@ export function rateLimiter({
     next();
   };
 }
+
+// Limitador de creación de pedidos (SEC-11: previene ataques DoS o reservas masivas falsas)
+export const orderCreationLimiter = rateLimiter({
+  maxAttempts: 15,
+  windowMs: 15 * 60 * 1000,
+  message: 'Has realizado muchos pedidos recientemente desde esta conexión.'
+});
+
+// Limitador de subida de comprobantes bancarios
+export const voucherUploadLimiter = rateLimiter({
+  maxAttempts: 10,
+  windowMs: 10 * 60 * 1000,
+  message: 'Has intentado subir muchos comprobantes en poco tiempo.'
+});
+
+// Limitador de autenticación
+export const authRateLimiter = rateLimiter({
+  maxAttempts: 10,
+  windowMs: 15 * 60 * 1000,
+  message: 'Demasiados intentos de inicio de sesión fallidos.'
+});
