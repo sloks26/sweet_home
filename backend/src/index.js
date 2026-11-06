@@ -3,8 +3,10 @@ import { createApp } from './server/index.js';
 
 const app = createApp();
 
-app.listen(config.port, '0.0.0.0', () => {
-  console.log(`✨ Sweet Home & Boutique CR backend corriendo en http://0.0.0.0:${config.port}`);
+const host = process.env.HOST || '127.0.0.1';
+
+app.listen(config.port, host, () => {
+  console.log(`✨ Sweet Home & Boutique CR backend corriendo localmente en http://${host}:${config.port}`);
 });
 
 export default app;
