@@ -81,8 +81,14 @@ export const authController = {
         });
       }
 
-      // Validar contraseña
-      const isMatch = await bcrypt.compare(password, user.password);
+      // Validar contraseña (soportando recorte de espacios o comillas accidentales al copiar/pegar)
+      let isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        const sanitizedPassword = password.trim().replace(/^["']+|["']+$/g, '');
+        if (sanitizedPassword && sanitizedPassword !== password) {
+          isMatch = await bcrypt.compare(sanitizedPassword, user.password);
+        }
+      }
       if (!isMatch) {
         const failedAttempts = (user.failedAttempts || 0) + 1;
         let updateData = { failedAttempts };
