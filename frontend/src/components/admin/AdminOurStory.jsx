@@ -16,8 +16,8 @@ export const AdminOurStory = () => {
   const [subtitle, setSubtitle] = useState(
     'Un sueño costarricense que nació para iluminar hogares'
   );
-  const [founderName, setFounderName] = useState('Fundadora & Directora Creativa');
-  const [founderRole, setFounderRole] = useState('Sweet Home & Boutique CR');
+  const [founderName, setFounderName] = useState('Vanessa Sánchez');
+  const [founderRole, setFounderRole] = useState('Fundadora & Directora Creativa');
   const [founderPhoto, setFounderPhoto] = useState(
     'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80'
   );
@@ -37,8 +37,8 @@ export const AdminOurStory = () => {
           setBadge(d.badge || 'El corazón de nuestra boutique');
           setTitle(d.title || 'Nuestra Historia');
           setSubtitle(d.subtitle || '');
-          setFounderName(d.founderName || 'Fundadora & Directora Creativa');
-          setFounderRole(d.founderRole || 'Sweet Home & Boutique CR');
+          setFounderName(d.founderName || 'Vanessa Sánchez');
+          setFounderRole(d.founderRole || 'Fundadora & Directora Creativa');
           setFounderPhoto(d.founderPhoto || '');
           setParagraphsText(Array.isArray(d.storyParagraphs) ? d.storyParagraphs.join('\n\n') : '');
           setIsActive(d.isActive !== undefined ? d.isActive : true);
@@ -135,13 +135,17 @@ export const AdminOurStory = () => {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl font-bold text-text-primary">
+      {/* Encabezado Ejecutivo */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E1036] via-[#150A26] to-[#11071F] border border-white/[0.08] border-t-gold-DEFAULT/35 p-5 sm:p-7 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/35 text-gold-bright text-xs font-semibold mb-1">
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Identidad & Propósito de Marca</span>
+          </div>
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
             Editar "Nuestra Historia"
           </h1>
-          <p className="text-xs sm:text-sm text-text-secondary mt-1">
+          <p className="text-xs sm:text-sm text-text-secondary max-w-2xl">
             Personaliza la sección especial del Home: tu fotografía, tu relato, firma y valores de
             marca.
           </p>
@@ -153,7 +157,7 @@ export const AdminOurStory = () => {
           icon={Check}
           isLoading={saving}
           onClick={handleSave}
-          className="hidden sm:inline-flex"
+          className="hidden sm:inline-flex shrink-0"
         >
           Guardar Cambios
         </Button>

@@ -9,11 +9,19 @@ export function getAdminGreeting(user) {
   const email = (user.email || '').toLowerCase().trim();
   const name = (user.name || '').toLowerCase();
 
-  if (email === 'admin@sweethomeboutiquecr.com' || name.includes('vanessa')) {
+  if (
+    email === 'admin@sweethomeandboutiquecr.com' ||
+    email === 'admin@sweethomeboutiquecr.com' ||
+    name.includes('vanessa')
+  ) {
     return '¡Bienvenida de nuevo, Vanessa!';
   }
 
-  if (email === 'jendry@sweethomeboutiquecr.com' || name.includes('jendry')) {
+  if (
+    email === 'jendry@sweethomeandboutiquecr.com' ||
+    email === 'jendry@sweethomeboutiquecr.com' ||
+    name.includes('jendry')
+  ) {
     return '¡Bienvenida, Jendry!';
   }
 
@@ -26,11 +34,19 @@ export function getAdminDisplayName(user) {
   const email = (user.email || '').toLowerCase().trim();
   const name = (user.name || '').toLowerCase();
 
-  if (email === 'admin@sweethomeboutiquecr.com' || name.includes('vanessa')) {
+  if (
+    email === 'admin@sweethomeandboutiquecr.com' ||
+    email === 'admin@sweethomeboutiquecr.com' ||
+    name.includes('vanessa')
+  ) {
     return 'Vanessa';
   }
 
-  if (email === 'jendry@sweethomeboutiquecr.com' || name.includes('jendry')) {
+  if (
+    email === 'jendry@sweethomeandboutiquecr.com' ||
+    email === 'jendry@sweethomeboutiquecr.com' ||
+    name.includes('jendry')
+  ) {
     return 'Jendry';
   }
 

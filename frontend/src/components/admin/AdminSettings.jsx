@@ -32,7 +32,7 @@ export const AdminSettings = ({ onSaveSuccess }) => {
   const [bankIdNumber, setBankIdNumber] = useState('');
   const [storeAddress, setStoreAddress] = useState('San José, Costa Rica');
   const [pickupNote, setPickupNote] = useState('Previa coordinación por WhatsApp');
-  const [contactEmail, setContactEmail] = useState('info@sweethomeboutiquecr.com');
+  const [contactEmail, setContactEmail] = useState('info@sweethomeandboutiquecr.com');
   const [freeShippingThreshold, setFreeShippingThreshold] = useState('35000');
   const [shippingExpressGamCost, setShippingExpressGamCost] = useState('2500');
   const [shippingExpressGamDesc, setShippingExpressGamDesc] = useState('San José, Alajuela, Heredia y Cartago central (24 a 48 hrs)');
@@ -65,7 +65,7 @@ export const AdminSettings = ({ onSaveSuccess }) => {
           setBankIdNumber(d.bankIdNumber || '');
           setStoreAddress(d.storeAddress || 'San José, Costa Rica');
           setPickupNote(d.pickupNote || 'Previa coordinación por WhatsApp');
-          setContactEmail(d.contactEmail || 'info@sweethomeboutiquecr.com');
+          setContactEmail(d.contactEmail || 'info@sweethomeandboutiquecr.com');
           setFreeShippingThreshold(
             d.freeShippingThreshold ? d.freeShippingThreshold.toString() : '35000'
           );
@@ -162,16 +162,19 @@ export const AdminSettings = ({ onSaveSuccess }) => {
 
   return (
     <div className="space-y-8">
-      {/* Encabezado */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl font-bold text-text-primary flex items-center gap-2.5">
-            <Settings className="w-8 h-8 text-gold-DEFAULT" />
-            <span>Ajustes Generales de la Boutique</span>
+      {/* Encabezado Ejecutivo */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E1036] via-[#150A26] to-[#11071F] border border-white/[0.08] border-t-gold-DEFAULT/35 p-5 sm:p-7 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/35 text-gold-bright text-xs font-semibold mb-1">
+            <Settings className="w-3.5 h-3.5" />
+            <span>Configuración Global & Pagos</span>
+          </div>
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
+            Ajustes Generales de la Boutique
           </h1>
-          <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Reemplaza aquí los datos de contacto (SINPE Móvil, teléfono, WhatsApp, cuentas bancarias
-            BAC / Popular y correos) por tus datos reales.
+          <p className="text-xs sm:text-sm text-text-secondary max-w-2xl">
+            Administra aquí los datos de contacto (SINPE Móvil, teléfono, WhatsApp, cuentas bancarias
+            BAC / Popular y correos oficiales).
           </p>
         </div>
 
@@ -255,7 +258,7 @@ export const AdminSettings = ({ onSaveSuccess }) => {
                 setContactEmail(e.target.value);
                 setIsDirty(true);
               }}
-              placeholder="Ej: boutique@sweethomecr.com"
+              placeholder="Ej: info@sweethomeandboutiquecr.com"
               required
             />
             <Input

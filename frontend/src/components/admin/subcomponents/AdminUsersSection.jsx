@@ -299,7 +299,7 @@ export const AdminUsersSection = ({ currentUserId }) => {
           <Input
             label="Correo Electrónico"
             type="email"
-            placeholder="ejemplo@sweethomeboutiquecr.com"
+            placeholder="ejemplo@sweethomeandboutiquecr.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

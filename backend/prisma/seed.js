@@ -14,6 +14,14 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenv.config();
 
 async function main() {
+  // Candado de seguridad: este seed BORRA TODA la base de datos (usuarios, pedidos, productos).
+  // Local y producción pueden compartir la misma base en la nube, por eso exige confirmación explícita.
+  if (process.env.CONFIRM_WIPE_DATABASE !== 'SI_BORRAR_TODO') {
+    throw new Error(
+      '❌ Este seed BORRA TODA la base de datos. Si estás 100% segura/o de lo que haces, ejecútalo con CONFIRM_WIPE_DATABASE=SI_BORRAR_TODO'
+    );
+  }
+
   console.log('✨ Iniciando Seed modular para Sweet Home & Boutique CR...');
 
   // 1. Limpieza segura de tablas previas
@@ -33,14 +41,13 @@ async function main() {
   await prisma.siteContent.deleteMany();
   await prisma.user.deleteMany();
 
-  // 2. Administradoras oficiales (Socias)
-  const isProd = process.env.NODE_ENV === 'production';
-  if (isProd && (!process.env.INITIAL_ADMIN_PASSWORD || !process.env.JENDRY_ADMIN_PASSWORD)) {
-    throw new Error('❌ En producción es obligatorio definir INITIAL_ADMIN_PASSWORD y JENDRY_ADMIN_PASSWORD en .env');
+  // 2. Administradoras oficiales (Socias): las contraseñas SIEMPRE deben venir del .env (sin valores por defecto)
+  if (!process.env.INITIAL_ADMIN_PASSWORD || !process.env.JENDRY_ADMIN_PASSWORD) {
+    throw new Error('❌ Es obligatorio definir INITIAL_ADMIN_PASSWORD y JENDRY_ADMIN_PASSWORD en .env');
   }
 
-  const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com';
-  const adminPass = process.env.INITIAL_ADMIN_PASSWORD || 'SweetHomeCR2026!#';
+  const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeandboutiquecr.com';
+  const adminPass = process.env.INITIAL_ADMIN_PASSWORD;
   const adminName = process.env.INITIAL_ADMIN_NAME || 'Vanessa';
 
   const hashedPassword = await bcrypt.hash(adminPass, 12);
@@ -56,8 +63,8 @@ async function main() {
   });
   console.log(`👤 Socia Administradora 1 creada: ${adminUser.email}`);
 
-  const jendryEmail = process.env.JENDRY_ADMIN_EMAIL || 'jendry@sweethomeboutiquecr.com';
-  const jendryPass = process.env.JENDRY_ADMIN_PASSWORD || 'SweetHomeCR2026!#';
+  const jendryEmail = process.env.JENDRY_ADMIN_EMAIL || 'jendry@sweethomeandboutiquecr.com';
+  const jendryPass = process.env.JENDRY_ADMIN_PASSWORD;
   const jendryName = process.env.JENDRY_ADMIN_NAME || 'Jendry Zúñiga';
   const jendryHashedPassword = await bcrypt.hash(jendryPass, 12);
   const jendryUser = await prisma.user.create({

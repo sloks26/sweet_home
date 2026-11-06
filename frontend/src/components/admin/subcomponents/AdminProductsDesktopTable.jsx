@@ -25,7 +25,7 @@ export const AdminProductsDesktopTable = ({
               <th className="py-3 px-4">Categoría</th>
               <th className="py-3 px-4">Precio (₡)</th>
               <th className="py-3 px-4">Stock</th>
-              <th className="py-3 px-4">Estado</th>
+              <th className="py-3 px-4">Visibilidad</th>
               <th className="py-3 px-4 text-right">Acciones</th>
             </tr>
           </thead>
@@ -101,10 +101,19 @@ export const AdminProductsDesktopTable = ({
                       <button
                         onClick={() => handleToggleProduct(prod.id)}
                         className="cursor-pointer"
-                        title="Clic para cambiar estado"
+                        title="Clic para mostrar u ocultar en el catálogo público"
                       >
-                        <Badge variant={prod.isActive ? 'success' : 'outline'} size="sm">
-                          {prod.isActive ? 'Activo' : 'Pausado'}
+                        <Badge
+                          variant={
+                            !prod.isActive ? 'outline' : prod.stock <= 0 ? 'warning' : 'success'
+                          }
+                          size="sm"
+                        >
+                          {!prod.isActive
+                            ? 'Oculto'
+                            : prod.stock <= 0
+                              ? 'Visible (Sin Stock)'
+                              : 'Visible'}
                         </Badge>
                       </button>
                     </td>

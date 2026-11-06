@@ -60,9 +60,12 @@ export const config = {
   privateVoucherDir,
   initialAdmin: {
     name: process.env.INITIAL_ADMIN_NAME || 'Vanessa',
-    email: process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com',
-    password: process.env.INITIAL_ADMIN_PASSWORD || 'SweetHomeCR2026!#'
+    email: process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeandboutiquecr.com',
+    // Sin contraseña por defecto: debe definirse explícitamente en el .env
+    password: process.env.INITIAL_ADMIN_PASSWORD || ''
   },
+  // Cuentas propietarias protegidas (no se pueden desactivar ni eliminar). Incluye el dominio anterior por compatibilidad.
+  ownerEmails: ['admin@sweethomeandboutiquecr.com', 'admin@sweethomeboutiquecr.com'],
   store: {
     name: process.env.STORE_NAME || 'Sweet Home & Boutique CR',
     slogan: 'Donde cada detalle ilumina tu hogar y tu estilo.',
@@ -72,7 +75,7 @@ export const config = {
     symbol: '₡',
     phone: process.env.STORE_PHONE || '+506 6465-6625',
     whatsapp: process.env.STORE_WHATSAPP || '50664656625',
-    email: process.env.STORE_EMAIL || 'info@sweethomeboutiquecr.com',
+    email: process.env.STORE_EMAIL || 'info@sweethomeandboutiquecr.com',
     address: process.env.STORE_ADDRESS || 'San José, Costa Rica',
     social: {
       instagram: {

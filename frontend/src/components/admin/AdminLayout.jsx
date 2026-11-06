@@ -65,7 +65,10 @@ export const AdminLayout = ({
   ];
 
   const currentTabObj = menuItems.find((t) => t.id === activeTab) || menuItems[0];
-  const isOwner = (authUser?.email || '').toLowerCase() === 'admin@sweethomeboutiquecr.com';
+  const userEmailLower = (authUser?.email || '').toLowerCase().trim();
+  const isOwner =
+    userEmailLower === 'admin@sweethomeandboutiquecr.com' ||
+    userEmailLower === 'admin@sweethomeboutiquecr.com';
   const adminInitial = isOwner ? 'V' : (authUser?.name || 'J').charAt(0).toUpperCase();
   const adminDisplayName = isOwner ? 'Vanessa Sánchez' : authUser?.name || 'Jendry';
   const adminRoleLabel = isOwner ? 'Directora Propietaria' : 'Administradora';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, RefreshCw } from 'lucide-react';
+import { Plus, Search, RefreshCw, Package } from 'lucide-react';
 import Button from '../ui/Button';
 import AdminProductModal from './subcomponents/AdminProductModal';
 import AdminProductsMobileList from './subcomponents/AdminProductsMobileList';
@@ -210,17 +210,21 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
 
   return (
     <div className="space-y-6">
-      {/* Cabecera y Botón Nuevo */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
+      {/* Encabezado Ejecutivo */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E1036] via-[#150A26] to-[#11071F] border border-white/[0.08] border-t-gold-DEFAULT/35 p-5 sm:p-7 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/35 text-gold-bright text-xs font-semibold mb-1">
+            <Package className="w-3.5 h-3.5" />
+            <span>Inventario & Colecciones ({totalCount} artículos)</span>
+          </div>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
             Catálogo de Productos
           </h2>
-          <p className="text-xs text-text-secondary mt-0.5">
+          <p className="text-xs sm:text-sm text-text-secondary max-w-2xl">
             Gestiona inventario, precios en colones (₡), fotografías 1:1 y colecciones exclusivas
           </p>
         </div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 shrink-0">
           <Button
             variant="outline"
             size="md"
@@ -235,6 +239,34 @@ export const AdminProducts = ({ initialStockStatus = '' }) => {
             Nuevo Producto
           </Button>
         </div>
+      </div>
+
+      {/* Píldoras Rápidas de Estado de Stock */}
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-night-900 border border-gold-DEFAULT/15">
+        {[
+          { id: '', label: 'Todos los Productos' },
+          { id: 'in', label: 'En Stock (> 0)' },
+          { id: 'low', label: 'Stock Bajo (≤ 5)', highlight: true },
+          { id: 'out', label: 'Agotados (0)' }
+        ].map((tab) => (
+          <button
+            key={tab.id || 'all'}
+            type="button"
+            onClick={() => {
+              setStockStatus(tab.id);
+              setCurrentPage(1);
+            }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+              stockStatus === tab.id
+                ? 'bg-gradient-to-r from-gold-light via-gold-DEFAULT to-gold-dark text-night-950 font-bold shadow-sm'
+                : tab.highlight
+                  ? 'text-amber-300 hover:bg-night-800'
+                  : 'text-text-secondary hover:text-gold-light hover:bg-night-800'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {/* Barra de Filtros */}

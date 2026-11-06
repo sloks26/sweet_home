@@ -41,8 +41,8 @@ export const siteContentData = [
       badge: 'El corazón de nuestra boutique',
       title: 'Nuestra Historia',
       subtitle: 'Un sueño costarricense que nació para iluminar hogares',
-      founderName: 'Fundadora & Directora Creativa',
-      founderRole: 'Sweet Home & Boutique CR',
+      founderName: 'Vanessa Sánchez',
+      founderRole: 'Fundadora & Directora Creativa',
       founderPhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80',
       storyParagraphs: [
         'Sweet Home & Boutique CR nació desde un anhelo profundo en el corazón: transformar espacios cotidianos en santuarios de calidez, belleza y armonía. Lo que empezó como una pequeña selección de detalles para seres queridos se convirtió, paso a paso y con inmenso amor, en una boutique donde cada artículo cuenta una historia.',
@@ -66,7 +66,7 @@ export const siteContentData = [
       bankIdNumber: '3-101-123456',
       storeAddress: 'San José, Costa Rica',
       pickupNote: 'Previa coordinación por WhatsApp',
-      contactEmail: 'admin@sweethomeboutiquecr.com',
+      contactEmail: 'info@sweethomeandboutiquecr.com',
       freeShippingThreshold: 35000
     })
   },

@@ -204,20 +204,23 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
 
   return (
     <div className="space-y-6">
-      {/* Encabezado */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl font-bold text-text-primary flex items-center gap-2.5">
-            <ShoppingBag className="w-8 h-8 text-gold-DEFAULT" />
-            <span>Gestión de Pedidos & Comprobantes</span>
+      {/* Encabezado Ejecutivo */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E1036] via-[#150A26] to-[#11071F] border border-white/[0.08] border-t-gold-DEFAULT/35 p-5 sm:p-7 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/35 text-gold-bright text-xs font-semibold mb-1">
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>Control de Ventas, Pagos & Despachos</span>
+          </div>
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
+            Gestión de Pedidos & Comprobantes
           </h1>
-          <p className="text-xs sm:text-sm text-text-secondary mt-1">
+          <p className="text-xs sm:text-sm text-text-secondary max-w-2xl">
             Valida transferencias y SINPE Móvil en tiempo real, despacha envíos y mantén
             comunicación directa por WhatsApp.
           </p>
         </div>
 
-        <Button variant="secondary" size="sm" onClick={fetchOrders}>
+        <Button variant="secondary" size="sm" icon={RefreshCw} onClick={() => fetchOrders(false)}>
           Actualizar Lista
         </Button>
       </div>
@@ -399,8 +402,16 @@ export const AdminOrders = ({ initialStatusFilter = 'ALL' }) => {
                             <Eye className="w-3.5 h-3.5" />
                             <span>Ver Captura</span>
                           </button>
+                        ) : ['PAYMENT_CONFIRMED', 'PREPARING', 'SHIPPED', 'DELIVERED'].includes(
+                            ord.status
+                          ) ? (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-300">
+                            <span>Verificado ✓</span>
+                          </span>
+                        ) : ord.status === 'CANCELLED' ? (
+                          <span className="text-[11px] text-text-muted">Cancelado</span>
                         ) : (
-                          <span className="text-[11px] text-text-muted italic">Pendiente</span>
+                          <span className="text-[11px] text-text-muted italic">Sin adjunto</span>
                         )}
                       </td>
                       <td className="py-3 px-4">{getStatusBadge(ord.status)}</td>

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import prisma from '../../config/prisma.js';
+import { config } from '../../config/index.js';
 import { logAudit } from '../../services/audit.js';
 
 export async function getAdminUsers(req, res) {
@@ -113,7 +114,7 @@ export async function toggleAdminUser(req, res) {
       return res.status(404).json({ error: true, message: 'Usuario no encontrado' });
     }
 
-    if (targetUser.email === 'admin@sweethomeboutiquecr.com') {
+    if (config.ownerEmails.includes((targetUser.email || '').toLowerCase())) {
       return res.status(403).json({
         error: true,
         message: 'La cuenta principal de la dueña Vanessa no puede ser desactivada.'
@@ -158,7 +159,7 @@ export async function deleteAdminUser(req, res) {
       return res.status(404).json({ error: true, message: 'Usuario no encontrado' });
     }
 
-    if (targetUser.email === 'admin@sweethomeboutiquecr.com') {
+    if (config.ownerEmails.includes((targetUser.email || '').toLowerCase())) {
       return res.status(403).json({
         error: true,
         message: 'La cuenta principal de la dueña Vanessa no puede ser eliminada.'

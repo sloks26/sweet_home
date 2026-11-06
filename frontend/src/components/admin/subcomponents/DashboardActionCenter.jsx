@@ -113,9 +113,10 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
 
       {/* Grid responsivo: 2 columnas en celular (375/390px) y 5 columnas en desktop */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-        {actionCards.map((card) => {
+        {actionCards.map((card, idx) => {
           const Icon = card.icon;
           const hasItems = card.count > 0;
+          const isLastOddCard = idx === actionCards.length - 1;
 
           // Temas de color con alto contraste AA y diferenciación de urgencia
           const themeStyles = {
@@ -185,7 +186,9 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
             <button
               key={card.id}
               onClick={card.onClick}
-              className={`p-3.5 sm:p-4 rounded-2xl border text-left flex flex-col justify-between transition-all duration-200 group cursor-pointer relative overflow-hidden min-h-[122px] sm:min-h-[130px] active:scale-[0.98] ${themeStyles.card}`}
+              className={`p-3.5 sm:p-4 rounded-2xl border text-left flex flex-col justify-between transition-all duration-200 group cursor-pointer relative overflow-hidden min-h-[122px] sm:min-h-[130px] active:scale-[0.98] ${
+                isLastOddCard ? 'col-span-2 lg:col-span-1' : ''
+              } ${themeStyles.card}`}
             >
               {/* Parte Superior: Ícono + Contador */}
               <div className="flex items-center justify-between w-full">

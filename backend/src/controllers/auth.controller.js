@@ -31,9 +31,22 @@ export const authController = {
       }
 
       const { email, password } = parsed.data;
-      const user = await prisma.user.findUnique({
-        where: { email: email.toLowerCase().trim() }
+      const cleanEmail = email.toLowerCase().trim();
+      const aliasEmail = cleanEmail.endsWith('@sweethomeandboutiquecr.com')
+        ? cleanEmail.replace('@sweethomeandboutiquecr.com', '@sweethomeboutiquecr.com')
+        : cleanEmail.endsWith('@sweethomeboutiquecr.com')
+          ? cleanEmail.replace('@sweethomeboutiquecr.com', '@sweethomeandboutiquecr.com')
+          : null;
+
+      let user = await prisma.user.findUnique({
+        where: { email: cleanEmail }
       });
+
+      if (!user && aliasEmail) {
+        user = await prisma.user.findUnique({
+          where: { email: aliasEmail }
+        });
+      }
 
       if (!user) {
         await logAudit({

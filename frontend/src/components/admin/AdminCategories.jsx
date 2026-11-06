@@ -142,7 +142,7 @@ export const AdminCategories = () => {
         </div>
 
         <Button variant="primary" size="md" icon={Plus} onClick={openCreateModal}>
-          + Nueva Categoría
+          Nueva Categoría
         </Button>
       </div>
 

@@ -151,13 +151,17 @@ export const AdminBanners = () => {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl font-bold text-text-primary">
+      {/* Encabezado Ejecutivo */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E1036] via-[#150A26] to-[#11071F] border border-white/[0.08] border-t-gold-DEFAULT/35 p-5 sm:p-7 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-DEFAULT/15 border border-gold-DEFAULT/35 text-gold-bright text-xs font-semibold mb-1">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Portada Principal & Promociones</span>
+          </div>
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-text-primary">
             Banners y Hero Carrusel
           </h1>
-          <p className="text-xs sm:text-sm text-text-secondary mt-1">
+          <p className="text-xs sm:text-sm text-text-secondary max-w-2xl">
             Administra las diapositivas principales de la tienda, textos, imágenes y orden de
             visualización.
           </p>
@@ -195,10 +199,21 @@ export const AdminBanners = () => {
                   alt={banner.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-2 left-2">
-                  <Badge variant={banner.isActive ? 'success' : 'outline'} size="sm">
+                <div className="absolute top-2.5 left-2.5">
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide backdrop-blur-md shadow-lg border ${
+                      banner.isActive
+                        ? 'bg-night-950/90 text-emerald-300 border-emerald-400/50'
+                        : 'bg-night-950/90 text-text-secondary border-white/20'
+                    }`}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        banner.isActive ? 'bg-emerald-400 shadow-[0_0_6px_#34d399]' : 'bg-text-muted'
+                      }`}
+                    />
                     {banner.isActive ? 'Activo' : 'Pausado'}
-                  </Badge>
+                  </span>
                 </div>
               </div>
 

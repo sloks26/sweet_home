@@ -159,7 +159,7 @@ Se ejecutó `jscpd` con umbral de 5 líneas y 50 tokens sobre `backend/src` y `f
 
 #### [SEC-04] Credenciales Administrativas por Defecto en Script de Inicialización (CRÍTICO)
 - **Archivo y Línea:** `backend/prisma/seed.js:38` y `.env.example:16`
-- **Qué pasa:** Si el entorno no define `INITIAL_ADMIN_PASSWORD`, el seed crea el usuario administrador con la contraseña `SweetHomeCR2026!#`.
+- **Qué pasa:** Si el entorno no define `INITIAL_ADMIN_PASSWORD`, el seed crea el usuario administrador con una contraseña por defecto escrita en el código fuente (ya eliminada y rotada).
 - **Por qué importa:** Despliegues automáticos o descuidos en producción dejarían el panel abierto con una contraseña indexada públicamente en el código.
 - **Cómo se corrige:** Forzar que la variable sea obligatoria o generar una contraseña segura aleatoria e imprimirla una sola vez en la consola.
 
