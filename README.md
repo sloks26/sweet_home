@@ -8,8 +8,9 @@ Plataforma integral de E-Commerce de Lujo, Gestión Contable/ERP y CRM para **Sw
 
 ## 🌐 Enlaces del Sistema en Producción
 
-- **Tienda Pública & Panel de Administración:** [http://174.138.62.86:8081/](http://174.138.62.86:8081/)
-- **Dossier Ejecutivo del Sistema (PDF):** [http://174.138.62.86:8081/Sweet_Home_Boutique_CR_Dossier_Sistema.pdf](http://174.138.62.86:8081/Sweet_Home_Boutique_CR_Dossier_Sistema.pdf)
+- **Tienda Oficial en Línea (Dominio Seguro SSL):** [https://sweethomeandboutiquecr.com/](https://sweethomeandboutiquecr.com/)
+- **Acceso con www:** [https://www.sweethomeandboutiquecr.com/](https://www.sweethomeandboutiquecr.com/)
+- **Dossier Ejecutivo del Sistema (PDF):** [https://sweethomeandboutiquecr.com/Sweet_Home_Boutique_CR_Dossier_Sistema.pdf](https://sweethomeandboutiquecr.com/Sweet_Home_Boutique_CR_Dossier_Sistema.pdf)
 - **Documento de Auditoría y Certificación:** [`AUDITORIA.md`](./AUDITORIA.md)
 
 ---

@@ -364,7 +364,10 @@ Se ejecutó la batería exhaustiva de análisis estático, herramientas de audit
 
 ---
 
-## Certificación de Cierre de Auditoría
-El sistema **Sweet Home & Boutique CR** ha completado exitosamente todas las fases del plan de auditoría, seguridad y refactorización arquitectónica. La plataforma cumple con los más altos estándares de seguridad para transacciones de comercio electrónico en Costa Rica (SINPE Móvil, transferencias bancarias, apartados y pago contra entrega) y cuenta con una arquitectura modular, mantenible y escalable.
+## Certificación de Cierre y Lanzamiento Oficial a Producción
+El sistema **Sweet Home & Boutique CR** ha completado exitosamente todas las fases del plan de auditoría, seguridad, refactorización arquitectónica y puesta en marcha comercial.
 
-El único paso pendiente para el lanzamiento comercial público al 100% es el aprovisionamiento de un **Dominio Personalizado** (ej: `sweethomeboutiquecr.com`), su respectivo apuntamiento DNS tipo A a la IP `174.138.62.86` y la emisión del certificado SSL/HTTPS Let's Encrypt mediante Nginx.
+- **Dominio Oficial:** [https://sweethomeandboutiquecr.com/](https://sweethomeandboutiquecr.com/)
+- **Certificado SSL/TLS:** Emitido e instalado con Let's Encrypt (HTTPS con cifrado AES-256 y renovación automática).
+- **Redirección Forzosa:** Todo tráfico HTTP se redirige automáticamente con código `301 Moved Permanently` a `https://`.
+- **Estado Global del Sistema:** 100% Blindado, auditado, optimizado y en producción activa.
