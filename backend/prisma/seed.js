@@ -42,12 +42,13 @@ async function main() {
   await prisma.user.deleteMany();
 
   // 2. Administradoras oficiales (Socias): las contraseñas SIEMPRE deben venir del .env (sin valores por defecto)
-  if (!process.env.INITIAL_ADMIN_PASSWORD || !process.env.JENDRY_ADMIN_PASSWORD) {
-    throw new Error('❌ Es obligatorio definir INITIAL_ADMIN_PASSWORD y JENDRY_ADMIN_PASSWORD en .env');
+  const adminPass = process.env.INITIAL_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+  const jendryPass = process.env.JENDRY_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+  if (!adminPass || !jendryPass) {
+    throw new Error('❌ Es obligatorio definir ADMIN_PASSWORD (o INITIAL_ADMIN_PASSWORD / JENDRY_ADMIN_PASSWORD) en .env');
   }
 
-  const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeandboutiquecr.com';
-  const adminPass = process.env.INITIAL_ADMIN_PASSWORD;
+  const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com';
   const adminName = process.env.INITIAL_ADMIN_NAME || 'Vanessa';
 
   const hashedPassword = await bcrypt.hash(adminPass, 12);
@@ -63,8 +64,7 @@ async function main() {
   });
   console.log(`👤 Socia Administradora 1 creada: ${adminUser.email}`);
 
-  const jendryEmail = process.env.JENDRY_ADMIN_EMAIL || 'jendry@sweethomeandboutiquecr.com';
-  const jendryPass = process.env.JENDRY_ADMIN_PASSWORD;
+  const jendryEmail = process.env.JENDRY_ADMIN_EMAIL || 'jendry@sweethomeboutiquecr.com';
   const jendryName = process.env.JENDRY_ADMIN_NAME || 'Jendry Zúñiga';
   const jendryHashedPassword = await bcrypt.hash(jendryPass, 12);
   const jendryUser = await prisma.user.create({

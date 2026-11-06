@@ -60,9 +60,9 @@ export const config = {
   privateVoucherDir,
   initialAdmin: {
     name: process.env.INITIAL_ADMIN_NAME || 'Vanessa',
-    email: process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeandboutiquecr.com',
+    email: process.env.INITIAL_ADMIN_EMAIL || 'admin@sweethomeboutiquecr.com',
     // Sin contraseña por defecto: debe definirse explícitamente en el .env
-    password: process.env.INITIAL_ADMIN_PASSWORD || ''
+    password: process.env.INITIAL_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || ''
   },
   // Cuentas propietarias protegidas (no se pueden desactivar ni eliminar). Incluye el dominio anterior por compatibilidad.
   ownerEmails: ['admin@sweethomeandboutiquecr.com', 'admin@sweethomeboutiquecr.com'],
