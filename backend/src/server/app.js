@@ -44,6 +44,10 @@ export function createApp() {
     'http://127.0.0.1:8081',
     'http://127.0.0.1:5173',
     'http://174.138.62.86:8081',
+    'http://sweethomeandboutiquecr.com',
+    'https://sweethomeandboutiquecr.com',
+    'http://www.sweethomeandboutiquecr.com',
+    'https://www.sweethomeandboutiquecr.com',
     'https://sweethomeboutiquecr.com',
     'https://www.sweethomeboutiquecr.com'
   ].filter(Boolean);
@@ -55,6 +59,7 @@ export function createApp() {
         if (!origin) return callback(null, true);
         if (
           allowedOrigins.includes(origin) ||
+          origin.includes('sweethomeandboutiquecr.com') ||
           origin.includes('174.138.62.86') ||
           origin.includes('localhost') ||
           origin.includes('127.0.0.1')
