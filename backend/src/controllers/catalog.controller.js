@@ -1,6 +1,12 @@
 import prisma from '../config/prisma.js';
 import { config } from '../config/index.js';
 import cacheService from '../services/cacheService.js';
+import {
+  fetchApprovedTestimonialsCombined,
+  getTestimonials,
+  createPublicTestimonial,
+  createProductReview
+} from './reviews.controller.js';
 
 export const catalogController = {
   /**
@@ -52,16 +58,17 @@ export const catalogController = {
             category: { select: { id: true, name: true, slug: true, isAdult: true } },
             subcategory: { select: { id: true, name: true, slug: true } },
             images: { orderBy: { order: 'asc' } },
-            variants: true
+            variants: true,
+            reviews: {
+              where: { isApproved: true },
+              orderBy: { createdAt: 'desc' },
+              take: 10
+            }
           }
         }),
         prisma.siteContent.findUnique({ where: { key: 'our_story' } }),
         prisma.siteContent.findUnique({ where: { key: 'store_settings' } }),
-        prisma.testimonial.findMany({
-          where: { isActive: true },
-          orderBy: [{ isFeatured: 'desc' }, { order: 'asc' }],
-          take: 8
-        })
+        fetchApprovedTestimonialsCombined()
       ]);
 
       const banners = rawBanners.filter((b) => {
@@ -216,7 +223,12 @@ export const catalogController = {
             category: { select: { id: true, name: true, slug: true, isAdult: true } },
             subcategory: { select: { id: true, name: true, slug: true } },
             images: { orderBy: { order: 'asc' } },
-            variants: true
+            variants: true,
+            reviews: {
+              where: { isApproved: true },
+              orderBy: { createdAt: 'desc' },
+              take: 10
+            }
           }
         }),
         prisma.product.aggregate({
@@ -351,21 +363,7 @@ export const catalogController = {
     }
   },
 
-  /**
-   * Obtener testimonios aprobados de clientes
-   */
-  async getTestimonials(req, res) {
-    try {
-      const testimonials = await prisma.testimonial.findMany({
-        where: { isActive: true },
-        orderBy: [{ isFeatured: 'desc' }, { order: 'asc' }],
-        take: 8
-      });
-
-      return res.json({ success: true, data: testimonials });
-    } catch (err) {
-      console.error('Error al obtener testimonios:', err);
-      return res.status(500).json({ error: true, message: 'Error al obtener testimonios' });
-    }
-  }
+  getTestimonials,
+  createPublicTestimonial,
+  createProductReview
 };

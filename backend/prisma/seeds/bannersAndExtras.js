@@ -105,48 +105,7 @@ export const siteContentData = [
   }
 ];
 
-export const testimonialsData = [
-  {
-    clientName: 'Valeria M.',
-    clientLocation: 'Curridabat, San José',
-    clientAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&q=80',
-    rating: 5,
-    comment: '¡Quedé enamorada del empaque! El difusor y las esencias llegaron al día siguiente por Correos de Costa Rica, todo envuelto con un aroma delicioso y una notita hermosa. 100% recomendados.',
-    isFeatured: true,
-    isActive: true,
-    order: 1
-  },
-  {
-    clientName: 'María José R.',
-    clientLocation: 'San Joaquín de Flores, Heredia',
-    clientAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80',
-    rating: 5,
-    comment: 'Compré el perfume Nuit Étoilée y un bolso para un regalo de cumpleaños. La atención por WhatsApp fue super personalizada y el pago por SINPE muy cómodo. La calidad superó mis expectativas.',
-    isFeatured: true,
-    isActive: true,
-    order: 2
-  },
-  {
-    clientName: 'Fernanda C.',
-    clientLocation: 'Cartago Centro',
-    clientAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&q=80',
-    rating: 5,
-    comment: 'Excelente variedad para el hogar. Las toallas y los cojines le dieron un toque super elegante a mi sala. Se nota el amor y el buen gusto en cada detalle.',
-    isFeatured: true,
-    isActive: true,
-    order: 3
-  },
-  {
-    clientName: 'Daniela S.',
-    clientLocation: 'Escazú, San José',
-    clientAvatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&q=80',
-    rating: 5,
-    comment: 'El vestido y los accesorios me llegaron perfectos en talla y tela. Además me encanta que sea un emprendimiento tico con un estándar de boutique tan alto.',
-    isFeatured: true,
-    isActive: true,
-    order: 4
-  }
-];
+export const testimonialsData = [];
 
 export const promotionData = {
   name: 'Descuento de Bienvenida',

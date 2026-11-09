@@ -15,7 +15,8 @@ export async function getDashboardStats(req, res) {
       totalProducts,
       lowStockCount,
       ordersToShipCount,
-      pendingReviewsCount,
+      pendingProductReviewsCount,
+      pendingTestimonialsCount,
       recentOrders,
       recentLogs,
       topProducts,
@@ -32,6 +33,7 @@ export async function getDashboardStats(req, res) {
       prisma.product.count({ where: { stock: { lte: 3 }, isActive: true } }),
       prisma.order.count({ where: { status: { in: ['PAYMENT_CONFIRMED', 'PREPARING'] } } }),
       prisma.review.count({ where: { isApproved: false } }),
+      prisma.testimonial.count({ where: { isActive: false } }),
       prisma.order.findMany({
         take: 6,
         orderBy: { createdAt: 'desc' },
@@ -105,6 +107,8 @@ export async function getDashboardStats(req, res) {
     });
 
     const totalRevenue = salesAggregate._sum.total || 0;
+    const pendingReviewsCount =
+      (pendingProductReviewsCount || 0) + (pendingTestimonialsCount || 0);
 
     return res.json({
       success: true,

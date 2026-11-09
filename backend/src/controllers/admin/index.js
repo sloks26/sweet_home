@@ -39,6 +39,11 @@ import {
   toggleAdminUser,
   deleteAdminUser
 } from './adminUsers.controller.js';
+import {
+  getAdminReviews,
+  approveAdminReview,
+  deleteAdminReview
+} from './adminReviews.controller.js';
 
 export const adminController = {
   // Contabilidad, Egresos y Control de Apartados / Contra Entrega
@@ -95,7 +100,12 @@ export const adminController = {
   getAdminUsers,
   createAdminUser,
   toggleAdminUser,
-  deleteAdminUser
+  deleteAdminUser,
+
+  // Reviews & Testimonials Moderation
+  getAdminReviews,
+  approveAdminReview,
+  deleteAdminReview
 };
 
 export default adminController;

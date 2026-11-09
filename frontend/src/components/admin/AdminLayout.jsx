@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Package,
   FolderTree,
-  Settings
+  Settings,
+  MessageSquareHeart
 } from 'lucide-react';
 import Logo, { LogoEmblem } from '../ui/Logo';
 import Badge from '../ui/Badge';
@@ -25,6 +26,7 @@ export const AdminLayout = ({
   authUser,
   onLogout,
   pendingVouchersCount = 0,
+  pendingReviewsCount = 0,
   children
 }) => {
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
@@ -39,6 +41,12 @@ export const AdminLayout = ({
     },
     { id: 'products', label: 'Productos', icon: Package },
     { id: 'categories', label: 'Categorías', icon: FolderTree },
+    {
+      id: 'reviews',
+      label: 'Reseñas de Clientas',
+      icon: MessageSquareHeart,
+      badge: pendingReviewsCount > 0 ? pendingReviewsCount : null
+    },
     { id: 'banners', label: 'Banners y Carrusel', icon: Sliders },
     { id: 'media', label: 'Biblioteca de Medios', icon: ImageIcon },
     { id: 'our-story', label: 'Nuestra Historia', icon: BookOpen },
@@ -54,11 +62,17 @@ export const AdminLayout = ({
       badge: pendingVouchersCount > 0 ? pendingVouchersCount : null
     },
     { id: 'products', label: 'Productos', icon: Package },
-    { id: 'banners', label: 'Contenido', icon: Sliders }
+    {
+      id: 'reviews',
+      label: 'Reseñas',
+      icon: MessageSquareHeart,
+      badge: pendingReviewsCount > 0 ? pendingReviewsCount : null
+    }
   ];
 
   const secondaryMenuItems = [
     { id: 'categories', label: 'Categorías', icon: FolderTree },
+    { id: 'banners', label: 'Banners y Carrusel', icon: Sliders },
     { id: 'media', label: 'Biblioteca de Medios', icon: ImageIcon },
     { id: 'our-story', label: 'Nuestra Historia', icon: BookOpen },
     { id: 'settings', label: 'Ajustes de Tienda', icon: Settings }

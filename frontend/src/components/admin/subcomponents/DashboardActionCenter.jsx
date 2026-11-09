@@ -79,7 +79,7 @@ export const DashboardActionCenter = ({ metrics = {}, onNavigate }) => {
       icon: MessageSquareHeart,
       isUrgent: pendingReviews > 0,
       colorTheme: 'purple',
-      onClick: () => onNavigate('products', { tab: 'reviews' })
+      onClick: () => onNavigate('reviews')
     }
   ];
 

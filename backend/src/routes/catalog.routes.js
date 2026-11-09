@@ -12,5 +12,7 @@ router.get('/products/:slug', catalogController.getProductBySlug);
 router.get('/banners', catalogController.getBanners);
 router.get('/content/:key', catalogController.getSiteContent);
 router.get('/testimonials', catalogController.getTestimonials);
+router.post('/testimonials', catalogController.createPublicTestimonial);
+router.post('/products/:productId/reviews', catalogController.createProductReview);
 
 export default router;

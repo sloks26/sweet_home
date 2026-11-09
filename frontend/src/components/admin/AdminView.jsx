@@ -9,6 +9,7 @@ const AdminMedia = lazy(() => import('./AdminMedia'));
 const AdminOurStory = lazy(() => import('./AdminOurStory'));
 const AdminProducts = lazy(() => import('./AdminProducts'));
 const AdminCategories = lazy(() => import('./AdminCategories'));
+const AdminReviews = lazy(() => import('./AdminReviews'));
 const AdminSettings = lazy(() => import('./AdminSettings'));
 
 export const AdminView = ({
@@ -30,7 +31,7 @@ export const AdminView = ({
       if (tab === 'orders') setOrderFilter(options.filter);
       if (tab === 'products') setProductStockFilter(options.filter);
     }
-    if (tab === 'dashboard' || tab === 'orders') fetchAdminStats();
+    if (tab === 'dashboard' || tab === 'orders' || tab === 'reviews') fetchAdminStats();
   };
 
   return (
@@ -46,6 +47,7 @@ export const AdminView = ({
         <AdminLayout
           activeTab={adminTab}
           pendingVouchersCount={adminStats?.metrics?.voucherReceivedOrders || 0}
+          pendingReviewsCount={adminStats?.metrics?.pendingReviewsCount || 0}
           onSelectTab={(tab) => handleAdminNavigation(tab)}
           onExitAdmin={handleExitAdmin}
           authUser={authUser}
@@ -61,6 +63,7 @@ export const AdminView = ({
           {adminTab === 'orders' && <AdminOrders initialStatusFilter={orderFilter} />}
           {adminTab === 'products' && <AdminProducts initialStockStatus={productStockFilter} />}
           {adminTab === 'categories' && <AdminCategories />}
+          {adminTab === 'reviews' && <AdminReviews onReviewsUpdated={fetchAdminStats} />}
           {adminTab === 'banners' && <AdminBanners />}
           {adminTab === 'media' && <AdminMedia />}
           {adminTab === 'our-story' && <AdminOurStory />}

@@ -70,4 +70,9 @@ router.post('/users', requireAdmin, adminController.createAdminUser);
 router.patch('/users/:id/toggle', requireAdmin, adminController.toggleAdminUser);
 router.delete('/users/:id', requireAdmin, adminController.deleteAdminUser);
 
+// Moderación de Reseñas y Testimonios de Clientes
+router.get('/reviews', adminController.getAdminReviews);
+router.patch('/reviews/:kind/:id/approve', adminController.approveAdminReview);
+router.delete('/reviews/:kind/:id', adminController.deleteAdminReview);
+
 export default router;

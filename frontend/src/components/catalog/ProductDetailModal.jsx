@@ -192,7 +192,11 @@ export const ProductDetailModal = ({ isOpen, onClose, product, onBuyNow, storeSe
                       {product.rating || '5.0'}
                     </span>
                     <span className="text-xs text-text-muted">
-                      ({product.reviewCount || 12} reseñas de clientas)
+                      (
+                      {Array.isArray(product.reviews)
+                        ? product.reviews.length
+                        : product.reviewCount || 0}{' '}
+                      reseñas verificadas)
                     </span>
                   </div>
                 </div>

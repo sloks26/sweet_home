@@ -150,7 +150,7 @@ export function App() {
           if (res.data.featuredProducts?.length > 0) setProducts(res.data.featuredProducts);
           if (res.data.banners?.length > 0) setBanners(res.data.banners);
           if (res.data.ourStory) setOurStory(res.data.ourStory);
-          if (res.data.testimonials?.length > 0) setTestimonials(res.data.testimonials);
+          if (Array.isArray(res.data.testimonials)) setTestimonials(res.data.testimonials);
           if (res.data.storeSettings) setStoreSettings(res.data.storeSettings);
         }
       })
@@ -207,7 +207,7 @@ export function App() {
           if (res.data.featuredProducts?.length > 0) setProducts(res.data.featuredProducts);
           if (res.data.banners?.length > 0) setBanners(res.data.banners);
           if (res.data.ourStory) setOurStory(res.data.ourStory);
-          if (res.data.testimonials?.length > 0) setTestimonials(res.data.testimonials);
+          if (Array.isArray(res.data.testimonials)) setTestimonials(res.data.testimonials);
           if (res.data.storeSettings) setStoreSettings(res.data.storeSettings);
         }
       })

@@ -181,7 +181,9 @@ async function main() {
 
   // 6. Testimonios
   console.log('⭐ Creando testimonios...');
-  await prisma.testimonial.createMany({ data: testimonialsData });
+  if (testimonialsData.length > 0) {
+    await prisma.testimonial.createMany({ data: testimonialsData });
+  }
 
   // 7. Promociones
   console.log('🎟️ Creando promociones...');
