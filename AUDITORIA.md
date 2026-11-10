@@ -371,3 +371,350 @@ El sistema **Sweet Home & Boutique CR** ha completado exitosamente todas las fas
 - **Certificado SSL/TLS:** Emitido e instalado con Let's Encrypt (HTTPS con cifrado AES-256 y renovación automática).
 - **Redirección Forzosa:** Todo tráfico HTTP se redirige automáticamente con código `301 Moved Permanently` a `https://`.
 - **Estado Global del Sistema:** 100% Blindado, auditado, optimizado y en producción activa.
+
+
+---
+
+## Documentación Técnica de Arquitectura, Modelos y Flujos (EGM-Bootstrap Reference)
+**Fecha de Actualización:** Noviembre 2026  
+**Alcance:** Backend (`/backend`), Frontend (`/frontend`), Base de Datos (`Prisma / MongoDB Atlas`), Infraestructura de Producción (VPS Ubuntu + Nginx + PM2).
+
+---
+
+### 1. Arquitectura Global del Monorepo
+
+Sweet Home & Boutique CR está estructurado bajo un modelo de monorepo moderno y desacoplado, optimizado para alto rendimiento, seguridad de grado financiero y una experiencia de compra fluida en Costa Rica.
+
+```
+sweet_home/
+├── backend/                  # Servidor de API REST en Node.js + Express + Prisma
+│   ├── prisma/               # Esquema de base de datos (schema.prisma) y seeds
+│   │   ├── schema.prisma     # Definición de modelos para MongoDB Atlas
+│   │   ├── seed.js           # Sembrado de administradores, categorías y productos
+│   │   └── seeds/            # Bloques de contenido y banners iniciales
+│   ├── private/              # Directorio protegido fuera de la web pública (vouchers)
+│   ├── uploads/              # Medios estáticos públicos optimizados (WebP / AVIF)
+│   └── src/
+│       ├── config/           # Configuración con Zod y cliente singleton de Prisma
+│       ├── controllers/      # Controladores públicos y submódulo /admin
+│       ├── middlewares/      # Autenticación JWT, RBAC y Rate Limiting
+│       ├── routes/           # Enrutadores Express (auth, catalog, order, admin)
+│       ├── server/           # Inicialización de Express, Helmet, CORS y rutas
+│       └── services/         # Servicios de auditoría, procesamiento de imágenes y caché
+├── frontend/                 # Aplicación Cliente Single Page Application (SPA)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── admin/        # Panel de administración y submódulo subcomponents/
+│   │   │   ├── catalog/      # Catálogo, filtros, detalle de producto y subcomponents/
+│   │   │   ├── checkout/     # Flujo de pago en 3 pasos y subcomponents/
+│   │   │   ├── home/         # Secciones de la página de inicio (Hero, Categorías, Historia)
+│   │   │   ├── layout/       # Cabecera, Mega Menú, Footer, Rastreo y Carrito
+│   │   │   └── ui/           # Componentes base de interfaz (Botones, Modales, Inputs)
+│   │   ├── constants/        # Enums y constantes centralizadas de negocio
+│   │   ├── store/            # Estado global con Zustand (carrito, wishlist, age-gate)
+│   │   └── utils/            # Formateadores de moneda (₡), fechas y portapapeles
+│   └── vite.config.js        # Configuración de empaquetado optimizado con Vite
+├── scripts/                  # Scripts de automatización y despliegue continuo (deploy-vps.sh)
+└── AUDITORIA.md              # Registro histórico de auditoría y documentación técnica viva
+```
+
+#### Tecnologías Principales y Versiones:
+- **Runtime Backend:** Node.js v20.x LTS con soporte nativo de módulos ECMAScript (`"type": "module"`).
+- **Framework Web:** Express v4.21.2 con `helmet`, `cors`, `cookie-parser` y `compression`.
+- **ORM / ODM:** Prisma Client v6.19.x conectado a clúster de MongoDB Atlas v7.0+.
+- **Procesamiento Gráfico:** Sharp v0.33.5 (conversión a WebP, miniaturas, LQIP y compresión inteligente).
+- **Frontend SPA:** React v18.3.1 empaquetado con Vite v6.4.x.
+- **Estilos e Interacción:** TailwindCSS v3.4.x, Lucide React (iconografía) y Framer Motion (animaciones fluidas).
+- **Gestión de Estado:** Zustand v4.5.x con persistencia automática en `localStorage`.
+
+---
+
+### 2. Arquitectura y Módulos del Backend
+
+El backend sigue un patrón arquitectónico en capas con responsabilidades delimitadas:
+
+```
+[Cliente HTTP / Navegador]
+           │
+           ▼
+[Capa de Red: Nginx Proxy Inverso con SSL/TLS Let's Encrypt]
+           │
+           ▼
+[Capa de Seguridad HTTP: Helmet + CORS Restringido + Compression]
+           │
+           ▼
+[Capa de Enrutamiento y Middlewares: Rate Limiter + JWT Auth + RBAC]
+           │
+           ▼
+[Capa de Controladores: Sanitización y Lógica de Negocio]
+           │
+    ┌──────┴──────────────────────────┐
+    ▼                                 ▼
+[Capa de Servicios]          [Capa de Datos: Prisma ORM]
+ (Sharp, Audit, Cache)                │
+                                      ▼
+                           [MongoDB Atlas Clúster]
+```
+
+#### A. Módulo de Configuración Segura (`backend/src/config/index.js`)
+- Utiliza **Zod** para validar exhaustivamente las variables de entorno en el arranque del servidor.
+- Exige obligatoriamente: `PORT`, `NODE_ENV`, `CLIENT_URL`, `DATABASE_URL`, `JWT_SECRET` (mínimo 32 caracteres criptográficos) y datos de contacto de Costa Rica.
+- Si falta una variable crítica o el entorno de producción detecta una clave por defecto, el proceso aborta inmediatamente con error explícito evitando arrancar en estado inseguro.
+
+#### B. Capa de Middlewares (`backend/src/middlewares/`)
+1. **`auth.js`:**
+   - Extrae el token JWT desde la cookie `httpOnly` (`auth_token`) o desde la cabecera `Authorization: Bearer <token>`.
+   - Verifica la firma criptográfica y la integridad del payload.
+   - **Revocación Activa (`tokenVersion`):** Compara el `tokenVersion` del payload con el registro actual en base de datos. Si la administradora cerró sesión, el token queda revocado al instante.
+   - **Control de Acceso Basado en Roles (RBAC):**
+     - `requireAuth`: Exige usuario autenticado.
+     - `requireStaff`: Permite acceso operativo (administradoras y personal de despacho).
+     - `requireAdmin`: Reserva operaciones críticas (eliminación de pedidos, finanzas, contabilidad, gestión de usuarios y ajustes globales) exclusivamente al rol `ADMIN`.
+2. **`rateLimiter.js`:**
+   - Limitador de tasa en memoria por IP del cliente (con soporte para `x-forwarded-for`).
+   - Implementa un temporizador automático con `unref()` que purga cada 5 minutos las IPs expiradas para evitar fugas de memoria (`PRF-01`).
+   - Limitadores configurados:
+     * `orderCreationLimiter`: Máximo 15 pedidos en 15 minutos (previene ataques DoS o reservas masivas falsas).
+     * `voucherUploadLimiter`: Máximo 10 comprobantes en 10 minutos.
+     * `authRateLimiter`: Máximo 10 intentos de autenticación en 15 minutos.
+     * `reviewSubmissionLimiter`: Máximo 5 opiniones de clientes en 10 minutos.
+
+#### C. Capa de Servicios (`backend/src/services/`)
+1. **`imageService.js`:**
+   - Maneja la subida de imágenes con Multer en memoria (`memoryStorage`).
+   - Convierte automáticamente todas las imágenes del catálogo a formato **WebP**, redimensiona a resoluciones estándar y genera miniaturas LQIP (Low Quality Image Placeholder) para carga ultrarrápida.
+   - Administra el almacenamiento de comprobantes bancarios en un directorio privado protegido (`privateVoucherDir`), garantizando que ningún comprobante sea accesible mediante rutas URL públicas estáticas.
+2. **`audit.js`:**
+   - Registra de forma inmutable cada acción sensible en la colección `audit_logs` (inicio de sesión, cambio de estado de pedidos, creación o borrado de productos, actualización de ajustes del negocio).
+   - Captura `userId`, `action`, `module`, detalles en JSON, dirección IP y User-Agent.
+3. **`cacheService.js`:**
+   - Mantiene en memoria una copia optimizada del payload de la página principal (`/api/home`), invalidándola automáticamente al crear o actualizar productos, categorías o banners.
+
+---
+
+### 3. Modelo de Datos Exhaustivo en Prisma (`schema.prisma`)
+
+El esquema de base de datos define 14 modelos relacionales adaptados a MongoDB mediante ObjectId (`@map("_id") @db.ObjectId`):
+
+#### Diagrama Entidad-Relación Conceptual:
+
+```
+    ┌──────────┐ 1        * ┌───────────────┐
+    │ Category │───────────<│  Subcategory  │
+    └────┬─────┘            └───────┬───────┘
+         │ 1                        │ 1
+         │                          │
+         │ *                        │ *
+    ┌────┴──────────────────────────┴───────┐
+    │                Product                │
+    └────┬──────────────┬──────────────┬────┘
+         │ 1            │ 1            │ 1
+         │              │              │
+         │ *            │ *            │ *
+    ┌────┴────────┐┌────┴────────┐┌────┴───────┐
+    │ProductImage ││ProductVari- ││   Review   │
+    │             ││    ant      ││            │
+    └─────────────┘└─────────────┘└────────────┘
+                                         │ *
+                                         │
+                                         │ 1
+    ┌─────────────┐ 1        * ┌─────────┴─────┐
+    │    Order    │───────────<│   OrderItem   │
+    └─────────────┘            └───────────────┘
+```
+
+#### Descripción Detallada de Modelos:
+
+1. **`User` (Colección: `users`):**
+   - Representa al personal administrativo, socios y clientes registrados.
+   - Campos clave: `email` (único), `password` (hasheado con bcrypt salt 10), `name`, `role` (`ADMIN`, `STAFF`, `CUSTOMER`), `tokenVersion` (contador entero para revocación de sesiones), `failedAttempts`, `lockedUntil`, `lastLoginAt`.
+   - Relaciones: Posee órdenes (`orders`), reseñas (`reviews`) y registros de auditoría (`auditLogs`).
+
+2. **`AuditLog` (Colección: `audit_logs`):**
+   - Registro inmutable de actividades administrativas y de seguridad.
+   - Campos clave: `action`, `module`, `details` (JSON string), `ipAddress`, `userAgent`, `createdAt`.
+   - Relación opcional con `User` (`onDelete: SetNull`).
+
+3. **`Category` (Colección: `categories`):**
+   - Agrupación principal de productos (Hogar, Ropa & Pijamas, Joyería & Accesorios, Belleza & Cuidado, +18 Bienestar Íntimo).
+   - Campos clave: `name`, `slug` (único), `description`, `icon`, `image`, `menuBadge`, `menuTitle`, `menuLink`, `order`, `isActive`, `isAdult`, `featuredInMenu`.
+   - Índices compuestos: `@@index([isActive, order])`.
+
+4. **`Subcategory` (Colección: `subcategories`):**
+   - Subdivisiones específicas vinculadas a una categoría padre.
+   - Campos clave: `categoryId`, `name`, `slug`, `description`, `image`, `order`, `isActive`.
+   - Índices compuestos: `@@unique([categoryId, slug])`, `@@index([categoryId, isActive, order])`.
+   - Protección: Al eliminarse una subcategoría, los productos vinculados son actualizados atómicamente a `subcategoryId: null`.
+
+5. **`Product` (Colección: `products`):**
+   - Entidad central del catálogo comercial.
+   - Campos clave: `name`, `slug` (único), `description`, `shortDescription`, `sku` (único), `price` (precio oficial en ₡), `compareAtPrice` (precio tachado), `costPrice` (costo confidencial para la tienda), `stock` (unidades físicas disponibles), `lowStockThreshold`, `isFeatured`, `isNew`, `isBestSeller`, `isActive`, `isAdult`, `rating`, `reviewCount`, `viewsCount`.
+   - Relaciones: `Category`, `Subcategory`, `ProductImage[]`, `ProductVariant[]`, `OrderItem[]`, `Review[]`.
+   - Índices de consulta: `@@index([isActive, isFeatured])`, `@@index([categoryId, isActive])`, etc.
+
+6. **`ProductImage` (Colección: `product_images`):**
+   - Imágenes del producto optimizadas.
+   - Campos: `productId`, `url`, `alt`, `isCover` (imagen de portada), `order`.
+
+7. **`ProductVariant` (Colección: `product_variants`):**
+   - Opciones combinables de producto (talla, color, aroma).
+   - Campos: `productId`, `name`, `options` (JSON string), `sku`, `price`, `stock`.
+
+8. **`Order` (Colección: `orders`):**
+   - Pedido comercial completo generado tras el checkout.
+   - Campos clave: `orderNumber` (ej: `SH-2026-1001`), `status` (`PENDING_PAYMENT`, `VOUCHER_RECEIVED`, `PAYMENT_CONFIRMED`, `PREPARING`, `SHIPPED`, `DELIVERED`, `CANCELLED`), `paymentMethod` (`SINPE_MOVIL`, `TRANSFER`), `customerName`, `customerEmail`, `customerPhone`, `shippingAddress`, `shippingMethod`, `subtotal`, `shippingCost`, `discountTotal`, `taxTotal`, `total`, `voucherUrl`, `voucherPath`, `voucherNotes`, `rejectionReason`, `trackingNumber`, `notes`, `internalNotes`, `expiresAt`, `voucherReceivedAt`, `paymentConfirmedAt`.
+   - Relaciones: `items: OrderItem[]`, `user: User?`.
+
+9. **`OrderItem` (Colección: `order_items`):**
+   - Línea de detalle inmutable asociada a una orden.
+   - Campos: `orderId`, `productId`, `productName`, `productSku`, `productImage`, `variantName`, `price`, `quantity`, `subtotal`.
+
+10. **`Banner` (Colección: `banners`):**
+    - Diapositivas para el carrusel de la página de inicio.
+    - Campos: `title`, `subtitle`, `badge`, `ctaText`, `ctaLink`, `desktopImage`, `mobileImage`, `order`, `isActive`, `startsAt`, `endsAt`.
+
+11. **`Promotion` (Colección: `promotions`):**
+    - Motor de promociones y cupones de descuento.
+    - Campos: `name`, `code` (opcional), `type` (`PERCENTAGE`, `FIXED_AMOUNT`, `FREE_SHIPPING`), `value`, `minOrderAmount`, `maxDiscount`, `usageLimit`, `usedCount`, `startsAt`, `endsAt`, `isActive`.
+
+12. **`SiteContent` (Colección: `site_content`):**
+    - Almacenamiento clave-valor de configuración dinámica y textos institucionales.
+    - Campos: `key` (único: `store_settings`, `our_story`, `sinpe_config`, etc.), `data` (JSON stringificado).
+
+13. **`Testimonial` y `Review` (Colecciones: `testimonials` y `reviews`):**
+    - Testimonios generales de la tienda y reseñas directas por producto.
+    - Cuentan con calificación de 1 a 5 estrellas, comentario y bandera de moderación `isApproved` para que la administradora decida su publicación en el sitio.
+
+14. **`Expense` (Colección: `expenses`) y `Layaway` (Colección: `layaways`):**
+    - Módulos administrativos para contabilidad financiera de la boutique (gastos operativos, mercadería, empaques) y seguimiento de clientes en modalidad de apartados a plazos y envíos contra entrega.
+
+---
+
+### 4. Flujo Integral de Pedidos (End-to-End Order Lifecycle)
+
+El ciclo de vida de un pedido en Sweet Home & Boutique CR está blindado contra manipulación de datos y sincronizado de principio a fin:
+
+```
+[Cliente: Carrito / Checkout]
+         │
+         ▼
+[Paso 1: POST /api/orders]
+ ├── Rate Limiting (Máx 15/15m)
+ ├── Consulta oficial de precios en Base de Datos (SEC-01)
+ ├── Obtención de tarifas dinámicas en StoreSettings
+ ├── Verificación y Descuento Transaccional de Stock (SEC-09)
+ └── Creación del Pedido con estado PENDING_PAYMENT
+         │
+         ▼
+[Paso 2: Cliente Realiza el Pago por SINPE Móvil o Transferencia BAC/Popular]
+         │
+         ▼
+[Paso 3: POST /api/orders/:orderNumber/voucher]
+ ├── Rate Limiting (Máx 10/10m)
+ ├── Procesamiento seguro del archivo en Sharp
+ ├── Almacenamiento en /backend/private/vouchers/
+ └── Actualización del estado a VOUCHER_RECEIVED
+         │
+         ▼
+[Paso 4: Administradora Revisa en Panel Admin (/admin/orders)]
+ ├── Visualización protegida del comprobante (GET /orders/:id/voucher)
+ ├── Opción A: Confirmar Pago -> Estado PAYMENT_CONFIRMED -> PREPARING
+ └── Opción B: Rechazar / Cancelar -> Estado CANCELLED -> Reposición Automática de Stock
+         │
+         ▼
+[Paso 5: Despacho y Entrega]
+ ├── Ingreso del número de guía de Correos de Costa Rica o Express GAM
+ ├── Cambio de estado a SHIPPED
+ └── Cliente rastrea su pedido en tiempo real con datos personales enmascarados (SEC-08)
+```
+
+#### Medidas de Seguridad Incorporadas en el Flujo:
+- **Precios Infalsificables (SEC-01):** El frontend no puede definir ni alterar los subtotales ni precios unitarios. El servidor consulta `prisma.product.findMany` y calcula el total exacto.
+- **Rastreo con Privacidad Protegida (SEC-08):** La consulta pública de rastreo `/api/orders/:orderNumber` devuelve únicamente los últimos 4 dígitos del teléfono (`***-6625`), el primer nombre y la provincia general, impidiendo el rastreo no autorizado de direcciones exactas.
+- **Comprobantes Bancarios Privados (SEC-02):** Ninguna imagen de comprobante se expone en URLs públicas directas; se requiere sesión administrativa de staff/admin para descargarlo o visualizarlo.
+
+---
+
+### 5. Mecanismo y Flujo de Inventario Concurrente
+
+Para prevenir la sobreventa, compras de productos agotados o desabastecimiento artificial, el sistema aplica reglas estrictas de consistencia:
+
+1. **Reserva Inmediata al Crear el Pedido:**
+   - Durante la ejecución de `orderController.createOrder`, se ejecuta una transacción atómica donde se valida que `product.stock >= requestedQuantity`.
+   - Si no hay existencia suficiente, la orden se rechaza con código HTTP 400.
+   - Si hay existencias, el stock se decrementa de inmediato (`stock: product.stock - requestedQuantity`).
+
+2. **Reposición Automática por Cancelación:**
+   - Si la administradora cancela un pedido (`status: CANCELLED`) desde el panel, el sistema itera cada ítem y restaura las unidades correspondientes (`stock: { increment: item.quantity }`).
+
+3. **Reactivación de Pedidos:**
+   - Si un pedido previamente cancelado es reactivado por el personal, el inventario vuelve a descontarse para mantener la cuadratura del inventario.
+
+4. **Eliminación Segura de Pedidos:**
+   - Al eliminar un pedido que no estaba cancelado previamente, el sistema repone primero el stock de los productos antes de suprimir el registro en la base de datos.
+
+---
+
+### 6. Arquitectura y Componentes del Frontend
+
+El frontend está desarrollado bajo el estándar de Single Page Application (SPA) con arquitectura basada en componentes modulares, optimizada para dispositivos móviles (más del 80% del tráfico esperado):
+
+#### A. Organización de Componentes (`frontend/src/components/`)
+1. **`layout/`:**
+   - `Header.jsx`: Barra superior con selector de categorías, barra promocional rotatoria y barra de búsqueda interactiva debounced (`HeaderSearchBar.jsx`).
+   - `MegaMenu.jsx`: Menú interactivo desktop con soporte visual para categorías destacadas y badges exclusivos.
+   - `MobileMenuDrawer.jsx`: Cajón de navegación lateral responsivo para smartphones.
+   - `CartDrawer.jsx`: Carrito deslizante con cálculo en tiempo real de envío gratuito y acceso directo al checkout.
+   - `OrderTrackingModal.jsx`: Modal interactivo de rastreo de pedidos por código con estados visuales animados.
+2. **`home/`:**
+   - `HeroCarousel.jsx`: Carrusel principal con soporte de imágenes diferenciadas para móvil y escritorio.
+   - `CategoryGrid.jsx`: Cuadrícula visual de acceso directo a colecciones.
+   - `ProductSection.jsx` y `ProductCard.jsx`: Tarjetas de producto con etiquetas de descuento, indicador de stock bajo y modal de vista rápida (`QuickViewModal.jsx`).
+   - `TestimonialsSection.jsx`: Carrusel de opiniones de clientes con formulario público para ingresar nuevas reseñas sujetas a moderación.
+3. **`checkout/`:**
+   - `CheckoutModal.jsx`: Flujo de compra guiado en 3 etapas:
+     * *Paso 1:* Datos de contacto del cliente y dirección física en Costa Rica con método de envío (GAM Express, Correos de CR, Retiro).
+     * *Paso 2:* Selección de método de pago (SINPE Móvil oficial al 6465-6625 o Cuentas IBAN de BAC Credomatic y Banco Popular) con copia de datos al portapapeles en 1 clic.
+     * *Paso 3:* Confirmación final y carga guiada del comprobante de transferencia bancaria.
+4. **`admin/`:**
+   - `AdminLayout.jsx` y `AdminView.jsx`: Interfaz de administración con diseño ejecutivo en paleta Rose & Gold.
+   - `AdminDashboard.jsx`: Métricas clave (ventas netas, pedidos pendientes, productos agotados, metas comerciales y centro de acciones rápidas).
+   - `AdminOrders.jsx`: Gestión de pedidos, tabla responsive, visor seguro de comprobantes bancarios e impresión de guías de despacho.
+   - `AdminProducts.jsx`: Alta, baja y modificación de artículos con editor visual de fotos y control de variantes.
+   - `AdminCategories.jsx`: Reordenamiento y edición de categorías y subcategorías.
+   - `AdminReviews.jsx`: Bandeja de moderación de reseñas para aprobar o eliminar comentarios de clientes.
+   - `AdminSettings.jsx`: Configuración centralizada de números de contacto, cuentas bancarias, redes sociales y costos de envío.
+   - Submódulo de Contabilidad (`subcomponents/`): Gráficos de ingresos/gastos, balance financiero, gestión de apartados a plazos y exportación a Excel.
+
+#### B. Gestión de Estado Global (`frontend/src/store/`)
+- **`cartStore.js`:** Gestiona los artículos del carrito de compras, cálculo de subtotales, variantes seleccionadas y persistencia en `localStorage`.
+- **`wishlistStore.js`:** Gestión de lista de deseos para clientes sin necesidad de registro previo.
+- **`ageGateStore.js`:** Puerta de confirmación de mayoría de edad (+18) obligatoria para el acceso a la sección de Bienestar Íntimo.
+
+---
+
+### 7. Matriz de Seguridad y Políticas de Protección
+
+| Dominio | Medida Implementada | Ubicación Técnica |
+| :--- | :--- | :--- |
+| **Integridad de Precios** | Precios y subtotales calculados estrictamente en el servidor. | [`order.controller.js`](file:///home/jose/sweet_home/backend/src/controllers/order.controller.js) |
+| **Confidencialidad Bancaria** | Comprobantes almacenados en directorio privado fuera del webroot estático. | [`imageService.js`](file:///home/jose/sweet_home/backend/src/services/imageService.js), [`adminOrders.controller.js`](file:///home/jose/sweet_home/backend/src/controllers/admin/adminOrders.controller.js) |
+| **Control de Sesiones** | Tokens JWT con revocación instantánea vía `tokenVersion` en base de datos. | [`auth.controller.js`](file:///home/jose/sweet_home/backend/src/controllers/auth.controller.js), [`auth.js`](file:///home/jose/sweet_home/backend/src/middlewares/auth.js) |
+| **Segregación de Roles** | Separación estricta de privilegios: `requireAdmin` para finanzas, borrados y usuarios; `requireStaff` para operaciones diarias. | [`admin.routes.js`](file:///home/jose/sweet_home/backend/src/routes/admin.routes.js) |
+| **Protección contra Abuso** | Rate Limiting por IP para creación de órdenes, subida de vouchers, login y reseñas. | [`rateLimiter.js`](file:///home/jose/sweet_home/backend/src/middlewares/rateLimiter.js) |
+| **Cabeceras HTTP Seguras** | Helmet activado con protección contra Clickjacking (X-Frame-Options), XSS y MIME sniffing. | [`server/app.js`](file:///home/jose/sweet_home/backend/src/server/app.js) |
+| **Políticas CORS** | Restringido exclusivamente al dominio oficial de producción y localhost en desarrollo. | [`server/app.js`](file:///home/jose/sweet_home/backend/src/server/app.js) |
+| **Privacidad de Clientes** | Enmascaramiento de datos personales en consultas públicas de rastreo. | [`order.controller.js`](file:///home/jose/sweet_home/backend/src/controllers/order.controller.js) |
+
+---
+
+### 8. Despliegue en Producción e Infraestructura
+
+- **Servidor VPS:** Ubuntu 24.04 LTS (Host: `174.138.62.86`).
+- **Administrador de Procesos:** PM2 gestionando el servicio `sweet-home-8081` con reinicio automático ante caídas (`pm2 start/restart`).
+- **Servidor Web Frontal:** Nginx configurado como proxy inverso hacia `localhost:8081`, con compresión gzip y caché de activos estáticos.
+- **Certificado Criptográfico:** Let's Encrypt SSL/TLS con renovación desatendida vía `certbot`.
+- **Pipeline de Despliegue (`scripts/deploy-vps.sh`):**
+  1. Compilación de producción de Vite en local.
+  2. Sincronización incremental vía `rsync` (excluyendo secretos `.env`, uploads y node_modules).
+  3. Ejecución de `npx prisma generate` y recarga en caliente con `pm2 restart sweet-home-8081 --update-env`.
