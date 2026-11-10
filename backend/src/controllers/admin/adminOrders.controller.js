@@ -78,6 +78,15 @@ export async function updateAdminOrderStatus(req, res) {
     const { id } = req.params;
     const { status, trackingNumber, internalNotes, rejectionReason } = req.body;
 
+    const currentOrder = await prisma.order.findUnique({
+      where: { id },
+      include: { items: true }
+    });
+
+    if (!currentOrder) {
+      return res.status(404).json({ error: true, message: 'Pedido no encontrado' });
+    }
+
     const updateData = {};
     if (status) {
       updateData.status = status;
@@ -89,10 +98,41 @@ export async function updateAdminOrderStatus(req, res) {
     if (internalNotes !== undefined) updateData.internalNotes = internalNotes;
     if (rejectionReason !== undefined) updateData.rejectionReason = rejectionReason;
 
-    const order = await prisma.order.update({
-      where: { id },
-      data: updateData,
-      include: { items: true }
+    // Transacción para garantizar consistencia entre estado del pedido y stock de inventario
+    const order = await prisma.$transaction(async (tx) => {
+      // Si cambia a CANCELLED desde otro estado, devolver el inventario
+      if (status && status === 'CANCELLED' && currentOrder.status !== 'CANCELLED') {
+        for (const item of currentOrder.items) {
+          if (item.productId && item.quantity > 0) {
+            await tx.product.update({
+              where: { id: item.productId },
+              data: { stock: { increment: item.quantity } }
+            }).catch((err) => {
+              console.warn(`No se pudo reponer stock para producto ${item.productId}:`, err.message);
+            });
+          }
+        }
+      }
+
+      // Si se reactiva un pedido CANCELLED a un estado activo, descontar inventario si es posible
+      if (status && currentOrder.status === 'CANCELLED' && status !== 'CANCELLED') {
+        for (const item of currentOrder.items) {
+          if (item.productId && item.quantity > 0) {
+            await tx.product.update({
+              where: { id: item.productId },
+              data: { stock: { decrement: item.quantity } }
+            }).catch((err) => {
+              console.warn(`No se pudo descontar stock para producto reactivado ${item.productId}:`, err.message);
+            });
+          }
+        }
+      }
+
+      return await tx.order.update({
+        where: { id },
+        data: updateData,
+        include: { items: true }
+      });
     });
 
     await logAudit({
@@ -114,15 +154,31 @@ export async function deleteAdminOrder(req, res) {
     const { id } = req.params;
     const order = await prisma.order.findUnique({
       where: { id },
-      select: { id: true, orderNumber: true }
+      include: { items: true }
     });
 
     if (!order) {
       return res.status(404).json({ error: true, message: 'Pedido no encontrado' });
     }
 
-    await prisma.order.delete({
-      where: { id }
+    await prisma.$transaction(async (tx) => {
+      // Si el pedido no estaba cancelado, restaurar el inventario antes de eliminar
+      if (order.status !== 'CANCELLED') {
+        for (const item of order.items) {
+          if (item.productId && item.quantity > 0) {
+            await tx.product.update({
+              where: { id: item.productId },
+              data: { stock: { increment: item.quantity } }
+            }).catch((err) => {
+              console.warn(`No se pudo reponer stock al eliminar pedido ${item.productId}:`, err.message);
+            });
+          }
+        }
+      }
+
+      await tx.order.delete({
+        where: { id }
+      });
     });
 
     await logAudit({

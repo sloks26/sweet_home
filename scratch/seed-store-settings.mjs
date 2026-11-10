@@ -16,6 +16,8 @@ async function seedSettings() {
     pickupNote: 'Previa coordinación por WhatsApp',
     contactEmail: config.store.email,
     freeShippingThreshold: 35000,
+    shippingExpressGamCost: 2500,
+    shippingCorreosCost: 3500,
     social: config.store.social
   };
 

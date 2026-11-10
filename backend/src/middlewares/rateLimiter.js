@@ -72,3 +72,10 @@ export const authRateLimiter = rateLimiter({
   windowMs: 15 * 60 * 1000,
   message: 'Demasiados intentos de inicio de sesión fallidos.'
 });
+
+// Limitador de envío de reseñas y testimonios públicos (previene spam de valoraciones)
+export const reviewSubmissionLimiter = rateLimiter({
+  maxAttempts: 5,
+  windowMs: 10 * 60 * 1000,
+  message: 'Has enviado varias opiniones recientemente. Gracias por tu aporte.'
+});

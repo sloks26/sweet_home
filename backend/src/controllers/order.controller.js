@@ -147,11 +147,17 @@ export const orderController = {
           where: { key: 'store_settings' }
         });
         let shippingRates = { gamCost: 2500, ruralCost: 3500, freeShippingThreshold: 35000 };
-        if (settingsDoc?.value) {
+        const rawSettings = settingsDoc?.data || settingsDoc?.value;
+        if (rawSettings) {
           try {
-            const parsedSettings = JSON.parse(settingsDoc.value);
-            if (parsedSettings.shippingRates) {
-              shippingRates = { ...shippingRates, ...parsedSettings.shippingRates };
+            const parsedSettings = typeof rawSettings === 'string' ? JSON.parse(rawSettings) : rawSettings;
+            if (parsedSettings) {
+              const gam = parsedSettings.shippingExpressGamCost ?? parsedSettings.shippingRates?.gamCost;
+              const rural = parsedSettings.shippingCorreosCost ?? parsedSettings.shippingRates?.ruralCost;
+              const freeThreshold = parsedSettings.freeShippingThreshold ?? parsedSettings.shippingRates?.freeShippingThreshold;
+              if (Number.isFinite(Number(gam))) shippingRates.gamCost = Number(gam);
+              if (Number.isFinite(Number(rural))) shippingRates.ruralCost = Number(rural);
+              if (Number.isFinite(Number(freeThreshold))) shippingRates.freeShippingThreshold = Number(freeThreshold);
             }
           } catch (_) {
             /* usar tarifas por defecto si falla el parseo */

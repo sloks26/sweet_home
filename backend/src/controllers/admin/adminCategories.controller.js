@@ -265,6 +265,11 @@ export async function updateAdminSubcategory(req, res) {
 export async function deleteAdminSubcategory(req, res) {
   try {
     const { id } = req.params;
+    // Desvincular productos asociados a esta subcategoría para evitar referencias huérfanas
+    await prisma.product.updateMany({
+      where: { subcategoryId: id },
+      data: { subcategoryId: null }
+    });
     await prisma.subcategory.delete({ where: { id } });
     cacheService.invalidateHome();
     return res.json({ success: true, message: 'Subcategoría eliminada' });
