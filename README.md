@@ -10,7 +10,6 @@ Plataforma integral de E-Commerce de Lujo, Gestión Contable/ERP y CRM para **Sw
 
 - **Tienda Oficial en Línea (Dominio Seguro SSL):** [https://sweethomeandboutiquecr.com/](https://sweethomeandboutiquecr.com/)
 - **Acceso con www:** [https://www.sweethomeandboutiquecr.com/](https://www.sweethomeandboutiquecr.com/)
-- **Dossier Ejecutivo del Sistema (PDF):** [https://sweethomeandboutiquecr.com/Sweet_Home_Boutique_CR_Dossier_Sistema.pdf](https://sweethomeandboutiquecr.com/Sweet_Home_Boutique_CR_Dossier_Sistema.pdf)
 - **Documento de Auditoría y Certificación:** [`AUDITORIA.md`](./AUDITORIA.md)
 
 ---
@@ -75,7 +74,6 @@ sweet_home/
 ├── scripts/
 │   └── deploy-vps.sh           # Script automatizado de compilación y despliegue a VPS con PM2
 ├── AUDITORIA.md                # Informe exhaustivo de auditoría y certificación de seguridad
-├── Sweet_Home_Boutique_CR_Dossier_Sistema.pdf # Dossier ejecutivo para presentación comercial
 ├── package.json                # Scripts globales del monorepo
 └── README.md                   # Esta documentación
 ```
