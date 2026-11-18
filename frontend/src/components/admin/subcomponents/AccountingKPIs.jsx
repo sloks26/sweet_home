@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Wallet, Clock, Truck, ArrowUpRight } from 'lucide-react';
 
 // Componente para animación de conteo numérico progresivo
@@ -7,6 +8,7 @@ export const AnimatedCounter = ({ targetValue = 0, duration = 1200, isCurrency =
 
   useEffect(() => {
     let startTimestamp = null;
+    let animFrame = null;
     const startValue = displayValue;
     const endValue = Number(targetValue) || 0;
 
@@ -19,11 +21,14 @@ export const AnimatedCounter = ({ targetValue = 0, duration = 1200, isCurrency =
       setDisplayValue(current);
 
       if (progress < 1) {
-        window.requestAnimationFrame(step);
+        animFrame = window.requestAnimationFrame(step);
       }
     };
 
-    window.requestAnimationFrame(step);
+    animFrame = window.requestAnimationFrame(step);
+    return () => {
+      if (animFrame) window.cancelAnimationFrame(animFrame);
+    };
   }, [targetValue, duration]);
 
   if (isCurrency) {
@@ -46,7 +51,13 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
       {/* 1. INGRESOS TOTALES */}
-      <div className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1035] to-[#120822] border border-white/[0.07] border-t-gold-DEFAULT/40 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 hover:border-gold-DEFAULT/60 transition-all">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0.05 }}
+        whileTap={{ scale: 0.98 }}
+        className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1035] to-[#120822] border border-white/[0.07] border-t-gold-DEFAULT/40 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 hover:border-gold-DEFAULT/60 transition-all select-none"
+      >
         <div className="pointer-events-none absolute -top-10 -right-10 w-24 h-24 rounded-full bg-gold-DEFAULT/15 blur-2xl" />
         <div className="relative flex items-center justify-between">
           <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-gold-light/90 truncate">
@@ -63,10 +74,16 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
           <span className="truncate">Ventas tienda + abonos</span>
           <span className="w-1.5 h-1.5 rounded-full bg-gold-bright" />
         </div>
-      </div>
+      </motion.div>
 
       {/* 2. EGRESOS TOTALES */}
-      <div className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1032] to-[#120822] border border-white/[0.07] border-t-rose-500/35 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 hover:border-rose-500/55 transition-all">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0.1 }}
+        whileTap={{ scale: 0.98 }}
+        className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1032] to-[#120822] border border-white/[0.07] border-t-rose-500/35 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 hover:border-rose-500/55 transition-all select-none"
+      >
         <div className="pointer-events-none absolute -top-10 -right-10 w-24 h-24 rounded-full bg-rose-500/10 blur-2xl" />
         <div className="relative flex items-center justify-between">
           <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-rose-300/90 truncate">
@@ -83,10 +100,16 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
           <span className="truncate">Gastos y compras</span>
           <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
         </div>
-      </div>
+      </motion.div>
 
       {/* 3. GANANCIA NETA */}
-      <div className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#132328] via-[#131229] to-[#110820] border border-emerald-500/25 border-t-emerald-400/50 shadow-[0_12px_30px_-10px_rgba(16,185,129,0.2)] space-y-2 hover:border-emerald-400/70 transition-all">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0.15 }}
+        whileTap={{ scale: 0.98 }}
+        className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#132328] via-[#131229] to-[#110820] border border-emerald-500/25 border-t-emerald-400/50 shadow-[0_12px_30px_-10px_rgba(16,185,129,0.2)] space-y-2 hover:border-emerald-400/70 transition-all select-none"
+      >
         <div className="pointer-events-none absolute -top-10 -right-10 w-28 h-28 rounded-full bg-emerald-500/15 blur-2xl" />
         <div className="relative flex items-center justify-between">
           <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-emerald-300 truncate">
@@ -105,12 +128,16 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
           <span className="truncate">Balance (Ingresos - Gastos)</span>
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
         </div>
-      </div>
+      </motion.div>
 
       {/* 4. APARTADOS / A PAGOS */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0.2 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => onSelectTab && onSelectTab('apartados')}
-        className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1032] to-[#120822] border border-white/[0.07] border-t-amber-400/35 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 cursor-pointer hover:border-amber-400/60 transition-all group"
+        className="relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1032] to-[#120822] border border-white/[0.07] border-t-amber-400/35 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 cursor-pointer hover:border-amber-400/60 transition-all group select-none"
       >
         <div className="pointer-events-none absolute -top-10 -right-10 w-24 h-24 rounded-full bg-amber-500/10 blur-2xl" />
         <div className="relative flex items-center justify-between">
@@ -133,12 +160,16 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
             Ver <ArrowUpRight className="w-3 h-3 ml-0.5" />
           </span>
         </div>
-      </div>
+      </motion.div>
 
       {/* 5. CONTRA ENTREGA (Ocupa ancho completo en 2 columnas de móvil para balance perfecto) */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0.25 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => onSelectTab && onSelectTab('contra_entrega')}
-        className="col-span-2 sm:col-span-1 lg:col-span-1 relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1032] to-[#120822] border border-white/[0.07] border-t-sky-400/35 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 cursor-pointer hover:border-sky-400/60 transition-all group"
+        className="col-span-2 sm:col-span-1 lg:col-span-1 relative overflow-hidden p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1E1032] to-[#120822] border border-white/[0.07] border-t-sky-400/35 shadow-[0_12px_30px_-10px_rgba(0,0,0,0.65)] space-y-2 cursor-pointer hover:border-sky-400/60 transition-all group select-none"
       >
         <div className="pointer-events-none absolute -top-10 -right-10 w-24 h-24 rounded-full bg-sky-500/10 blur-2xl" />
         <div className="relative flex items-center justify-between">
@@ -161,7 +192,7 @@ export const AccountingKPIs = ({ metrics, onSelectTab }) => {
             Ver <ArrowUpRight className="w-3 h-3 ml-0.5" />
           </span>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

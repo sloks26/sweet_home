@@ -128,7 +128,7 @@ export const ContraEntregaTable = ({
                   <button
                     type="button"
                     onClick={() => onDelete(item.id, item.customerName)}
-                    className="min-h-[40px] px-3 py-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 text-xs font-semibold transition-colors flex items-center justify-center"
+                    className="min-h-[40px] px-3.5 py-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95 touch-manipulation"
                     title="Eliminar"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -210,7 +210,7 @@ export const ContraEntregaTable = ({
                       <button
                         type="button"
                         onClick={() => onDelete(item.id, item.customerName)}
-                        className="p-1 rounded text-text-muted hover:text-rose-400 transition-colors inline-block"
+                        className="p-2 rounded-xl text-text-muted hover:text-rose-400 hover:bg-rose-500/10 transition-all inline-flex items-center justify-center min-w-[36px] min-h-[36px] cursor-pointer active:scale-95 touch-manipulation"
                         title="Eliminar"
                       >
                         <Trash2 className="w-3.5 h-3.5" />

@@ -6,6 +6,17 @@ import Button from '../../ui/Button';
 export const AccountingChart = ({ charts, onExportExcel }) => {
   const [activePeriod, setActivePeriod] = useState('daily'); // 'daily' | 'weekly' | 'monthly'
   const [viewMode, setViewMode] = useState('comparative'); // 'comparative' | 'income' | 'expense'
+  const [selectedBar, setSelectedBar] = useState(null);
+
+  const handlePeriodChange = (period) => {
+    setActivePeriod(period);
+    setSelectedBar(null);
+  };
+
+  const handleViewModeChange = (mode) => {
+    setViewMode(mode);
+    setSelectedBar(null);
+  };
 
   const currentData =
     activePeriod === 'daily'
@@ -82,7 +93,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
           <div className="flex rounded-xl bg-[#0A0412] p-1 border border-white/[0.07] text-xs shadow-inner">
             <button
               type="button"
-              onClick={() => setViewMode('comparative')}
+              onClick={() => handleViewModeChange('comparative')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 viewMode === 'comparative'
                   ? 'bg-gradient-to-r from-amber-300 to-amber-500 text-slate-950 font-bold shadow-sm'
@@ -93,7 +104,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
             </button>
             <button
               type="button"
-              onClick={() => setViewMode('income')}
+              onClick={() => handleViewModeChange('income')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 viewMode === 'income'
                   ? 'bg-emerald-500 text-white font-bold shadow-sm'
@@ -104,7 +115,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
             </button>
             <button
               type="button"
-              onClick={() => setViewMode('expense')}
+              onClick={() => handleViewModeChange('expense')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 viewMode === 'expense'
                   ? 'bg-rose-500 text-white font-bold shadow-sm'
@@ -119,7 +130,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
           <div className="flex rounded-xl bg-[#0A0412] p-1 border border-white/[0.07] text-xs shadow-inner">
             <button
               type="button"
-              onClick={() => setActivePeriod('daily')}
+              onClick={() => handlePeriodChange('daily')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 activePeriod === 'daily'
                   ? 'bg-[#21113A] text-gold-bright font-bold shadow-sm border border-gold-DEFAULT/35'
@@ -130,7 +141,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
             </button>
             <button
               type="button"
-              onClick={() => setActivePeriod('weekly')}
+              onClick={() => handlePeriodChange('weekly')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 activePeriod === 'weekly'
                   ? 'bg-[#21113A] text-gold-bright font-bold shadow-sm border border-gold-DEFAULT/35'
@@ -141,7 +152,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
             </button>
             <button
               type="button"
-              onClick={() => setActivePeriod('monthly')}
+              onClick={() => handlePeriodChange('monthly')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                 activePeriod === 'monthly'
                   ? 'bg-[#21113A] text-gold-bright font-bold shadow-sm border border-gold-DEFAULT/35'
@@ -206,7 +217,7 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
 
       {/* Contenedor de la Gráfica Financiera con Eje Y Real y Etiquetas Claras */}
       <div className="w-full overflow-x-auto pt-2 pb-1">
-        <div className="min-w-[540px] sm:min-w-full rounded-2xl bg-[#090312] border border-white/[0.08] p-4 sm:p-6">
+        <div className={`${activePeriod === 'monthly' ? 'min-w-[520px] sm:min-w-full' : 'min-w-full'} rounded-2xl bg-[#090312] border border-white/[0.08] p-4 sm:p-6 transition-all`}>
           <div className="flex items-stretch gap-3">
             {/* Eje Y Izquierdo (Escala en Colones alineada con las 5 líneas de la cuadrícula) */}
             <div className="flex flex-col justify-between text-right pr-2 pt-28 pb-14 text-[10px] font-semibold text-text-muted tabular-nums select-none w-12 shrink-0">
@@ -248,14 +259,19 @@ export const AccountingChart = ({ charts, onExportExcel }) => {
                       <div
                         key={`${activePeriod}-${viewMode}-${idx}`}
                         className="flex-1 flex flex-col items-center justify-end h-full group relative z-10 cursor-pointer"
+                        onClick={() => setSelectedBar(selectedBar === idx ? null : idx)}
                       >
                         {/* Fondo de columna sutil al hacer hover */}
                         <div className="pointer-events-none absolute inset-x-1 top-1 bottom-0 rounded-xl bg-white/[0.0] group-hover:bg-white/[0.03] transition-colors" />
 
-                        {/* Tooltip Flotante 100% DENTRO del área superior reservada (Cero recortes y nunca tapa las barras) */}
+                        {/* Tooltip Flotante 100% DENTRO del área superior reservada (Cero recortes y táctil en móviles) */}
                         <div
                           style={{ backgroundColor: '#0D051A' }}
-                          className="pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-150 absolute top-1.5 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-xl border border-gold-DEFAULT shadow-[0_12px_30px_rgba(0,0,0,0.95)] text-[11px] whitespace-nowrap tabular-nums"
+                          className={`pointer-events-none transition-all duration-150 absolute top-1.5 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-xl border border-gold-DEFAULT shadow-[0_12px_30px_rgba(0,0,0,0.95)] text-[11px] whitespace-nowrap tabular-nums ${
+                            selectedBar === idx
+                              ? 'opacity-100 scale-100'
+                              : 'opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100'
+                          }`}
                         >
                           <p className="font-bold text-[#FFE08A] border-b border-white/10 pb-0.5 mb-1 text-xs text-center">
                             {item.label || item.month}

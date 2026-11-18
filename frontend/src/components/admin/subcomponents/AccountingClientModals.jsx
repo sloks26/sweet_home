@@ -148,4 +148,41 @@ export const AddPaymentModal = ({
   );
 };
 
+export const ConfirmDeleteClientModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  clientName,
+  isSubmitting
+}) => {
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="¿Eliminar Registro?"
+      subtitle={clientName ? `Registro de: ${clientName}` : 'Confirmación requerida'}
+    >
+      <div className="space-y-4 pb-1">
+        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-200 leading-relaxed">
+          ¿Segura(o) que deseas eliminar este registro permanentemente? Esta acción lo borrará de la lista de cartera y no se puede deshacer.
+        </div>
+
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-night-700">
+          <Button type="button" variant="ghost" size="sm" onClick={onClose} disabled={isSubmitting}>
+            Cancelar
+          </Button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-md shadow-rose-900/30 disabled:opacity-50 cursor-pointer"
+          >
+            {isSubmitting ? 'Eliminando...' : 'Sí, Eliminar'}
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
 export default CreateClientModal;

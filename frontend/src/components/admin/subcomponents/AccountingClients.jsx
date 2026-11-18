@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react';
 import Button from '../../ui/Button';
 import ApartadosTable from './ApartadosTable';
 import ContraEntregaTable from './ContraEntregaTable';
-import { CreateClientModal, AddPaymentModal } from './AccountingClientModals';
+import { CreateClientModal, AddPaymentModal, ConfirmDeleteClientModal } from './AccountingClientModals';
 
 export const AccountingClients = ({ layaways = [], onRefresh }) => {
   const [filterMode, setFilterMode] = useState('both'); // 'both' | 'apartados' | 'contra_entrega'
@@ -13,6 +13,8 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
   const [selectedLayaway, setSelectedLayaway] = useState(null);
   const [paymentAmount, setPaymentAmount] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [clientToDelete, setClientToDelete] = useState(null);
 
   const [formState, setFormState] = useState({
     name: '',
@@ -131,14 +133,29 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
     }
   };
 
-  const handleDeleteRecord = async (id, name) => {
-    if (!window.confirm(`¿Segura(o) que deseas eliminar el registro de ${name}?`)) return;
+  const openDeleteModal = (id, name) => {
+    setClientToDelete({ id, name });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!clientToDelete) return;
+    setIsSubmitting(true);
     try {
-      const res = await fetch(`/api/admin/layaways/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/layaways/${clientToDelete.id}`, { method: 'DELETE' });
       const data = await res.json();
-      if (data.success && onRefresh) onRefresh();
+      if (data.success) {
+        setIsDeleteModalOpen(false);
+        setClientToDelete(null);
+        if (onRefresh) onRefresh();
+      } else {
+        alert(data.message || 'Error al eliminar registro');
+      }
     } catch (err) {
       console.error(err);
+      alert('Error de conexión al eliminar');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -241,7 +258,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
           pendingSaldo={pendingApartadosSaldo}
           onOpenCreate={() => openCreateModal('APARTADO')}
           onOpenPayment={openAddPaymentModal}
-          onDelete={handleDeleteRecord}
+          onDelete={openDeleteModal}
           formatCleanPhone={formatCleanPhone}
           getWhatsAppLink={getApartadoWhatsAppLink}
         />
@@ -254,7 +271,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
           pendingSaldo={pendingContraEntregaSaldo}
           onOpenCreate={() => openCreateModal('CONTRA_ENTREGA')}
           onMarkAsCompleted={handleMarkAsCompleted}
-          onDelete={handleDeleteRecord}
+          onDelete={openDeleteModal}
           formatCleanPhone={formatCleanPhone}
           getWhatsAppLink={getContraEntregaWhatsAppLink}
         />
@@ -278,6 +295,17 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
         paymentAmount={paymentAmount}
         setPaymentAmount={setPaymentAmount}
         onSubmit={handleAddPayment}
+        isSubmitting={isSubmitting}
+      />
+
+      <ConfirmDeleteClientModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setClientToDelete(null);
+        }}
+        onConfirm={handleConfirmDelete}
+        clientName={clientToDelete?.name}
         isSubmitting={isSubmitting}
       />
     </div>

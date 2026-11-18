@@ -27,7 +27,12 @@ export const adminAccountingController = {
       });
 
       const ordersRevenue = confirmedOrders.reduce((sum, o) => sum + (o.total || 0), 0);
-      const layawaysRevenue = allLayaways.reduce((sum, l) => sum + (l.paidAmount || 0), 0);
+      const layawaysRevenue = allLayaways.reduce((sum, l) => {
+        if (l.status === 'COMPLETED') {
+          return sum + (l.paidAmount > 0 ? l.paidAmount : (l.totalAmount || 0));
+        }
+        return sum + (l.paidAmount || 0);
+      }, 0);
       const totalRevenue = ordersRevenue + layawaysRevenue;
 
       const totalExpenses = allExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
@@ -119,21 +124,28 @@ export const adminAccountingController = {
         }
       });
 
-      // Distribuir abonos de apartados
+      // Distribuir abonos de apartados y pedidos contra entrega cobrados
       allLayaways.forEach((l) => {
-        if (l.paidAmount > 0) {
+        const incomeValue =
+          l.status === 'COMPLETED'
+            ? l.paidAmount > 0
+              ? l.paidAmount
+              : l.totalAmount || 0
+            : l.paidAmount || 0;
+
+        if (incomeValue > 0) {
           const d = new Date(l.updatedAt || l.createdAt);
           const dayKey = d.toISOString().split('T')[0];
-          if (dailyMap[dayKey]) dailyMap[dayKey].income += l.paidAmount;
+          if (dailyMap[dayKey]) dailyMap[dayKey].income += incomeValue;
 
           const wDiff = getWeekDiff(d);
           if (wDiff >= 0 && wDiff <= 3) {
             const wItem = weeklyData.find((w) => w.weekIdx === wDiff);
-            if (wItem) wItem.income += l.paidAmount;
+            if (wItem) wItem.income += incomeValue;
           }
 
           if (d.getFullYear() === currentYear) {
-            monthlyData[d.getMonth()].income += l.paidAmount;
+            monthlyData[d.getMonth()].income += incomeValue;
           }
         }
       });
@@ -341,7 +353,7 @@ export const adminAccountingController = {
   async updateLayaway(req, res) {
     try {
       const { id } = req.params;
-      const { addPayment, status, notes } = req.body;
+      const { addPayment, paidAmount, status, notes } = req.body;
 
       const existing = await prisma.layaway.findUnique({ where: { id } });
       if (!existing) {
@@ -349,8 +361,12 @@ export const adminAccountingController = {
       }
 
       let newPaid = existing.paidAmount;
-      if (addPayment && Number(addPayment) > 0) {
+      if (paidAmount !== undefined && Number(paidAmount) >= 0) {
+        newPaid = parseFloat(paidAmount);
+      } else if (addPayment && Number(addPayment) > 0) {
         newPaid += parseFloat(addPayment);
+      } else if (status === 'COMPLETED') {
+        newPaid = existing.totalAmount;
       }
 
       const newRemaining = Math.max(0, existing.totalAmount - newPaid);

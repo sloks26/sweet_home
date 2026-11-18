@@ -11,8 +11,8 @@ router.use(authenticate, requireAuth, requireStaff);
 // Dashboard
 router.get('/dashboard', adminController.getDashboardStats);
 
-// Contabilidad y Finanzas (SEC-10: Exclusivo para ADMIN)
-router.get('/accounting', requireAdmin, adminController.getAccountingDashboard);
+// Contabilidad y Finanzas (Visualización para STAFF y ADMIN; gastos exclusivo para ADMIN)
+router.get('/accounting', adminController.getAccountingDashboard);
 router.post('/expenses', requireAdmin, adminController.createExpense);
 router.delete('/expenses/:id', requireAdmin, adminController.deleteExpense);
 
@@ -20,7 +20,7 @@ router.delete('/expenses/:id', requireAdmin, adminController.deleteExpense);
 router.get('/layaways', adminController.getLayaways);
 router.post('/layaways', adminController.createLayaway);
 router.put('/layaways/:id', adminController.updateLayaway);
-router.delete('/layaways/:id', requireAdmin, adminController.deleteLayaway);
+router.delete('/layaways/:id', adminController.deleteLayaway);
 
 // Banners y Hero Carrusel
 router.get('/banners', adminController.getBanners);
