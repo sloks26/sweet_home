@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Target, TrendingUp, Edit3, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export const DashboardSalesGoal = ({ currentSales = 0 }) => {
+export const DashboardSalesGoal = ({ currentSales = 0, totalHistoricSales = 0 }) => {
   const [goal, setGoal] = useState(() => {
     const saved = localStorage.getItem('sh_monthly_goal');
     return saved ? parseFloat(saved) : 1000000; // ₡1,000,000 por defecto
@@ -88,13 +88,18 @@ export const DashboardSalesGoal = ({ currentSales = 0 }) => {
 
       {/* Montos y Porcentaje */}
       <div className="relative flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-        <div className="flex items-baseline gap-2.5">
+        <div className="flex flex-wrap items-baseline gap-2">
           <span className="text-2xl sm:text-3xl font-extrabold text-[#FFE08A] drop-shadow-[0_2px_10px_rgba(242,193,78,0.25)] tabular-nums">
             ₡{currentSales.toLocaleString('es-CR')}
           </span>
           <span className="text-xs font-medium text-text-secondary tabular-nums">
-            de ₡{goal.toLocaleString('es-CR')}
+            en {currentMonthName} (Meta: ₡{goal.toLocaleString('es-CR')})
           </span>
+          {totalHistoricSales > 0 && totalHistoricSales !== currentSales && (
+            <span className="text-[11px] text-gold-light/60 font-medium block sm:inline w-full sm:w-auto">
+              • Acumulado total histórico: ₡{totalHistoricSales.toLocaleString('es-CR')}
+            </span>
+          )}
         </div>
         <div className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-300 inline-flex items-center gap-1.5 w-fit tabular-nums">
           <TrendingUp className="w-3.5 h-3.5" />

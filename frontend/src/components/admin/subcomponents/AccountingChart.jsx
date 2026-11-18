@@ -4,7 +4,7 @@ import { BarChart3, FileSpreadsheet, Sparkles } from 'lucide-react';
 import Button from '../../ui/Button';
 
 export const AccountingChart = ({ charts, onExportExcel }) => {
-  const [activePeriod, setActivePeriod] = useState('daily'); // 'daily' | 'weekly' | 'monthly'
+  const [activePeriod, setActivePeriod] = useState('monthly'); // 'monthly' | 'daily' | 'weekly'
   const [viewMode, setViewMode] = useState('comparative'); // 'comparative' | 'income' | 'expense'
   const [selectedBar, setSelectedBar] = useState(null);
 

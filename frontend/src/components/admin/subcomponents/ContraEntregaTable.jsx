@@ -93,7 +93,14 @@ export const ContraEntregaTable = ({
                 </div>
 
                 <div className="flex items-center justify-between text-xs py-1 border-t border-b border-night-800">
-                  <span className="text-[11px] text-text-muted">Monto por Cobrar:</span>
+                  <div className="flex flex-col">
+                    <span className="text-[11px] text-text-muted">Monto por Cobrar:</span>
+                    {item.dueDate && (
+                      <span className="text-[10px] text-sky-300/80 font-medium capitalize">
+                        📅 {new Date(item.dueDate).toLocaleDateString('es-CR', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    )}
+                  </div>
                   <span className="text-sm font-extrabold text-sky-300">
                     {formatColones(item.totalAmount)}
                   </span>
@@ -172,7 +179,12 @@ export const ContraEntregaTable = ({
                       {item.productDetails}
                     </td>
                     <td className="py-3 font-bold text-sky-300">
-                      {formatColones(item.totalAmount)}
+                      <div>{formatColones(item.totalAmount)}</div>
+                      {item.dueDate && (
+                        <span className="text-[10px] text-text-muted font-normal block capitalize">
+                          {new Date(item.dueDate).toLocaleDateString('es-CR', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      )}
                     </td>
                     <td className="py-3">
                       {item.status === 'COMPLETED' ? (

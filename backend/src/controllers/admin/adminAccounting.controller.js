@@ -134,7 +134,8 @@ export const adminAccountingController = {
             : l.paidAmount || 0;
 
         if (incomeValue > 0) {
-          const d = new Date(l.updatedAt || l.createdAt);
+          // Tomar la fecha del pedido / entrega (dueDate) si fue especificada por la clienta para segmentar por mes
+          const d = new Date(l.dueDate || l.updatedAt || l.createdAt);
           const dayKey = d.toISOString().split('T')[0];
           if (dailyMap[dayKey]) dailyMap[dayKey].income += incomeValue;
 
@@ -181,6 +182,11 @@ export const adminAccountingController = {
         m.net = m.income - m.expense;
       });
 
+      const currentMonthIndex = now.getMonth();
+      const currentMonthRevenue = monthlyData[currentMonthIndex]?.income || 0;
+      const currentMonthExpenses = monthlyData[currentMonthIndex]?.expense || 0;
+      const currentMonthNet = currentMonthRevenue - currentMonthExpenses;
+
       return res.json({
         success: true,
         data: {
@@ -188,6 +194,9 @@ export const adminAccountingController = {
             totalRevenue,
             totalExpenses,
             netProfit,
+            currentMonthRevenue,
+            currentMonthExpenses,
+            currentMonthNet,
             activeApartadosCount: activeApartados.length,
             pendingApartadosAmount,
             activeContraEntregaCount: activeContraEntrega.length,

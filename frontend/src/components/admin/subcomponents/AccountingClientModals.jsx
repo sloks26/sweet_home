@@ -62,20 +62,22 @@ export const CreateClientModal = ({
             />
           ) : (
             <Input
-              label="Fecha de Entrega Estimada"
+              label="Fecha del Pedido / Cobro (Mes y Día) *"
               type="date"
               value={formState.dueDate}
               onChange={(e) => setFormState({ ...formState, dueDate: e.target.value })}
+              required
             />
           )}
         </div>
 
         {createType === 'APARTADO' && (
           <Input
-            label="Fecha Límite para Liquidar"
+            label="Fecha del Apartado / Límite (Mes y Día) *"
             type="date"
             value={formState.dueDate}
             onChange={(e) => setFormState({ ...formState, dueDate: e.target.value })}
+            required
           />
         )}
 

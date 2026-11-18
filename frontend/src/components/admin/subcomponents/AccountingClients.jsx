@@ -46,7 +46,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
       details: '',
       total: '',
       initialPaid: '',
-      dueDate: '',
+      dueDate: new Date().toISOString().split('T')[0],
       notes: ''
     });
     setIsCreateModalOpen(true);

@@ -59,6 +59,7 @@ export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
 
   const combinedMetrics = {
     totalRevenue: accountingData?.metrics?.totalRevenue ?? metrics.totalRevenue,
+    currentMonthRevenue: accountingData?.metrics?.currentMonthRevenue ?? 0,
     totalExpenses: accountingData?.metrics?.totalExpenses ?? 0,
     netProfit: accountingData?.metrics?.netProfit ?? metrics.totalRevenue,
     activeApartadosCount: accountingData?.metrics?.activeApartadosCount ?? 0,
@@ -158,7 +159,10 @@ export const AdminDashboard = ({ stats, onNavigate, authUser }) => {
       />
 
       {/* 4. META MENSUAL DE VENTAS (BARRA DE PROGRESO) */}
-      <DashboardSalesGoal currentSales={combinedMetrics.totalRevenue} />
+      <DashboardSalesGoal
+        currentSales={combinedMetrics.currentMonthRevenue}
+        totalHistoricSales={combinedMetrics.totalRevenue}
+      />
 
       {/* 5. GRÁFICA ANIMADA DE INGRESOS VS EGRESOS (DÍA, SEMANA, MES) */}
       <AccountingChart charts={accountingData?.charts} onExportExcel={handleExportExcel} />
