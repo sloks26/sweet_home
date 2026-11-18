@@ -199,27 +199,54 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
     }
   };
 
-  const openDeleteModal = (id, name) => {
-    setClientToDelete({ id, name });
-    setIsDeleteModalOpen(true);
+  const openDeleteModal = (id) => {
+    try {
+      if (!id) {
+        alert('Identificador de registro no válido.');
+        return;
+      }
+      const target = (layaways || []).find((l) => l && l.id === id);
+      const name = (target && target.customerName) ? target.customerName : 'este registro';
+      setClientToDelete({ id: id, name: name });
+      setIsDeleteModalOpen(true);
+    } catch (err) {
+      console.error(err);
+      alert('Error abriendo confirmación: ' + (err.message || err));
+    }
   };
 
   const handleConfirmDelete = async () => {
-    if (!clientToDelete) return;
+    if (!clientToDelete || !clientToDelete.id) return;
     setIsSubmitting(true);
     try {
-      const res = await fetch(`/api/admin/layaways/${clientToDelete.id}`, { method: 'DELETE' });
+      const res = await fetch('/api/admin/layaways/' + encodeURIComponent(clientToDelete.id), {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        let errMsg = 'Error del servidor (' + res.status + ')';
+        try {
+          const errJson = JSON.parse(errText);
+          if (errJson && errJson.message) errMsg = errJson.message;
+        } catch (_) {}
+        throw new Error(errMsg);
+      }
       const data = await res.json();
-      if (data.success) {
+      if (data && data.success) {
         setIsDeleteModalOpen(false);
         setClientToDelete(null);
         if (onRefresh) onRefresh();
       } else {
-        alert(data.message || 'Error al eliminar registro');
+        alert((data && data.message) ? data.message : 'Error al eliminar registro');
       }
     } catch (err) {
       console.error(err);
-      alert('Error de conexión al eliminar');
+      alert('No se pudo eliminar el registro: ' + (err.message || err));
     } finally {
       setIsSubmitting(false);
     }
@@ -385,7 +412,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
           setClientToDelete(null);
         }}
         onConfirm={handleConfirmDelete}
-        clientName={clientToDelete?.name}
+        clientName={(clientToDelete && clientToDelete.name) ? clientToDelete.name : ''}
         isSubmitting={isSubmitting}
       />
     </div>

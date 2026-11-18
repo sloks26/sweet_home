@@ -30,7 +30,13 @@ export const Modal = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto overscroll-contain">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto overscroll-contain"
+          style={{
+            paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',
+            WebkitOverflowScrolling: 'touch'
+          }}
+        >
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -39,6 +45,11 @@ export const Modal = ({
             transition={{ duration: 0.2 }}
             onClick={onClose}
             className="fixed inset-0 bg-night-950/85 backdrop-blur-md"
+            style={{
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
+              cursor: 'pointer'
+            }}
           />
 
           {/* Modal Content */}

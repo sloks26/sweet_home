@@ -133,22 +133,40 @@ export const ContraEntregaTable = ({
                     </div>
                   )}
 
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-2 relative z-10">
                     <button
                       type="button"
-                      onClick={() => onEdit && onEdit(item)}
-                      className="min-h-[40px] px-3 py-2 rounded-xl border border-sky-500/30 text-sky-300 hover:bg-sky-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95 touch-manipulation"
+                      data-id={item.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onEdit) onEdit(item);
+                      }}
+                      style={{
+                        touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'transparent',
+                        cursor: 'pointer'
+                      }}
+                      className="min-h-[44px] min-w-[44px] px-3 py-2 rounded-xl border border-sky-500/30 text-sky-300 hover:bg-sky-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95"
                       title="Editar Pedido"
                     >
-                      <Pencil className="w-4 h-4" />
+                      <Pencil className="w-4 h-4 pointer-events-none" />
                     </button>
                     <button
                       type="button"
-                      onClick={() => onDelete(item.id, item.customerName)}
-                      className="min-h-[40px] px-3.5 py-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95 touch-manipulation"
+                      data-id={item.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onDelete) onDelete(item.id);
+                      }}
+                      style={{
+                        touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'transparent',
+                        cursor: 'pointer'
+                      }}
+                      className="min-h-[44px] min-w-[44px] px-3.5 py-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95"
                       title="Eliminar"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-4 h-4 pointer-events-none" />
                     </button>
                   </div>
                 </div>
@@ -232,19 +250,37 @@ export const ContraEntregaTable = ({
                       )}
                       <button
                         type="button"
-                        onClick={() => onEdit && onEdit(item)}
-                        className="p-2 rounded-xl text-text-muted hover:text-sky-300 hover:bg-sky-500/10 transition-all inline-flex items-center justify-center min-w-[36px] min-h-[36px] cursor-pointer active:scale-95 touch-manipulation"
+                        data-id={item.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onEdit) onEdit(item);
+                        }}
+                        style={{
+                          touchAction: 'manipulation',
+                          WebkitTapHighlightColor: 'transparent',
+                          cursor: 'pointer'
+                        }}
+                        className="p-2 rounded-xl text-text-muted hover:text-sky-300 hover:bg-sky-500/10 transition-all inline-flex items-center justify-center min-w-[40px] min-h-[40px] cursor-pointer active:scale-95"
                         title="Editar Pedido"
                       >
-                        <Pencil className="w-3.5 h-3.5" />
+                        <Pencil className="w-4 h-4 pointer-events-none" />
                       </button>
                       <button
                         type="button"
-                        onClick={() => onDelete(item.id, item.customerName)}
-                        className="p-2 rounded-xl text-text-muted hover:text-rose-400 hover:bg-rose-500/10 transition-all inline-flex items-center justify-center min-w-[36px] min-h-[36px] cursor-pointer active:scale-95 touch-manipulation"
+                        data-id={item.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onDelete) onDelete(item.id);
+                        }}
+                        style={{
+                          touchAction: 'manipulation',
+                          WebkitTapHighlightColor: 'transparent',
+                          cursor: 'pointer'
+                        }}
+                        className="p-2 rounded-xl text-text-muted hover:text-rose-400 hover:bg-rose-500/10 transition-all inline-flex items-center justify-center min-w-[40px] min-h-[40px] cursor-pointer active:scale-95"
                         title="Eliminar"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-4 h-4 pointer-events-none" />
                       </button>
                     </td>
                   </tr>

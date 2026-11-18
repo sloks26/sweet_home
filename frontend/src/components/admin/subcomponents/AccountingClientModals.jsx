@@ -162,22 +162,40 @@ export const ConfirmDeleteClientModal = ({
       isOpen={isOpen}
       onClose={onClose}
       title="¿Eliminar Registro?"
-      subtitle={clientName ? `Registro de: ${clientName}` : 'Confirmación requerida'}
+      subtitle={clientName ? 'Registro de: ' + clientName : 'Confirmación requerida'}
     >
-      <div className="space-y-4 pb-1">
+      <div
+        className="space-y-4 pb-2"
+        style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}
+      >
         <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-200 leading-relaxed">
           ¿Segura(o) que deseas eliminar este registro permanentemente? Esta acción lo borrará de la lista de cartera y no se puede deshacer.
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-3 border-t border-night-700">
-          <Button type="button" variant="ghost" size="sm" onClick={onClose} disabled={isSubmitting}>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            style={{
+              touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'transparent',
+              cursor: 'pointer'
+            }}
+            className="px-4 py-2.5 rounded-xl border border-white/10 text-text-secondary hover:text-white hover:bg-white/5 text-xs font-semibold transition-all min-h-[44px] cursor-pointer"
+          >
             Cancelar
-          </Button>
+          </button>
           <button
             type="button"
             onClick={onConfirm}
             disabled={isSubmitting}
-            className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-md shadow-rose-900/30 disabled:opacity-50 cursor-pointer"
+            style={{
+              touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'transparent',
+              cursor: 'pointer'
+            }}
+            className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs font-bold transition-all shadow-md shadow-rose-900/30 disabled:opacity-50 cursor-pointer min-h-[44px]"
           >
             {isSubmitting ? 'Eliminando...' : 'Sí, Eliminar'}
           </button>
