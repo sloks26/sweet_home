@@ -357,43 +357,79 @@ export const adminAccountingController = {
   },
 
   /**
-   * Registrar abono o actualizar estado de apartado / contra entrega
+   * Registrar abono o actualizar información de apartado / contra entrega
    */
   async updateLayaway(req, res) {
     try {
       const { id } = req.params;
-      const { addPayment, paidAmount, status, notes } = req.body;
+      const {
+        customerName,
+        customerPhone,
+        productDetails,
+        totalAmount,
+        addPayment,
+        paidAmount,
+        status,
+        dueDate,
+        notes,
+        type
+      } = req.body;
 
       const existing = await prisma.layaway.findUnique({ where: { id } });
       if (!existing) {
         return res.status(404).json({ error: true, message: 'Registro no encontrado' });
       }
 
+      const newTotal = totalAmount !== undefined && !isNaN(parseFloat(totalAmount))
+        ? parseFloat(totalAmount)
+        : existing.totalAmount;
+
       let newPaid = existing.paidAmount;
-      if (paidAmount !== undefined && Number(paidAmount) >= 0) {
+      if (paidAmount !== undefined && !isNaN(parseFloat(paidAmount)) && Number(paidAmount) >= 0) {
         newPaid = parseFloat(paidAmount);
       } else if (addPayment && Number(addPayment) > 0) {
         newPaid += parseFloat(addPayment);
-      } else if (status === 'COMPLETED') {
-        newPaid = existing.totalAmount;
+      } else if (status === 'COMPLETED' && paidAmount === undefined) {
+        newPaid = newTotal;
       }
 
-      const newRemaining = Math.max(0, existing.totalAmount - newPaid);
+      if (status === 'COMPLETED' && newPaid < newTotal && paidAmount === undefined) {
+        newPaid = newTotal;
+      }
+
+      const newRemaining = Math.max(0, newTotal - newPaid);
       const newStatus = status || (newRemaining <= 0 ? 'COMPLETED' : existing.status);
+
+      const updateData = {
+        totalAmount: newTotal,
+        paidAmount: newPaid,
+        remainingAmount: newRemaining,
+        status: newStatus
+      };
+
+      if (customerName && customerName.trim()) updateData.customerName = customerName.trim();
+      if (customerPhone && customerPhone.trim()) updateData.customerPhone = customerPhone.trim();
+      if (productDetails && productDetails.trim()) updateData.productDetails = productDetails.trim();
+      if (dueDate !== undefined) updateData.dueDate = dueDate ? new Date(dueDate) : null;
+      if (type && type.trim()) updateData.type = type.trim().toUpperCase();
+      if (notes !== undefined) updateData.notes = notes ? notes.trim() : null;
 
       const updated = await prisma.layaway.update({
         where: { id },
-        data: {
-          paidAmount: newPaid,
-          remainingAmount: newRemaining,
-          status: newStatus,
-          notes: notes !== undefined ? notes : existing.notes
-        }
+        data: updateData
+      });
+
+      await logAudit({
+        userId: req.user?.id,
+        action: 'UPDATE_LAYAWAY',
+        module: 'ACCOUNTING',
+        details: { id: updated.id, customer: updated.customerName, type: updated.type },
+        req
       });
 
       return res.json({
         success: true,
-        message: 'Apartado actualizado correctamente',
+        message: 'Registro actualizado correctamente',
         data: updated
       });
     } catch (err) {

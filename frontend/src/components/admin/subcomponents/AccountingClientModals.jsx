@@ -1,5 +1,5 @@
 import React from 'react';
-import { Coins } from 'lucide-react';
+import { Coins, Pencil, Save } from 'lucide-react';
 import Button from '../../ui/Button';
 import Input from '../../ui/Input';
 import Modal from '../../ui/Modal';
@@ -183,6 +183,144 @@ export const ConfirmDeleteClientModal = ({
           </button>
         </div>
       </div>
+    </Modal>
+  );
+};
+
+export const EditClientModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  isSubmitting,
+  formState,
+  setFormState
+}) => {
+  if (!formState) return null;
+  const isContraEntrega = formState.type === 'CONTRA_ENTREGA';
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={isContraEntrega ? 'Editar Pedido Contra Entrega' : 'Editar Apartado / A Pagos'}
+      subtitle="Actualiza los datos del cliente, prendas, montos, fecha o estado"
+    >
+      <form onSubmit={onSubmit} className="space-y-4 pb-2">
+        <Input
+          label="Nombre Completo del Cliente *"
+          value={formState.name || ''}
+          onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+          placeholder="Ej: Laura Castro Vargas"
+          required
+        />
+        <Input
+          label="Número de Teléfono / WhatsApp *"
+          value={formState.phone || ''}
+          onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
+          placeholder="Ej: 8888-9999"
+          required
+        />
+        <Input
+          label="Prendas o Artículos *"
+          value={formState.details || ''}
+          onChange={(e) => setFormState({ ...formState, details: e.target.value })}
+          placeholder="Ej: Vestido Esmeralda M, Set Joyería Oro Rosa"
+          required
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Input
+            label="Monto Total (₡) *"
+            type="number"
+            value={formState.total || ''}
+            onChange={(e) => setFormState({ ...formState, total: e.target.value })}
+            placeholder="Ej: 28500"
+            required
+          />
+
+          {!isContraEntrega ? (
+            <Input
+              label="Monto Abonado (₡)"
+              type="number"
+              value={formState.paidAmount !== undefined ? formState.paidAmount : ''}
+              onChange={(e) => setFormState({ ...formState, paidAmount: e.target.value })}
+              placeholder="Ej: 10000"
+            />
+          ) : (
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-text-secondary">
+                Estado del Pedido
+              </label>
+              <select
+                value={formState.status || 'ACTIVE'}
+                onChange={(e) => setFormState({ ...formState, status: e.target.value })}
+                className="w-full bg-[#180C2C] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-sky-400"
+              >
+                <option value="ACTIVE">Por Cobrar</option>
+                <option value="COMPLETED">Cobrado / Entregado</option>
+              </select>
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Input
+            label="Fecha del Pedido / Cobro (Mes y Día) *"
+            type="date"
+            value={formState.dueDate || ''}
+            onChange={(e) => setFormState({ ...formState, dueDate: e.target.value })}
+            required
+          />
+
+          {!isContraEntrega && (
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-text-secondary">
+                Estado de la Cuenta
+              </label>
+              <select
+                value={formState.status || 'ACTIVE'}
+                onChange={(e) => setFormState({ ...formState, status: e.target.value })}
+                className="w-full bg-[#180C2C] border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+              >
+                <option value="ACTIVE">Pendiente (Activo)</option>
+                <option value="COMPLETED">Liquidado / Cancelado</option>
+              </select>
+            </div>
+          )}
+        </div>
+
+        {!isContraEntrega && (
+          <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 font-medium flex items-center justify-between">
+            <span>Saldo pendiente resultante:</span>
+            <strong className="text-amber-200 tabular-nums">
+              ₡{Math.max(0, (parseFloat(formState.total) || 0) - (parseFloat(formState.paidAmount) || 0)).toLocaleString('es-CR')}
+            </strong>
+          </div>
+        )}
+
+        <Input
+          label="Notas Adicionales (Opcional)"
+          value={formState.notes || ''}
+          onChange={(e) => setFormState({ ...formState, notes: e.target.value })}
+          placeholder="Ej: Entrega confirmada para la tarde"
+        />
+
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-night-700">
+          <Button type="button" variant="ghost" size="sm" onClick={onClose} disabled={isSubmitting}>
+            Cancelar
+          </Button>
+          <Button
+            type="submit"
+            variant={isContraEntrega ? 'outline' : 'primary'}
+            size="md"
+            icon={Save}
+            isLoading={isSubmitting}
+            className={isContraEntrega ? 'bg-sky-500/20 border-sky-400/40 text-sky-200 hover:bg-sky-500/30' : ''}
+          >
+            Guardar Cambios
+          </Button>
+        </div>
+      </form>
     </Modal>
   );
 };

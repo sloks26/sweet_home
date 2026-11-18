@@ -3,7 +3,12 @@ import { Plus } from 'lucide-react';
 import Button from '../../ui/Button';
 import ApartadosTable from './ApartadosTable';
 import ContraEntregaTable from './ContraEntregaTable';
-import { CreateClientModal, AddPaymentModal, ConfirmDeleteClientModal } from './AccountingClientModals';
+import {
+  CreateClientModal,
+  AddPaymentModal,
+  ConfirmDeleteClientModal,
+  EditClientModal
+} from './AccountingClientModals';
 
 export const AccountingClients = ({ layaways = [], onRefresh }) => {
   const [filterMode, setFilterMode] = useState('both'); // 'both' | 'apartados' | 'contra_entrega'
@@ -15,6 +20,10 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [clientToDelete, setClientToDelete] = useState(null);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [clientToEdit, setClientToEdit] = useState(null);
+  const [editFormState, setEditFormState] = useState(null);
 
   const [formState, setFormState] = useState({
     name: '',
@@ -130,6 +139,63 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
       if (data.success && onRefresh) onRefresh();
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const openEditModal = (item) => {
+    setClientToEdit(item);
+    const formattedDate = item.dueDate
+      ? new Date(item.dueDate).toISOString().split('T')[0]
+      : '';
+    setEditFormState({
+      id: item.id,
+      name: item.customerName || '',
+      phone: item.customerPhone || '',
+      details: item.productDetails || '',
+      total: item.totalAmount || '',
+      paidAmount: item.paidAmount !== undefined ? item.paidAmount : (item.status === 'COMPLETED' ? item.totalAmount : 0),
+      dueDate: formattedDate,
+      type: item.type || 'CONTRA_ENTREGA',
+      status: item.status || 'ACTIVE',
+      notes: item.notes || ''
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateRecord = async (e) => {
+    e.preventDefault();
+    if (!editFormState || !editFormState.name || !editFormState.phone || !editFormState.total) return;
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`/api/admin/layaways/${editFormState.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: editFormState.name,
+          customerPhone: editFormState.phone,
+          productDetails: editFormState.details,
+          totalAmount: parseFloat(editFormState.total),
+          paidAmount: parseFloat(editFormState.paidAmount) || 0,
+          type: editFormState.type,
+          status: editFormState.status,
+          dueDate: editFormState.dueDate || null,
+          notes: editFormState.notes || null
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setIsEditModalOpen(false);
+        setClientToEdit(null);
+        if (onRefresh) onRefresh();
+      } else {
+        alert(data.message || 'Error al actualizar registro');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error de conexión al actualizar');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -258,6 +324,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
           pendingSaldo={pendingApartadosSaldo}
           onOpenCreate={() => openCreateModal('APARTADO')}
           onOpenPayment={openAddPaymentModal}
+          onEdit={openEditModal}
           onDelete={openDeleteModal}
           formatCleanPhone={formatCleanPhone}
           getWhatsAppLink={getApartadoWhatsAppLink}
@@ -271,6 +338,7 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
           pendingSaldo={pendingContraEntregaSaldo}
           onOpenCreate={() => openCreateModal('CONTRA_ENTREGA')}
           onMarkAsCompleted={handleMarkAsCompleted}
+          onEdit={openEditModal}
           onDelete={openDeleteModal}
           formatCleanPhone={formatCleanPhone}
           getWhatsAppLink={getContraEntregaWhatsAppLink}
@@ -286,6 +354,18 @@ export const AccountingClients = ({ layaways = [], onRefresh }) => {
         isSubmitting={isSubmitting}
         formState={formState}
         setFormState={setFormState}
+      />
+
+      <EditClientModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setClientToEdit(null);
+        }}
+        onSubmit={handleUpdateRecord}
+        isSubmitting={isSubmitting}
+        formState={editFormState}
+        setFormState={setEditFormState}
       />
 
       <AddPaymentModal

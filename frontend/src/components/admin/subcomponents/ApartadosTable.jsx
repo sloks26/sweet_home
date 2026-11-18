@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle, Send, Trash2, Clock, Plus } from 'lucide-react';
+import { MessageCircle, Send, Trash2, Clock, Plus, Pencil } from 'lucide-react';
 import Badge from '../../ui/Badge';
 import Button from '../../ui/Button';
 import { formatColones } from '../../../utils/currency';
@@ -9,6 +9,7 @@ export const ApartadosTable = ({
   pendingSaldo = 0,
   onOpenCreate,
   onOpenPayment,
+  onEdit,
   onDelete,
   formatCleanPhone,
   getWhatsAppLink
@@ -133,14 +134,24 @@ export const ApartadosTable = ({
                     </div>
                   )}
 
-                  <button
-                    type="button"
-                    onClick={() => onDelete(item.id, item.customerName)}
-                    className="min-h-[40px] px-3.5 py-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95 touch-manipulation"
-                    title="Eliminar"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => onEdit && onEdit(item)}
+                      className="min-h-[40px] px-3 py-2 rounded-xl border border-amber-500/30 text-amber-300 hover:bg-amber-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95 touch-manipulation"
+                      title="Editar Apartado"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(item.id, item.customerName)}
+                      className="min-h-[40px] px-3.5 py-2 rounded-xl border border-rose-500/30 text-rose-400 hover:bg-rose-500/15 text-xs font-semibold transition-all flex items-center justify-center cursor-pointer active:scale-95 touch-manipulation"
+                      title="Eliminar"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -223,6 +234,14 @@ export const ApartadosTable = ({
                           </button>
                         </>
                       )}
+                      <button
+                        type="button"
+                        onClick={() => onEdit && onEdit(item)}
+                        className="p-2 rounded-xl text-text-muted hover:text-amber-300 hover:bg-amber-500/10 transition-all inline-flex items-center justify-center min-w-[36px] min-h-[36px] cursor-pointer active:scale-95 touch-manipulation"
+                        title="Editar Apartado"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
                       <button
                         type="button"
                         onClick={() => onDelete(item.id, item.customerName)}
